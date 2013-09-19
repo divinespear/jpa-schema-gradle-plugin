@@ -147,7 +147,6 @@ uploadArchives {
 }
 
 task createDirs(description: "initialize project") << {
-    sourceSets*.java.srcDirs*.each { it.mkdirs() }
     sourceSets*.groovy.srcDirs*.each { it.mkdirs() }
     sourceSets*.resources.srcDirs*.each { it.mkdirs() }
 }
