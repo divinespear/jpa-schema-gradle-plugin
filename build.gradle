@@ -22,6 +22,9 @@ ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/stag
 ext.deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: sonatypeDeployUserName
 ext.deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
 
+println "deployUserName = ${deployUserName}"
+println "deployPassword = ${deployPassword}"
+
 repositories {
     mavenCentral()
 }
