@@ -3,8 +3,8 @@ language: groovy
 jdk:
   - openjdk6
 
-script: gradle -g .gradle uploadArchives
-install: gradle -g .gradle check
+script: ./gradlew -g .gradle uploadArchives
+install: ./gradlew -g .gradle check
 
 branches:
   only:
