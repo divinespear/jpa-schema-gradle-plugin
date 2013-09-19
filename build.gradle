@@ -19,8 +19,8 @@ ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 
 // deploy config
 ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
-ext.deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: deployUserName
-ext.deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: deployPassword
+ext.deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: sonatypeDeployUserName
+ext.deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
 
 repositories {
     mavenCentral()
@@ -28,11 +28,19 @@ repositories {
 
 configurations {
     deployerJars
+    
+    // uses javax.persistence
+    all*.exclude module: "hibernate-jpa-2.0-api"
+    all*.exclude module: "hibernate-jpa-2.1-api"
 }
 
 dependencies {
     compile gradleApi()
     compile "org.codehaus.groovy:groovy-all:2.1.7"
+    
+    // jpa
+    compile "org.eclipse.persistence:org.eclipse.persistence.jpa:2.5.0"
+    compile "org.hibernate:hibernate-entitymanager:4.3.0.Beta3"
 
     // deploy
     deployerJars "org.apache.maven.wagon:wagon-http:2.2"
