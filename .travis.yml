@@ -1,0 +1,16 @@
+language: groovy
+jdk:
+  - openjdk6
+
+script: ./gradlew uploadArchives
+install: ./gradlew check
+
+branches:
+  only:
+    - master
+    - /^issue-.*$/
+
+env:
+  global:
+    - secure: ZukzGrk7dBD2zFJVfTKuWZwKarb6R/lmSmaWgn1slvDaff6rm7VxR7U0UneZR3l8x1BUQ7knUJ5DfXSwJBYMUREKTXEQggGCOkKZrQa9ykQNVftQXthKgvKRn3iVqVOiLqMckARVStpCdpnqT9MT8LUSZo+JHx7JWd0TQai8OXs=
+    - secure: PRRjJ7UDOpH0S3Gm0K3bHHr1tSeDwu/Q7ZkMMGjPrYnA3wkY1PICuB4N0hiXH0E7RmhXY+yl2XqCHh3c3MKGOYH3cwXGNX0vL+ZeaJgRzf37MdF0nm4PwsZt56xc7E6LKiDVtCA5JkbV8lMr/ESZbew2VCrkfYWBsjUpCctnYOU=
