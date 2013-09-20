@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.*
 import static org.junit.Assert.*
 
 import org.gradle.testfixtures.ProjectBuilder
+import org.gradle.tooling.GradleConnector
 import org.junit.Test
 
 class JpaSchemaGeneratePluginTest {
@@ -31,7 +32,25 @@ class JpaSchemaGeneratePluginTest {
     void shouldPluginAddsTaskToProject() {
         def project = ProjectBuilder.builder().build()
         project.apply plugin: "jpa-schema-generate"
-        
+
         assertThat(project.tasks.generateSchema, instanceOf(JpaSchemaGenerateTask.class))
+    }
+
+    @Test
+    void shouldGenerateScriptUsingEclipselink() {
+        def testProjectHome = new File("build/test-classes/unit/eclipselink-simple-script-test")
+        
+        def connector = GradleConnector.newConnector()
+        def connection = connector.forProjectDirectory(testProjectHome).connect()
+        try {
+            connection.newBuild()
+                    .setStandardOutput(System.out)
+                    .setStandardError(System.err)
+                    .forTasks("generateSchema")
+                    .withArguments("-PpluginVersion=" + System.getProperty("pluginVersion"))
+                    .run()
+        } finally {
+            connection.close()
+        }
     }
 }
