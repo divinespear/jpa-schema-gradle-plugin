@@ -43,7 +43,7 @@ class JpaSchemaGeneratePluginTest {
 
     @Test
     void shouldGenerateScriptUsingEclipselink() {
-        def testProjectHome = new File("build/test-classes/unit/eclipselink-simple-script-test")
+        def testProjectHome = new File("build/test-classes/unit/eclipselink-simple-test")
         
         // execute plugin
         def connector = GradleConnector.newConnector()
