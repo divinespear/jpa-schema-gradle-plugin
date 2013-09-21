@@ -104,7 +104,7 @@ test {
         logger.lifecycle("Running test: " + descriptor)
     }
 }
-test.dependsOn(jar)
+test.dependsOn(install)
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'

@@ -19,9 +19,11 @@
 
 buildscript {
     repositories {
-        flatDir(dirs: "${projectDir}/../../../libs")
+        mavenLocal()
     }
     dependencies {
+        //classpath "org.eclipse.persistence:org.eclipse.persistence.jpa:2.5.0"
+        //classpath "org.hibernate:hibernate-entitymanager:4.3.0.Beta3"
         classpath "io.github.divinespear:jpa-schema-gradle-plugin:${pluginVersion}"
     }
 }

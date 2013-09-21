@@ -33,24 +33,30 @@ class JpaSchemaGeneratePluginTest {
         def project = ProjectBuilder.builder().build()
         project.apply plugin: "jpa-schema-generate"
 
-        assertThat(project.tasks.generateSchema, instanceOf(JpaSchemaGenerateTask.class))
+        // task
+        assertThat(project.tasks.generateSchema, instanceOf(JpaSchemaGenerateTask))
+        // extensions
+        assertThat(project.generateSchema, instanceOf(SchemaGenerationConfig))
+        assertThat(project.generateSchema.skip, is(false))
+        assertThat(project.generateSchema.outputDirectory, is(new File(project.buildDir, "generated-schema")))
     }
 
     @Test
     void shouldGenerateScriptUsingEclipselink() {
         def testProjectHome = new File("build/test-classes/unit/eclipselink-simple-script-test")
         
+        // execute plugin
         def connector = GradleConnector.newConnector()
         def connection = connector.forProjectDirectory(testProjectHome).connect()
         try {
             connection.newBuild()
-                    .setStandardOutput(System.out)
-                    .setStandardError(System.err)
                     .forTasks("generateSchema")
                     .withArguments("-PpluginVersion=" + System.getProperty("pluginVersion"))
                     .run()
         } finally {
             connection.close()
         }
+        
+        // output check
     }
 }
