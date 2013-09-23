@@ -41,12 +41,24 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir "${projectDir}/../src/java"
+            srcDir project.file("../src/java")
         }
         resources {
-            srcDir "${projectDir}/resources"
+            srcDir project.file("resources")
         }
-        output.classesDir = "${buildDir}/classes"
-        output.resourcesDir = "${buildDir}/classes"
+        //output.classesDir = "${buildDir}/classes"
+        //output.resourcesDir = "${buildDir}/classes"
+    }
+}
+
+generateSchema {
+    
+    targets {
+        h2script {
+            scriptAction = "drop-and-create"
+            databaseProductName = "H2"
+            databaseMajorVersion = 1
+            databaseMinorVersion = 3
+        }
     }
 }

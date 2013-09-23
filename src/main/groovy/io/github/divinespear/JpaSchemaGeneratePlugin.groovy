@@ -274,4 +274,41 @@ class SchemaGenerationConfig {
     SchemaGenerationConfig(String name) {
         this.name = name
     }
+
+    SchemaGenerationConfig(String name, SchemaGenerationConfig base, SchemaGenerationConfig target) {
+        this(name)
+
+        this.skip = target?.skip ? target?.skip : base.skip
+
+        this.persistenceXml = target?.persistenceXml ?: base.persistenceXml
+        this.persistenceUnitName = target?.persistenceUnitName ?: base.persistenceUnitName
+
+        this.databaseAction = target?.databaseAction ?: base.databaseAction
+        this.scriptAction = target?.scriptAction ?: base.scriptAction
+
+        this.outputDirectory = target?.outputDirectory ?: base.outputDirectory
+        this.createOutputFileName = target?.createOutputFileName ?: base.createOutputFileName
+        this.dropOutputFileName = target?.dropOutputFileName ?: base.dropOutputFileName
+
+        this.createSourceMode = target?.createSourceMode ?: base.createSourceMode
+        this.createSourceFile = target?.createSourceFile ?: base.createSourceFile
+        this.dropSourceMode = target?.dropSourceMode ?: base.dropSourceMode
+        this.dropSourceFile = target?.dropSourceFile ?: base.dropSourceFile
+
+        this.jdbcDriver = target?.jdbcDriver ?: base.jdbcDriver
+        this.jdbcUrl = target?.jdbcUrl ?: base.jdbcUrl
+        this.jdbcUser = target?.jdbcUser ?: base.jdbcUser
+        this.jdbcPassword = target?.jdbcPassword ?: base.jdbcPassword
+
+        this.databaseProductName = target?.databaseProductName ?: base.databaseProductName
+        this.databaseMajorVersion = target?.databaseMajorVersion ?: base.databaseMajorVersion
+        this.databaseMinorVersion = target?.databaseMinorVersion ?: base.databaseMinorVersion
+
+        this.namingStrategy = target?.namingStrategy ?: base.namingStrategy
+        this.dialect = target?.dialect ?: base.dialect
+    }
+
+    boolean isScriptTarget() {
+        return !PersistenceUnitProperties.SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(scriptAction)
+    }
 }
