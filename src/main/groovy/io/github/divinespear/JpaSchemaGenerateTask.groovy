@@ -24,7 +24,29 @@ import org.gradle.api.tasks.TaskAction
 
 class JpaSchemaGenerateTask extends DefaultTask {
 
+    SchemaGenerationConfig merge(SchemaGenerationConfig a, SchemaGenerationConfig b) {
+        if (b == null) {
+            return a
+        } else {
+            def config = new SchemaGenerationConfig(b.name)
+            return config
+        }
+    }
+
+    List<SchemaGenerationConfig> getTargets() {
+        def List<SchemaGenerationConfig> list = []
+
+        project.generateSchema.targets.all { target ->
+            list.add(merge(project.generateSchema, target))
+        }
+        if (list.empty) {
+            list.add(project.generateSchema)
+        }
+
+        return list
+    }
+
     @TaskAction
-    void generate() {
+    def generate() {
     }
 }

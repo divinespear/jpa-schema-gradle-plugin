@@ -39,12 +39,36 @@ class JpaSchemaGeneratePluginTest {
         assertThat(project.generateSchema, instanceOf(SchemaGenerationConfig))
         assertThat(project.generateSchema.skip, is(false))
         assertThat(project.generateSchema.outputDirectory, is(new File(project.buildDir, "generated-schema")))
+        assertThat(project.generateSchema.targets, emptyIterableOf(SchemaGenerationConfig))
     }
 
     @Test
-    void shouldGenerateScriptUsingEclipselink() {
+    void shouldConfigGenerateSchemaTargets() {
+        def project = ProjectBuilder.builder().build()
+        project.apply plugin: "jpa-schema-generate"
+
+        project.generateSchema {
+            targets {
+                script {
+                    scriptAction = "drop-and-create"
+                    databaseProductName = "H2"
+                    databaseMajorVersion = 1
+                    databaseMinorVersion = 3
+                }
+                database {
+                }
+            }
+        }
+
+        assertThat(project.generateSchema.targets.size(), is(2))
+        def schemaTargets = project.tasks.generateSchema.targets
+        assertThat(schemaTargets.size(), is(2))
+    }
+
+    @Test
+    void shouldGenerateUsingEclipselink() {
         def testProjectHome = new File("build/test-classes/unit/eclipselink-simple-test")
-        
+
         // execute plugin
         def connector = GradleConnector.newConnector()
         def connection = connector.forProjectDirectory(testProjectHome).connect()
@@ -56,7 +80,7 @@ class JpaSchemaGeneratePluginTest {
         } finally {
             connection.close()
         }
-        
+
         // output check
     }
 }
