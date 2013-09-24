@@ -16,7 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = "jpa-schema-gradle-plugin"
-
-include "test-common"
-include "test-eclipselink"
+rootProject.name = 'jpa-schema-gradle-plugin'

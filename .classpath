@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/groovy"/>
-	<classpathentry kind="src" output="build/resources/main" path="src/main/resources"/>
-	<classpathentry kind="src" output="build/classes/test" path="src/test/groovy"/>
-	<classpathentry kind="src" output="build/resources/test" path="src/test/resources"/>
+	<classpathentry excluding="unit/" kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" output="build/test-classes" path="src/test/groovy"/>
+	<classpathentry excluding="unit/" kind="src" output="build/test-classes" path="src/test/resources"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="con" path="org.springsource.ide.eclipse.gradle.dsld.classpathcontainer"/>
 	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
 	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
-	<classpathentry kind="output" path="build/classes/main"/>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>
