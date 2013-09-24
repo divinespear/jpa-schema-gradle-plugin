@@ -69,6 +69,15 @@ class SchemaGenerationConfig {
     boolean skip = false
 
     /**
+     * scan test classes
+     * <p>
+     * default is <code>false</code>.
+     * 
+     * @category required
+     */
+    boolean scanTestClasses = false
+
+    /**
      * location of <code>persistence.xml</code> file
      * <p>
      * default is <code>META-INF/persistence.xml</code>.
@@ -278,7 +287,8 @@ class SchemaGenerationConfig {
     SchemaGenerationConfig(String name, SchemaGenerationConfig base, SchemaGenerationConfig target) {
         this(name)
 
-        this.skip = target?.skip ? target?.skip : base.skip
+        this.skip = (target?.skip ?: false) ? target.skip : base.skip
+        this.scanTestClasses = (target?.scanTestClasses ?: false) ? target.scanTestClasses : base.scanTestClasses
 
         this.persistenceXml = target?.persistenceXml ?: base.persistenceXml
         this.persistenceUnitName = target?.persistenceUnitName ?: base.persistenceUnitName
