@@ -62,24 +62,15 @@ dependencies {
     deployerJars "org.apache.maven.wagon:wagon-http:2.2"
 }
 
-sourceSets {
-    main {
-        output.classesDir = "${project.buildDir}/classes"
-        output.resourcesDir = "${project.buildDir}/classes"
-    }
-    test {
-        output.classesDir = "${project.buildDir}/test-classes"
-        output.resourcesDir = "${project.buildDir}/test-classes"
-    }
-}
-
 eclipse {
     classpath {
-        defaultOutputDir = file("build/classes")
+        defaultOutputDir = sourceSets.main.output.classesDir
         file {
             whenMerged { classpath ->
-                classpath.entries.findAll { it.kind == "src" && it.path.startsWith("src/test/") }*.output = "build/test-classes"
                 classpath.entries.findAll { it.kind == "src" && it.path.endsWith("/resources") }*.excludes = ["unit/"]
+                classpath.entries.findAll { it.kind == "src" && it.path.startsWith("src/test/") }*.output = relativePath(sourceSets.test.output.classesDir)
+                classpath.entries.findAll { it.kind == "src" && it.path.endsWith("/main/resources") }*.output = relativePath(sourceSets.main.output.resourcesDir)
+                classpath.entries.findAll { it.kind == "src" && it.path.endsWith("/test/resources") }*.output = relativePath(sourceSets.test.output.resourcesDir)
                 classpath.entries.findAll { it.kind == "lib" }*.exported = false
             }
             withXml { provider ->
