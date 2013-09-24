@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/groovy"/>
-	<classpathentry kind="src" output="build/resources/main" path="src/main/resources"/>
-	<classpathentry kind="src" output="build/classes/test" path="src/test/groovy"/>
-	<classpathentry kind="src" output="build/resources/test" path="src/test/resources"/>
+	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="con" path="org.springsource.ide.eclipse.gradle.dsld.classpathcontainer"/>
