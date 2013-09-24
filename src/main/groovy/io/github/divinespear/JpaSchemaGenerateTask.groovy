@@ -25,10 +25,9 @@ import java.sql.DriverManager
 import javax.persistence.Persistence
 
 import org.eclipse.persistence.config.PersistenceUnitProperties
+import org.eclipse.persistence.logging.SessionLog
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
-import org.hibernate.dialect.Dialect
 import org.hibernate.engine.jdbc.dialect.internal.StandardDatabaseInfoDialectResolver
 import org.hibernate.engine.jdbc.dialect.spi.DatabaseInfoDialectResolver.DatabaseInfo
 import org.hibernate.jpa.AvailableSettings
@@ -51,12 +50,16 @@ class JpaSchemaGenerateTask extends DefaultTask {
     private ClassLoader getProjectClassLoader(boolean scanTestClasses) {
         def classfiles = [] as Set
         // compiled classpath
-        classfiles << project.sourceSets.main.output.classesDir
-        classfiles << project.sourceSets.main.output.resourcesDir
+        classfiles += [
+            project.sourceSets.main.output.classesDir,
+            project.sourceSets.main.output.resourcesDir
+        ]
         // include test classpath
         if (scanTestClasses) {
-            classfiles << project.sourceSets.test.output.classesDir
-            classfiles << project.sourceSets.test.output.resourcesDir
+            classfiles += [
+                project.sourceSets.test.output.classesDir,
+                project.sourceSets.test.output.resourcesDir
+            ]
         }
         // convert to url
         def classURLs = []
@@ -117,6 +120,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
          */
         // persistence.xml
         map[PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
+        map[PersistenceUnitProperties.LOGGING_LEVEL] = SessionLog.ALL_LABEL
 
         /*
          * Hibernate specific
@@ -143,7 +147,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                             return target.databaseMinorVersion
                         }
                     }
-            Dialect detectedDialect = new StandardDatabaseInfoDialectResolver().resolve(databaseInfo)
+            def detectedDialect = new StandardDatabaseInfoDialectResolver().resolve(databaseInfo)
             target.dialect = detectedDialect.getClass().getName()
         }
         if (target.dialect != null) {
@@ -164,12 +168,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
             def classloader = this.getProjectClassLoader(target.scanTestClasses)
             // load JDBC driver if necessary
             if (target.jdbcDriver?.length() > 0) {
-                try {
-                    def driver = classLoader.loadClass(target.jdbcDriver).newInstance() as Driver
-                    DriverManager.registerDriver(driver)
-                } catch (Exception e) {
-                    throw new GradleException("Dependency for driver-class " + target.jdbcDriver + " is missing!", e)
-                }
+                def driver = classLoader.loadClass(target.jdbcDriver).newInstance() as Driver
+                DriverManager.registerDriver(driver)
             }
             // generate
             def thread = Thread.currentThread()

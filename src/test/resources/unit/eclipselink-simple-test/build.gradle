@@ -46,13 +46,10 @@ sourceSets {
         resources {
             srcDir project.file("resources")
         }
-        //output.classesDir = "${buildDir}/classes"
-        //output.resourcesDir = "${buildDir}/classes"
     }
 }
 
 generateSchema {
-    
     targets {
         h2script {
             scriptAction = "drop-and-create"
