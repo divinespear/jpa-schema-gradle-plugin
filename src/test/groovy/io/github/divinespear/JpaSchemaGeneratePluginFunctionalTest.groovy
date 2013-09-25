@@ -96,4 +96,71 @@ class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
             sql.close()
         }
     }
+    
+    def shouldWorkBasicHibernateGeneration() {
+        given:
+        buildFile << """
+            sourceSets {
+                main {
+                    java {
+                        srcDir file("../../../../src/test/resources/unit/src/java")
+                    }
+                    resources {
+                        srcDir file("../../../../src/test/resources/unit/hibernate-simple-test/resources")
+                    }
+                    output.resourcesDir output.classesDir
+                }
+            }
+            
+            generateSchema {
+                namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
+                targets {
+                    h2script {
+                        scriptAction = "drop-and-create"
+                        databaseProductName = "H2"
+                        databaseMajorVersion = 1
+                        databaseMinorVersion = 3
+                    }
+                    h2database {
+                        databaseAction = "drop-and-create"
+                        jdbcDriver = "org.h2.Driver"
+                        jdbcUrl = "jdbc:h2:nio:\${buildDir}/generated-schema/test"
+                        jdbcUser = "sa"
+                    }
+                }
+            }
+        """
+        when:
+        run "generateSchema"
+        then:
+        file("build/generated-schema/create.sql").exists()
+        file("build/generated-schema/create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, stored_value varchar(32768), primary key (stored_key));") > -1
+        file("build/generated-schema/create.sql").text.indexOf("create table many_column_table (id bigint not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/create.sql").text.indexOf("create sequence hibernate_sequence;") > -1
+        file("build/generated-schema/drop.sql").exists()
+        file("build/generated-schema/drop.sql").text.indexOf("drop table key_value_store if exists;") > -1
+        file("build/generated-schema/drop.sql").text.indexOf("drop table many_column_table if exists;") > -1
+        file("build/generated-schema/drop.sql").text.indexOf("drop sequence hibernate_sequence;") > -1
+        file("build/generated-schema/test.h2.db").exists()
+        def sql = Sql.newInstance("jdbc:h2:nio:" + file("build/generated-schema/test").toString(), "sa", null, "org.h2.Driver")
+        try {
+            sql.eachRow("SELECT * FROM KEY_VALUE_STORE", {
+                /* metadata */
+                it.getColumnLabel(1) == "STORED_KEY"
+                it.getColumnLabel(2) == "STORED_VALUE"
+            }, {
+                /* data */
+            })
+            sql.eachRow("SELECT * FROM MANY_COLUMN_TABLE", {
+                /* metadata */
+                it.getColumnLabel(1) == "ID"
+                [Types.BIGINT, Types.DECIMAL].contains(it.getColumnType(1))
+                it.getColumnLabel(2) == "COLUMN00"
+            }, {
+                /* data */
+            })
+        } finally {
+            sql.close()
+        }
+    }
 }
