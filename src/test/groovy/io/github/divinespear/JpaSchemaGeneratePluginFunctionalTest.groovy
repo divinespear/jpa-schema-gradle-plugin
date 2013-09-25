@@ -22,11 +22,11 @@ package io.github.divinespear
 import org.gradle.test.FunctionalSpec
 
 class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
-    
+
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
     }
-        
+
     def shouldWorkBasicEclipseLinkGeneration() {
         given:
         buildFile << """
@@ -59,7 +59,6 @@ class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
                 }
             }
         """
-        
         when:
         run "generateSchema"
         then:
