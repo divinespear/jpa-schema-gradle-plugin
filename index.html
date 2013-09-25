@@ -34,7 +34,267 @@
         <h1>
 <a name="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin"><span class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
-<p>Gradle plugin for generate database schema or DDL scripts from JPA entities</p>
+<p><a href="http://travis-ci.org/divinespear/jpa-schema-gradle-plugin"><img src="https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png" alt="Build Status"></a></p>
+
+<p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.</p>
+
+<p>Currently support <a href="http://www.eclipse.org/eclipselink">EclipseLink</a> (Reference Implementation) and <a href="http://hibernate.org">Hibernate</a>.</p>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How-to Use</h2>
+
+<p>Put this to your <code>build.gradle</code></p>
+
+<div class="highlight highlight-groovy"><pre><span class="n">buildscript</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">mavenCentral</span><span class="o">()</span>
+    <span class="o">}</span>
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="c1">// plugin dependencies</span>
+        <span class="n">classpath</span> <span class="s2">"org.eclipse.persistence:org.eclipse.persistence.jpa:2.5.0"</span>
+        <span class="n">classpath</span> <span class="s2">"org.hibernate:hibernate-entitymanager:4.3.0.Beta3"</span>
+        <span class="c1">// plugin</span>
+        <span class="n">classpath</span> <span class="s2">"io.github.divinespear:jpa-schema-gradle-plugin:0.1.0"</span>
+        <span class="c1">// jdbc drivers also here</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s2">"java"</span>
+<span class="n">apply</span> <span class="nl">plugin:</span> <span class="s2">"jpa-schema-generate"</span>
+
+<span class="n">sourceSets</span> <span class="o">{</span>
+    <span class="n">main</span> <span class="o">{</span>
+        <span class="c1">// set output to same directories</span>
+        <span class="c1">// jpa implementations always scan classes using classpath that found persistence.xml</span>
+        <span class="n">output</span><span class="o">.</span><span class="na">resourcesDir</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="na">classesDir</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">generateSchema</span> <span class="o">{</span>
+    <span class="c1">// default options</span>
+    <span class="c1">// see SchemaGenerationConfig to all options</span>
+    <span class="o">...</span>
+    <span class="c1">// if you want multiple output</span>
+    <span class="n">targets</span> <span class="o">{</span>
+        <span class="n">targetName</span> <span class="o">{</span>
+            <span class="c1">// same as default options</span>
+            <span class="o">...</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>To generate schema, run</p>
+
+<pre><code>gradle generateSchema
+</code></pre>
+
+<p>or</p>
+
+<pre><code>./gradlew generateSchema
+</code></pre>
+
+<h3>
+<a name="schemagenerationconfig" class="anchor" href="#schemagenerationconfig"><span class="octicon octicon-link"></span></a>SchemaGenerationConfig</h3>
+
+<p>Here is full list of parameters of <code>generateSchema</code>.</p>
+
+<table>
+<thead><tr>
+<th>name</th>
+<th>type</th>
+<th>description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>skip</code></td>
+<td><code>boolean</code></td>
+<td>skip schema generation<p>default value is <code>false</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>scanTestClasses</code></td>
+<td><code>boolean</code></td>
+<td>scan test classes<p>default value is <code>false</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>persistenceXml</code></td>
+<td><code>string</code></td>
+<td>location of <code>persistence.xml</code> file<p>Note for Hibernate: <strong>current version (4.3.0.beta3) DOES NOT SUPPORT custom location.</strong> (<code>SchemaExport</code> support it, but JPA 2.1 schema generator does NOT.)</p>
+<p>default value is <code>META-INF/persistence.xml</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>persistenceUnitName</code></td>
+<td><code>string</code></td>
+<td>unit name of <code>persistence.xml</code><p>default value is <code>default</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>databaseAction</code></td>
+<td><code>string</code></td>
+<td>schema generation action for database<p>support value is one of </p>
+<ul>
+<li><code>none</code></li>
+<li><code>create</code></li>
+<li><code>drop</code></li>
+<li><code>drop-and-create</code></li>
+<li>
+<code>create-or-extend-tables</code> (only for EclipseLink with database target)</li>
+</ul>
+<p>default value is <code>none</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>scriptAction</code></td>
+<td><code>string</code></td>
+<td>schema generation action for script<p>support value is one of </p>
+<ul>
+<li><code>none</code></li>
+<li><code>create</code></li>
+<li><code>drop</code></li>
+<li><code>drop-and-create</code></li>
+</ul>
+<p>default value is <code>none</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>outputDirectory</code></td>
+<td><code>file</code></td>
+<td>output directory for generated ddl scripts<p>REQUIRED for <code>scriptAction</code> is one of <code>create</code>, <code>drop</code>, or <code>drop-and-create</code>.</p>
+<p>default value is <code>${project.buildDir}/generated-schema</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>createOutputFileName</code></td>
+<td><code>string</code></td>
+<td>generated create script name<p>REQUIRED for <code>scriptAction</code> is one of <code>create</code>, or <code>drop-and-create</code>.</p>
+<p>default value is <code>create.sql</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>dropOutputFileName</code></td>
+<td><code>string</code></td>
+<td>generated drop script name<p>REQUIRED for <code>scriptAction</code> is one of <code>drop</code>, or <code>drop-and-create</code>.</p>
+<p>default value is <code>drop.sql</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>createSourceMode</code></td>
+<td><code>string</code></td>
+<td>specifies whether the creation of database artifacts is to occur on the basis of the object/relational mappingmetadata, DDL script, or a combination of the two.<p>support value is one of </p>
+<ul>
+<li><code>metadata</code></li>
+<li><code>script</code></li>
+<li><code>metadata-then-script</code></li>
+<li><code>script-then-metadata</code></li>
+</ul>
+<p>default value is <code>metadata</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>createSourceFile</code></td>
+<td><code>string</code></td>
+<td>create source file path.<p>REQUIRED for <code>createSourceMode</code> is one of <code>script</code>, <code>metadata-then-script</code>, or<code>script-then-metadata</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>dropSourceMode</code></td>
+<td><code>string</code></td>
+<td>specifies whether the dropping of database artifacts is to occur on the basis of the object/relational mappingmetadata, DDL script, or a combination of the two.<p>support value is one of </p>
+<ul>
+<li><code>metadata</code></li>
+<li><code>script</code></li>
+<li><code>metadata-then-script</code></li>
+<li><code>script-then-metadata</code></li>
+</ul>
+<p>default value is <code>metadata</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>dropSourceFile</code></td>
+<td><code>file</code></td>
+<td>drop source file path.<p>REQUIRED for <code>dropSourceMode</code> is one of <code>script</code>, <code>metadata-then-script</code>, or<code>script-then-metadata</code>.</p>
+</td>
+</tr>
+<tr>
+<td><code>jdbcDriver</code></td>
+<td><code>string</code></td>
+<td>jdbc driver class name<p>default is declared class name in persistence xml.</p>
+<p>and Remember, <a href="http://callofduty.wikia.com/wiki/No_Russian">No Russian</a> you MUST configure jdbc driver to dependencies.</p>
+</td>
+</tr>
+<tr>
+<td><code>jdbcUrl</code></td>
+<td><code>string</code></td>
+<td>jdbc connection url<p>default is declared connection url in persistence xml.</p>
+</td>
+</tr>
+<tr>
+<td><code>jdbcUser</code></td>
+<td><code>string</code></td>
+<td>jdbc connection username<p>default is declared username in persistence xml.</p>
+</td>
+</tr>
+<tr>
+<td><code>jdbcPassword</code></td>
+<td><code>string</code></td>
+<td>jdbc connection password<p>default is declared password in persistence xml.</p>
+<p>If your account has no password (especially local file-base, like Apache Derby, H2, etc...), it can be omitted.</p>
+</td>
+</tr>
+<tr>
+<td><code>databaseProductName</code></td>
+<td><code>string</code></td>
+<td>database product name for emulate database connection. this should useful for script-only action.<ul>
+<li>specified if scripts are to be generated by the persistence provider and a connection to the target databaseis not supplied.</li>
+<li>The value of this property should be the value returned for the target database by <code>DatabaseMetaData#getDatabaseProductName()</code>
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td><code>databaseMajorVersion</code></td>
+<td><code>int</code></td>
+<td>database major version for emulate database connection. this should useful for script-only action.<ul>
+<li>specified if sufficient database version information is not included from <code>DatabaseMetaData#getDatabaseProductName()</code>
+</li>
+<li>The value of this property should be the value returned for the target database by <code>DatabaseMetaData#getDatabaseMajorVersion()</code>
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td><code>databaseMinorVersion</code></td>
+<td><code>int</code></td>
+<td>database minor version for emulate database connection. this should useful for script-only action.<ul>
+<li>specified if sufficient database version information is not included from <code>DatabaseMetaData#getDatabaseProductName()</code>
+</li>
+<li>The value of this property should be the value returned for the target database by <code>DatabaseMetaData#getDatabaseMinorVersion()</code>
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td><code>namingStrategy</code></td>
+<td><code>string</code></td>
+<td>naming strategy that implements <code>org.hibernate.cfg.NamingStrategy</code><p>this is Hibernate-only option.</p>
+</td>
+</tr>
+<tr>
+<td><code>dialect</code></td>
+<td><code>string</code></td>
+<td>dialect class<p>use this parameter if you want use custom dialect class. default is detect from JDBC connection or using <code>databaseProductName</code>, <code>databaseMajorVersion</code>, and <code>databaseMinorVersion</code>.</p>
+<p>this is Hibernate-only option.</p>
+</td>
+</tr>
+</tbody>
+</table><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Source Copyright © 2013 Sin-young "Divinespear" Kang. Distributed under the <a href="http://www.apache.org/licenses">Apache License, Version 2.0</a>.</p>
       </section>
     </div>
 
