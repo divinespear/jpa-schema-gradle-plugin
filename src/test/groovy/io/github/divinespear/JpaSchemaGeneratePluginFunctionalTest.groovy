@@ -19,6 +19,10 @@ package io.github.divinespear
  * under the License.
  */
 
+import groovy.sql.Sql
+
+import java.sql.Types
+
 import org.gradle.test.FunctionalSpec
 
 class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
@@ -69,7 +73,27 @@ class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
         file("build/generated-schema/drop.sql").exists()
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE KEY_VALUE_STORE;") > -1
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE") > -1
+        file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE;") > -1
         file("build/generated-schema/test.h2.db").exists()
+        def sql = Sql.newInstance("jdbc:h2:nio:" + file("build/generated-schema/test").toString(), "sa", null, "org.h2.Driver")
+        try {
+            sql.eachRow("SELECT * FROM KEY_VALUE_STORE", {
+                /* metadata */
+                it.getColumnLabel(1) == "STORED_KEY"
+                it.getColumnLabel(2) == "STORED_VALUE"
+            }, {
+                /* data */
+            })
+            sql.eachRow("SELECT * FROM MANY_COLUMN_TABLE", {
+                /* metadata */
+                it.getColumnLabel(1) == "ID"
+                [Types.BIGINT, Types.DECIMAL].contains(it.getColumnType(1))
+                it.getColumnLabel(2) == "COLUMN00"
+            }, {
+                /* data */
+            })
+        } finally {
+            sql.close()
+        }
     }
 }
