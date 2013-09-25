@@ -24,6 +24,7 @@ import java.sql.DriverManager
 
 import javax.persistence.Persistence
 
+import org.codehaus.groovy.util.StringUtil;
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.eclipse.persistence.logging.SessionLog
 import org.gradle.api.DefaultTask
@@ -34,7 +35,7 @@ import org.hibernate.jpa.AvailableSettings
 
 class JpaSchemaGenerateTask extends DefaultTask {
 
-    List<SchemaGenerationConfig> getTargets() {
+    def List<SchemaGenerationConfig> getTargets() {
         def List<SchemaGenerationConfig> list = []
 
         project.generateSchema.targets.all { target ->
@@ -47,7 +48,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return list
     }
 
-    private ClassLoader getProjectClassLoader(boolean scanTestClasses) {
+    def ClassLoader getProjectClassLoader(boolean scanTestClasses) {
         def classfiles = [] as Set
         // compiled classpath
         classfiles += [
@@ -69,7 +70,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return new URLClassLoader(classURLs.toArray(new URL[0]), this.class.classLoader)
     }
 
-    private Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
+    def Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
         def Map<String, Object> map = [:]
 
         /*
@@ -157,8 +158,39 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return map
     }
 
+    def postProcess(SchemaGenerationConfig target) {
+        if (target.outputDirectory == null) {
+            return
+        }
+        def files = [
+            new File(target.outputDirectory, target.createOutputFileName),
+            new File(target.outputDirectory, target.dropOutputFileName)
+        ]
+        files.each { file ->
+            if (file.exists()) {
+                def tmp = File.createTempFile("script-", null, target.outputDirectory)
+                file.renameTo(tmp)
+                try {
+                    tmp.withReader { reader ->
+                        def line = null
+                        while ((line = reader.readLine()) != null) {
+                            line.replaceAll(/(?i)(create|drop)/, ";\$1").split(";").each {
+                                def s = it?.trim() ?: ""
+                                if (!s.empty) {
+                                    file << s + ";\r\n"
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    tmp.delete()
+                }
+            }
+        }
+    }
+
     @TaskAction
-    void generate() {
+    def generate() {
         this.getTargets().each { target ->
             // create output directory
             if (target.outputDirectory != null) {
@@ -180,6 +212,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
             } finally {
                 thread.setContextClassLoader(contextClassLoader)
             }
+            // post-process
+            this.postProcess(target)
         }
     }
 }
