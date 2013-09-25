@@ -50,6 +50,12 @@ class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
                         databaseMajorVersion = 1
                         databaseMinorVersion = 3
                     }
+                    h2database {
+                        databaseAction = "drop-and-create"
+                        jdbcDriver = "org.h2.Driver"
+                        jdbcUrl = "jdbc:h2:nio:\${buildDir}/generated-schema/test"
+                        jdbcUser = "sa"
+                    }
                 }
             }
         """
@@ -65,5 +71,6 @@ class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE KEY_VALUE_STORE;") > -1
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
         file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE") > -1
+        file("build/generated-schema/test.h2.db").exists()
     }
 }

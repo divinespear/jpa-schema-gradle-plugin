@@ -200,7 +200,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
             def classloader = this.getProjectClassLoader(target.scanTestClasses)
             // load JDBC driver if necessary
             if (target.jdbcDriver?.length() > 0) {
-                def driver = classLoader.loadClass(target.jdbcDriver).newInstance() as Driver
+                def driver = classloader.loadClass(target.jdbcDriver).newInstance() as Driver
                 DriverManager.registerDriver(driver)
             }
             // generate
