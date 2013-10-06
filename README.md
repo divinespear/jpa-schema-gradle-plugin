@@ -18,10 +18,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-    	// plugin dependencies
-        classpath "org.eclipse.persistence:org.eclipse.persistence.jpa:2.5.0"
-        classpath "org.hibernate:hibernate-entitymanager:4.3.0.Beta3"
-        // plugin
         classpath "io.github.divinespear:jpa-schema-gradle-plugin:0.1.0"
         // jdbc drivers also here
         ...
@@ -61,6 +57,21 @@ or
 ```
 ./gradlew generateSchema
 ```
+
+### For Scala
+
+You MUST put `scala-library` to `dependencies` of `buildscript`.
+
+```groovy
+buildscript {
+    ...
+    dependencies {
+        ...
+        classpath "org.scala-lang:scala-library:scala_version"
+        ...
+    }
+}
+
 
 ### SchemaGenerationConfig
 

@@ -19,12 +19,16 @@ package io.github.divinespear.model;
  * under the License.
  */
 
+import java.util.Date;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Test JPA model
@@ -42,6 +46,10 @@ public class KeyValueStore {
 
     @Column(name = "STORED_VALUE", length = 32768)
     private String value;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_AT")
+    private Date createdAt;
 
     public String getKey() {
         return key;
