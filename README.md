@@ -71,7 +71,7 @@ buildscript {
         ...
     }
 }
-
+```
 
 ### SchemaGenerationConfig
 
