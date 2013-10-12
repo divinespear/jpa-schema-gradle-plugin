@@ -19,10 +19,6 @@ package io.github.divinespear
  * under the License.
  */
 
-import groovy.sql.Sql
-
-import java.sql.Types
-
 import org.gradle.test.FunctionalSpec
 
 class GenerateSqlServerSpec extends FunctionalSpec {

@@ -24,7 +24,6 @@ import java.sql.DriverManager
 
 import javax.persistence.Persistence
 
-import org.codehaus.groovy.util.StringUtil
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.eclipse.persistence.logging.SessionLog
 import org.gradle.api.DefaultTask
