@@ -118,6 +118,11 @@
 
 <p>Hibernate <strong>DOES NOT SUPPORT</strong> <code>@GeneratedValue(strategy = GenerationType.SEQUENCE)</code> for DBMS dosen't support <code>CREATE/DROP SEQUENCE</code>. <del>WTF?!</del> You should use <code>@GeneratedValue</code> instead.</p>
 
+<h4>
+<a name="for-eclipselink-with-oracle" class="anchor" href="#for-eclipselink-with-oracle"><span class="octicon octicon-link"></span></a>For EclipseLink with Oracle</h4>
+
+<p>EclipseLink's <code>Oracle{8,9,10,11}Platform</code> uses some type classes from Oracle's JDBC driver. you should have it in your dependency.</p>
+
 <h3>
 <a name="schemagenerationconfig" class="anchor" href="#schemagenerationconfig"><span class="octicon octicon-link"></span></a>SchemaGenerationConfig</h3>
 
