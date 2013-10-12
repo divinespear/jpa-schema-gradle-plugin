@@ -132,11 +132,40 @@ class GenerateMySQLSpec extends FunctionalSpec {
         when:
         run "generateSchema"
         then:
+        // scriptdefault
         file("build/generated-schema/default-create.sql").exists()
         file("build/generated-schema/default-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value longtext, primary key (stored_key));") > -1
         file("build/generated-schema/default-create.sql").text.indexOf("create table many_column_table (id bigint not null auto_increment, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
         file("build/generated-schema/default-drop.sql").exists()
-        file("build/generated-schema/default-drop.sql").text.indexOf("drop table key_value_store if exists;") > -1
-        file("build/generated-schema/default-drop.sql").text.indexOf("drop table many_column_table if exists;") > -1
+        file("build/generated-schema/default-drop.sql").text.indexOf("drop table if exists key_value_store;") > -1
+        file("build/generated-schema/default-drop.sql").text.indexOf("drop table if exists many_column_table;") > -1
+        // scriptdefault5
+        file("build/generated-schema/default-5-create.sql").exists()
+        file("build/generated-schema/default-5-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value varchar(32768), primary key (stored_key));") > -1
+        file("build/generated-schema/default-5-create.sql").text.indexOf("create table many_column_table (id bigint not null auto_increment, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/default-5-drop.sql").exists()
+        file("build/generated-schema/default-5-drop.sql").text.indexOf("drop table if exists key_value_store;") > -1
+        file("build/generated-schema/default-5-drop.sql").text.indexOf("drop table if exists many_column_table;") > -1
+        // scriptmyisam
+        file("build/generated-schema/myisam-create.sql").exists()
+        file("build/generated-schema/myisam-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value longtext, primary key (stored_key)) type=MyISAM;") > -1
+        file("build/generated-schema/myisam-create.sql").text.indexOf("create table many_column_table (id bigint not null auto_increment, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id)) type=MyISAM;") > -1
+        file("build/generated-schema/myisam-drop.sql").exists()
+        file("build/generated-schema/myisam-drop.sql").text.indexOf("drop table if exists key_value_store;") > -1
+        file("build/generated-schema/myisam-drop.sql").text.indexOf("drop table if exists many_column_table;") > -1
+        // scriptinnodb
+        file("build/generated-schema/innodb-create.sql").exists()
+        file("build/generated-schema/innodb-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value longtext, primary key (stored_key)) type=InnoDB;") > -1
+        file("build/generated-schema/innodb-create.sql").text.indexOf("create table many_column_table (id bigint not null auto_increment, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id)) type=InnoDB;") > -1
+        file("build/generated-schema/innodb-drop.sql").exists()
+        file("build/generated-schema/innodb-drop.sql").text.indexOf("drop table if exists key_value_store;") > -1
+        file("build/generated-schema/innodb-drop.sql").text.indexOf("drop table if exists many_column_table;") > -1
+        // scriptinnodb5
+        file("build/generated-schema/innodb-5-create.sql").exists()
+        file("build/generated-schema/innodb-5-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value varchar(32768), primary key (stored_key)) ENGINE=InnoDB;") > -1
+        file("build/generated-schema/innodb-5-create.sql").text.indexOf("create table many_column_table (id bigint not null auto_increment, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id)) ENGINE=InnoDB;") > -1
+        file("build/generated-schema/innodb-5-drop.sql").exists()
+        file("build/generated-schema/innodb-5-drop.sql").text.indexOf("drop table if exists key_value_store;") > -1
+        file("build/generated-schema/innodb-5-drop.sql").text.indexOf("drop table if exists many_column_table;") > -1
     }
 }
