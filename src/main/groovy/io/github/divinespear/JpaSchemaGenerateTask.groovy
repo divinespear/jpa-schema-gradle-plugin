@@ -172,7 +172,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                     tmp.withReader { reader ->
                         def line = null
                         while ((line = reader.readLine()) != null) {
-                            line.replaceAll(/(?i)((?:create|drop)\s+(?:table|view|sequence))/, ";\$1").split(";").each {
+                            line.replaceAll(/(?i)((?:create|drop|alter)\s+(?:table|view|sequence))/, ";\$1").split(";").each {
                                 def s = it?.trim() ?: ""
                                 if (!s.empty) {
                                     file << s + ";\r\n"
