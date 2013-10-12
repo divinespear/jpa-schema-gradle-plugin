@@ -85,6 +85,10 @@ buildscript {
 
 Hibernate **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` for DBMS dosen't support `CREATE/DROP SEQUENCE`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
 
+#### For EclipseLink with Oracle
+
+EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
+
 ### SchemaGenerationConfig
 
 Here is full list of parameters of `generateSchema`.
