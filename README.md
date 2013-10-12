@@ -83,8 +83,7 @@ buildscript {
 
 #### For Hibernate
 
-Hibernate (current version: 4.3.0.Beta3) **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` with DBMS that dosen't support `CREATE/DROP SEQUENCE`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
-
+Hibernate **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` for DBMS dosen't support `CREATE/DROP SEQUENCE`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
 
 ### SchemaGenerationConfig
 
