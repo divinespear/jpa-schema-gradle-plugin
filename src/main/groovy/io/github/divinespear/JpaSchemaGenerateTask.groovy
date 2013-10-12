@@ -120,7 +120,6 @@ class JpaSchemaGenerateTask extends DefaultTask {
          */
         // persistence.xml
         map[PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
-        map[PersistenceUnitProperties.LOGGING_LEVEL] = SessionLog.ALL_LABEL
 
         /*
          * Hibernate specific
