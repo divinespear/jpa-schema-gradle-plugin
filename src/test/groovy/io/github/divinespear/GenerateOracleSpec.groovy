@@ -8,7 +8,7 @@ class GenerateOracleSpec extends FunctionalSpec {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
     }
 
-    def shouldWorkOracleEclipseLink() {
+    def shouldWorkEclipseLink() {
         given:
         buildFile << """
             sourceSets {
@@ -119,7 +119,7 @@ class GenerateOracleSpec extends FunctionalSpec {
         
     }
 
-    def shouldWorkOracleHibernate() {
+    def shouldWorkHibernate() {
         given:
         buildFile << """
             sourceSets {

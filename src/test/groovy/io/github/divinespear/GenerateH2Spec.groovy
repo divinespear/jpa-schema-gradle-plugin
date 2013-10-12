@@ -31,7 +31,7 @@ class GenerateH2Spec extends FunctionalSpec {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
     }
 
-    def shouldWorkH2EclipseLink() {
+    def shouldWorkEclipseLink() {
         given:
         buildFile << """
             sourceSets {
@@ -98,7 +98,7 @@ class GenerateH2Spec extends FunctionalSpec {
         }
     }
 
-    def shouldWorkH2Hibernate() {
+    def shouldWorkHibernate() {
         given:
         buildFile << """
             sourceSets {

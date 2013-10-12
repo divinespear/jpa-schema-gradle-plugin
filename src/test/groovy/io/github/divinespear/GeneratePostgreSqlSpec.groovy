@@ -31,7 +31,7 @@ class GeneratePostgreSqlSpec extends FunctionalSpec {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
     }
 
-    def shouldWorkH2EclipseLink() {
+    def shouldWorkEclipseLink() {
         given:
         buildFile << """
             sourceSets {
@@ -70,7 +70,7 @@ class GeneratePostgreSqlSpec extends FunctionalSpec {
         file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE;") > -1
     }
 
-    def shouldWorkH2Hibernate() {
+    def shouldWorkHibernate() {
         given:
         buildFile << """
             sourceSets {

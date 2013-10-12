@@ -27,7 +27,7 @@ class GenerateSqlServerSpec extends FunctionalSpec {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
     }
 
-    def shouldWorkSqlServerEclipseLink() {
+    def shouldWorkEclipseLink() {
         given:
         buildFile << """
             sourceSets {
@@ -64,7 +64,7 @@ class GenerateSqlServerSpec extends FunctionalSpec {
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
     }
 
-    def shouldWorkSqlServerHibernate() {
+    def shouldWorkHibernate() {
         given:
         buildFile << """
             sourceSets {
