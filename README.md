@@ -8,6 +8,12 @@ Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.
 Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference Implementation) and [Hibernate](http://hibernate.org).
 
 
+## Before Announce...
+
+**JPA-GENERATED DDLs IS NOT SILVER BULLET**
+
+Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify it properly.
+
 ## How-to Use
 
 Put this to your `build.gradle`
@@ -57,6 +63,8 @@ or
 ```
 ./gradlew generateSchema
 ```
+
+see also test cases `Generate*Spec.groovy`, as examples.
 
 #### For Scala
 
