@@ -10,9 +10,9 @@ Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference I
 
 ## Before Announce...
 
-**JPA-GENERATED DDLs IS NOT SILVER BULLET**
+READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
-Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify it properly.
+Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
 ## How-to Use
 
