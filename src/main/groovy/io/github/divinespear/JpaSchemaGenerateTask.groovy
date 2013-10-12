@@ -138,12 +138,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
                         @Override
                         public int getDatabaseMajorVersion() {
-                            return target.databaseMajorVersion
+                            return target.databaseMajorVersion ?: 0
                         }
 
                         @Override
                         public int getDatabaseMinorVersion() {
-                            return target.databaseMinorVersion
+                            return target.databaseMinorVersion ?: 0
                         }
                     }
             def detectedDialect = new StandardDatabaseInfoDialectResolver().resolve(databaseInfo)
