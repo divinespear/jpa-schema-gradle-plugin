@@ -73,6 +73,11 @@ buildscript {
 }
 ```
 
+#### For Microsoft SQL Server (MSSQL) with Hibernate
+
+Hibernate (current version: 4.3.0.Beta3) with MSSQL **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` ~~WTF?!~~
+
+
 ### SchemaGenerationConfig
 
 Here is full list of parameters of `generateSchema`.
