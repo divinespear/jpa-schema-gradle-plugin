@@ -58,7 +58,7 @@ or
 ./gradlew generateSchema
 ```
 
-### For Scala
+#### For Scala
 
 You MUST put `scala-library` to `dependencies` of `buildscript`.
 
@@ -67,7 +67,7 @@ buildscript {
     ...
     dependencies {
         ...
-        classpath "org.scala-lang:scala-library:scala_version"
+        classpath "org.scala-lang:scala-library:${your_scala_version}"
         ...
     }
 }
@@ -92,7 +92,7 @@ Here is full list of parameters of `generateSchema`.
 | `createSourceFile` | `string` | create source file path.<p>REQUIRED for `createSourceMode` is one of `script`, `metadata-then-script`, or`script-then-metadata`.</p> |
 | `dropSourceMode` | `string` | specifies whether the dropping of database artifacts is to occur on the basis of the object/relational mappingmetadata, DDL script, or a combination of the two.<p>support value is one of <ul><li>`metadata`</li><li>`script`</li><li>`metadata-then-script`</li><li>`script-then-metadata`</li></ul></p><p>default value is `metadata`.</p> |
 | `dropSourceFile` | `file` | drop source file path.<p>REQUIRED for `dropSourceMode` is one of `script`, `metadata-then-script`, or`script-then-metadata`.</p> |
-| `jdbcDriver` | `string` | jdbc driver class name<p>default is declared class name in persistence xml.</p><p>and Remember, <strike>[No Russian](http://callofduty.wikia.com/wiki/No_Russian)</strike> you MUST configure jdbc driver to dependencies.</p> |
+| `jdbcDriver` | `string` | jdbc driver class name<p>default is declared class name in persistence xml.</p><p>and Remember, ~~[No Russian](http://callofduty.wikia.com/wiki/No_Russian)~~ you MUST configure jdbc driver to dependencies.</p> |
 | `jdbcUrl` | `string` | jdbc connection url<p>default is declared connection url in persistence xml.</p> |
 | `jdbcUser` | `string` | jdbc connection username<p>default is declared username in persistence xml.</p> |
 | `jdbcPassword` | `string` | jdbc connection password<p>default is declared password in persistence xml.</p><p>If your account has no password (especially local file-base, like Apache Derby, H2, etc...), it can be omitted.</p> |

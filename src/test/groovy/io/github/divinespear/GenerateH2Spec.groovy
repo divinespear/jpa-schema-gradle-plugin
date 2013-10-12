@@ -25,13 +25,13 @@ import java.sql.Types
 
 import org.gradle.test.FunctionalSpec
 
-class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
+class GenerateH2Spec extends FunctionalSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
     }
 
-    def shouldWorkBasicEclipseLinkGeneration() {
+    def shouldWorkH2EclipseLink() {
         given:
         buildFile << """
             sourceSets {
@@ -97,8 +97,8 @@ class JpaSchemaGeneratePluginFunctionalTest extends FunctionalSpec {
             sql.close()
         }
     }
-    
-    def shouldWorkBasicHibernateGeneration() {
+
+    def shouldWorkH2Hibernate() {
         given:
         buildFile << """
             sourceSets {
