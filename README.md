@@ -81,9 +81,9 @@ buildscript {
 }
 ```
 
-#### For Microsoft SQL Server (MSSQL) with Hibernate
+#### For Hibernate
 
-Hibernate (current version: 4.3.0.Beta3) with MSSQL **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
+Hibernate (current version: 4.3.0.Beta3) **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` with DBMS without `CREATE/DROP SEQUENCE`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
 
 
 ### SchemaGenerationConfig
