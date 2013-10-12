@@ -163,6 +163,7 @@ class GenerateOracleSpec extends FunctionalSpec {
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE CASCADE CONSTRAINTS;") > -1
         file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE;") > -1
     }
+
     def shouldWork8iEclipseLink() {
         given:
         buildFile << """
@@ -322,6 +323,7 @@ class GenerateOracleSpec extends FunctionalSpec {
         file("build/generated-schema/drop.sql").text.indexOf("drop table many_column_table cascade constraints;") > -1
         file("build/generated-schema/drop.sql").text.indexOf("drop sequence hibernate_sequence;") > -1
     }
+
     def shouldWork8iHibernate() {
         given:
         buildFile << """
