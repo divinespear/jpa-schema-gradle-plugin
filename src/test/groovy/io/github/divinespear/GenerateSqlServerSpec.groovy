@@ -33,10 +33,10 @@ class GenerateSqlServerSpec extends FunctionalSpec {
             sourceSets {
                 main {
                     java {
-                        srcDir file("../../../../src/test/resources/unit/src/java")
+                        srcDir file("../../../../src/test/resources/unit/eclipselink/src")
                     }
                     resources {
-                        srcDir file("../../../../src/test/resources/unit/eclipselink-simple-test/resources")
+                        srcDir file("../../../../src/test/resources/unit/eclipselink/resources")
                     }
                     output.resourcesDir output.classesDir
                 }
@@ -64,6 +64,59 @@ class GenerateSqlServerSpec extends FunctionalSpec {
         file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
     }
 
-    // Hibernate throws
-    // org.hibernate.MappingException: org.hibernate.dialect.SQLServer2008Dialect does not support sequences
+    def shouldWorkSqlServerHibernate() {
+        given:
+        buildFile << """
+            sourceSets {
+                main {
+                    java {
+                        srcDir file("../../../../src/test/resources/unit/hibernate/src")
+                    }
+                    resources {
+                        srcDir file("../../../../src/test/resources/unit/hibernate/resources")
+                    }
+                    output.resourcesDir output.classesDir
+                }
+            }
+            
+            generateSchema {
+                namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
+                targets {
+                    script2008 {
+                        scriptAction = "drop-and-create"
+                        databaseProductName = "Microsoft SQL Server"
+                        databaseMajorVersion = 10
+                        createOutputFileName = "2008-create.sql"
+                        dropOutputFileName = "2008-drop.sql"
+                    }
+                    script2005 {
+                        scriptAction = "drop-and-create"
+                        databaseProductName = "Microsoft SQL Server"
+                        databaseMajorVersion = 9
+                        createOutputFileName = "2005-create.sql"
+                        dropOutputFileName = "2005-drop.sql"
+                    }
+                    script2003 {
+                        scriptAction = "drop-and-create"
+                        databaseProductName = "Microsoft SQL Server"
+                        databaseMajorVersion = 8
+                        createOutputFileName = "2003-create.sql"
+                        dropOutputFileName = "2003-drop.sql"
+                    }
+                }
+            }
+        """
+        when:
+        run "generateSchema"
+        then:
+        // script2008
+        file("build/generated-schema/2008-create.sql").exists()
+        file("build/generated-schema/2008-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value longtext, primary key (stored_key));") > -1
+        file("build/generated-schema/2008-create.sql").text.indexOf("create table many_column_table (id bigint not null auto_increment, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/2008-drop.sql").exists()
+        file("build/generated-schema/2008-drop.sql").text.indexOf("drop table key_value_store if exists;") > -1
+        file("build/generated-schema/2008-drop.sql").text.indexOf("drop table many_column_table if exists;") > -1
+        // script2005
+        // script2003
+    }
 }
