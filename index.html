@@ -39,6 +39,13 @@
 <p>Currently support <a href="http://www.eclipse.org/eclipselink">EclipseLink</a> (Reference Implementation) and <a href="http://hibernate.org">Hibernate</a>.</p>
 
 <h2>
+<a name="before-announce" class="anchor" href="#before-announce"><span class="octicon octicon-link"></span></a>Before Announce...</h2>
+
+<p><strong>JPA-GENERATED DDLs IS NOT SILVER BULLET</strong></p>
+
+<p>Sometimes (<em>most times</em> exactly :P) JPA will generate weird scripts so you <strong>SHOULD</strong> modify it properly.</p>
+
+<h2>
 <a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How-to Use</h2>
 
 <p>Put this to your <code>build.gradle</code></p>
@@ -89,8 +96,10 @@
 <pre><code>./gradlew generateSchema
 </code></pre>
 
-<h3>
-<a name="for-scala" class="anchor" href="#for-scala"><span class="octicon octicon-link"></span></a>For Scala</h3>
+<p>see also test cases <code>Generate*Spec.groovy</code>, as examples.</p>
+
+<h4>
+<a name="for-scala" class="anchor" href="#for-scala"><span class="octicon octicon-link"></span></a>For Scala</h4>
 
 <p>You MUST put <code>scala-library</code> to <code>dependencies</code> of <code>buildscript</code>.</p>
 
@@ -98,11 +107,16 @@
     <span class="o">...</span>
     <span class="n">dependencies</span> <span class="o">{</span>
         <span class="o">...</span>
-        <span class="n">classpath</span> <span class="s2">"org.scala-lang:scala-library:scala_version"</span>
+        <span class="n">classpath</span> <span class="s2">"org.scala-lang:scala-library:${your_scala_version}"</span>
         <span class="o">...</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
+
+<h4>
+<a name="for-hibernate" class="anchor" href="#for-hibernate"><span class="octicon octicon-link"></span></a>For Hibernate</h4>
+
+<p>Hibernate (current version: 4.3.0.Beta3) <strong>DOES NOT SUPPORT</strong> <code>@GeneratedValue(strategy = GenerationType.SEQUENCE)</code> with DBMS that dosen't support <code>CREATE/DROP SEQUENCE</code>. <del>WTF?!</del> You should use <code>@GeneratedValue</code> instead.</p>
 
 <h3>
 <a name="schemagenerationconfig" class="anchor" href="#schemagenerationconfig"><span class="octicon octicon-link"></span></a>SchemaGenerationConfig</h3>
@@ -232,7 +246,7 @@
 <td><code>jdbcDriver</code></td>
 <td><code>string</code></td>
 <td>jdbc driver class name<p>default is declared class name in persistence xml.</p>
-<p>and Remember, <a href="http://callofduty.wikia.com/wiki/No_Russian">No Russian</a> you MUST configure jdbc driver to dependencies.</p>
+<p>and Remember, <del><a href="http://callofduty.wikia.com/wiki/No_Russian">No Russian</a></del> you MUST configure jdbc driver to dependencies.</p>
 </td>
 </tr>
 <tr>
