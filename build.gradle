@@ -26,6 +26,8 @@ group = "io.github.divinespear"
 version = "0.1.2-SNAPSHOT"
 
 ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
+ext.version_eclipselink = "2.5.1"
+ext.version_hibernate = "4.3.0.Beta3"
 
 // deploy config
 ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
@@ -34,6 +36,7 @@ ext.deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
 
 repositories {
     mavenCentral()
+    maven { url "src/m2-repo" }
 }
 
 configurations {
@@ -55,14 +58,16 @@ dependencies {
         exclude module: "groovy-all"
     }
     testRuntime "com.h2database:h2:1.3.173"
+    testRuntime "oracle.jdbc:ojdbc7:12.1.0-1"
+    testRuntime "oracle.jdbc:orai18n:12.1.0-1"
 
     // jpa
-    compile "org.eclipse.persistence:org.eclipse.persistence.jpa:2.5.0"
-    compile "org.eclipse.persistence:org.eclipse.persistence.oracle:2.5.0"
-    compile("org.hibernate:hibernate-entitymanager:4.3.0.Beta3") {
+    compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${version_eclipselink}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.oracle:${version_eclipselink}"
+    compile("org.hibernate:hibernate-entitymanager:${version_hibernate}") {
         exclude group: "org.hibernate.javax.persistence"
     }
-    
+
     // for jpa generation using spring-data
     runtime "org.springframework.data:spring-data-jpa:1.4.1.RELEASE"
     runtime "joda-time:joda-time:2.3"
@@ -187,7 +192,7 @@ uploadArchives {
                     system "Travis CI"
                     url "https://travis-ci.org/divinespear/jpa-schema-gradle-plugin"
                 }
-           }
+            }
         }
     }
 }

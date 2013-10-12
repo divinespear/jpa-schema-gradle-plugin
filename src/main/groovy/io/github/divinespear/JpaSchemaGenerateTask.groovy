@@ -24,7 +24,7 @@ import java.sql.DriverManager
 
 import javax.persistence.Persistence
 
-import org.codehaus.groovy.util.StringUtil;
+import org.codehaus.groovy.util.StringUtil
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.eclipse.persistence.logging.SessionLog
 import org.gradle.api.DefaultTask
@@ -35,7 +35,7 @@ import org.hibernate.jpa.AvailableSettings
 
 class JpaSchemaGenerateTask extends DefaultTask {
 
-    def List<SchemaGenerationConfig> getTargets() {
+    List<SchemaGenerationConfig> getTargets() {
         def List<SchemaGenerationConfig> list = []
 
         project.generateSchema.targets.all { target ->
@@ -48,7 +48,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return list
     }
 
-    def ClassLoader getProjectClassLoader(boolean scanTestClasses) {
+    ClassLoader getProjectClassLoader(boolean scanTestClasses) {
         def classfiles = [] as Set
         // compiled classpath
         classfiles += [
@@ -70,7 +70,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return new URLClassLoader(classURLs.toArray(new URL[0]), this.class.classLoader)
     }
 
-    def Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
+    Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
         def Map<String, Object> map = [:]
 
         /*
@@ -158,7 +158,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return map
     }
 
-    def postProcess(SchemaGenerationConfig target) {
+    void postProcess(SchemaGenerationConfig target) {
         if (target.outputDirectory == null) {
             return
         }
@@ -190,7 +190,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
     }
 
     @TaskAction
-    def generate() {
+    void generate() {
         this.getTargets().each { target ->
             // create output directory
             if (target.outputDirectory != null) {
