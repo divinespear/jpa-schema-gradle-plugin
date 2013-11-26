@@ -25,7 +25,6 @@ import java.sql.DriverManager
 import javax.persistence.Persistence
 
 import org.eclipse.persistence.config.PersistenceUnitProperties
-import org.eclipse.persistence.logging.SessionLog
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.hibernate.engine.jdbc.dialect.internal.StandardDatabaseInfoDialectResolver
@@ -66,6 +65,17 @@ class JpaSchemaGenerateTask extends DefaultTask {
         classfiles.each {
             classURLs << it.toURI().toURL()
         }
+
+        // dependency artifacts to url
+        project.configurations.compile.each {
+            classURLs << it.toURI().toURL()
+        }
+
+        // logs
+        classURLs.each {
+            logger.info("  * classpath: " + it)
+        }
+        
         return new URLClassLoader(classURLs.toArray(new URL[0]), this.class.classLoader)
     }
 
