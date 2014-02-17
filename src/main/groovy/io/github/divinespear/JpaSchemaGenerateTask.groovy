@@ -177,21 +177,21 @@ class JpaSchemaGenerateTask extends DefaultTask {
         files.each { file ->
             if (file.exists()) {
                 def tmp = File.createTempFile("script-", null, target.outputDirectory)
-                file.renameTo(tmp)
                 try {
-                    tmp.withReader { reader ->
+                    file.withReader { reader ->
                         def line = null
                         while ((line = reader.readLine()) != null) {
                             line.replaceAll(/(?i)((?:create|drop|alter)\s+(?:table|view|sequence))/, ";\$1").split(";").each {
                                 def s = it?.trim() ?: ""
                                 if (!s.empty) {
-                                    file << s + ";\r\n"
+                                    tmp << s + ";\r\n"
                                 }
                             }
                         }
                     }
                 } finally {
-                    tmp.delete()
+                    file.delete()
+                    tmp.renameTo(file)
                 }
             }
         }
