@@ -69,6 +69,15 @@ class SchemaGenerationConfig {
     boolean skip = false
 
     /**
+     * generate as formatted
+     * <p>
+     * default is <code>false</code>.
+     * 
+     * @category required
+     */
+    boolean format = false
+
+    /**
      * scan test classes
      * <p>
      * default is <code>false</code>.
