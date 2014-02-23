@@ -57,11 +57,13 @@ class GenerateSqlServerSpec extends FunctionalSpec {
         run "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT DATETIME NULL, STORED_VALUE VARCHAR(32768) NULL, PRIMARY KEY (STORED_KEY));") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE MANY_COLUMN_TABLE (ID NUMERIC(19) IDENTITY NOT NULL, COLUMN00 VARCHAR(255) NULL, COLUMN01 VARCHAR(255) NULL, COLUMN02 VARCHAR(255) NULL, COLUMN03 VARCHAR(255) NULL, COLUMN04 VARCHAR(255) NULL, COLUMN05 VARCHAR(255) NULL, COLUMN06 VARCHAR(255) NULL, COLUMN07 VARCHAR(255) NULL, COLUMN08 VARCHAR(255) NULL, COLUMN09 VARCHAR(255) NULL, COLUMN10 VARCHAR(255) NULL, COLUMN11 VARCHAR(255) NULL, COLUMN12 VARCHAR(255) NULL, COLUMN13 VARCHAR(255) NULL, COLUMN14 VARCHAR(255) NULL, COLUMN15 VARCHAR(255) NULL, COLUMN16 VARCHAR(255) NULL, COLUMN17 VARCHAR(255) NULL, COLUMN18 VARCHAR(255) NULL, COLUMN19 VARCHAR(255) NULL, COLUMN20 VARCHAR(255) NULL, COLUMN21 VARCHAR(255) NULL, COLUMN22 VARCHAR(255) NULL, COLUMN23 VARCHAR(255) NULL, COLUMN24 VARCHAR(255) NULL, COLUMN25 VARCHAR(255) NULL, COLUMN26 VARCHAR(255) NULL, COLUMN27 VARCHAR(255) NULL, COLUMN28 VARCHAR(255) NULL, COLUMN29 VARCHAR(255) NULL, PRIMARY KEY (ID));") > -1
+        file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT DATETIME NULL, STORED_VALUE VARCHAR(32768) NULL, PRIMARY KEY (STORED_KEY));\r
+CREATE TABLE MANY_COLUMN_TABLE (ID NUMERIC(19) IDENTITY NOT NULL, COLUMN00 VARCHAR(255) NULL, COLUMN01 VARCHAR(255) NULL, COLUMN02 VARCHAR(255) NULL, COLUMN03 VARCHAR(255) NULL, COLUMN04 VARCHAR(255) NULL, COLUMN05 VARCHAR(255) NULL, COLUMN06 VARCHAR(255) NULL, COLUMN07 VARCHAR(255) NULL, COLUMN08 VARCHAR(255) NULL, COLUMN09 VARCHAR(255) NULL, COLUMN10 VARCHAR(255) NULL, COLUMN11 VARCHAR(255) NULL, COLUMN12 VARCHAR(255) NULL, COLUMN13 VARCHAR(255) NULL, COLUMN14 VARCHAR(255) NULL, COLUMN15 VARCHAR(255) NULL, COLUMN16 VARCHAR(255) NULL, COLUMN17 VARCHAR(255) NULL, COLUMN18 VARCHAR(255) NULL, COLUMN19 VARCHAR(255) NULL, COLUMN20 VARCHAR(255) NULL, COLUMN21 VARCHAR(255) NULL, COLUMN22 VARCHAR(255) NULL, COLUMN23 VARCHAR(255) NULL, COLUMN24 VARCHAR(255) NULL, COLUMN25 VARCHAR(255) NULL, COLUMN26 VARCHAR(255) NULL, COLUMN27 VARCHAR(255) NULL, COLUMN28 VARCHAR(255) NULL, COLUMN29 VARCHAR(255) NULL, PRIMARY KEY (ID));\r
+"""
         file("build/generated-schema/drop.sql").exists()
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE KEY_VALUE_STORE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
+        file("build/generated-schema/drop.sql").text == """DROP TABLE KEY_VALUE_STORE;\r
+DROP TABLE MANY_COLUMN_TABLE;\r
+"""
     }
 
     def shouldWorkHibernate() {
@@ -111,24 +113,30 @@ class GenerateSqlServerSpec extends FunctionalSpec {
         then:
         // script2008
         file("build/generated-schema/2008-create.sql").exists()
-        file("build/generated-schema/2008-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime2, stored_value varchar(MAX), primary key (stored_key));") > -1
-        file("build/generated-schema/2008-create.sql").text.indexOf("create table many_column_table (id bigint identity not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/2008-create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at datetime2, stored_value varchar(MAX), primary key (stored_key));\r
+create table many_column_table (id bigint identity not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));\r
+"""
         file("build/generated-schema/2008-drop.sql").exists()
-        file("build/generated-schema/2008-drop.sql").text.indexOf("drop table key_value_store;") > -1
-        file("build/generated-schema/2008-drop.sql").text.indexOf("drop table many_column_table;") > -1
+        file("build/generated-schema/2008-drop.sql").text == """drop table key_value_store;\r
+drop table many_column_table;\r
+"""
         // script2005
         file("build/generated-schema/2005-create.sql").exists()
-        file("build/generated-schema/2005-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value varchar(MAX), primary key (stored_key));") > -1
-        file("build/generated-schema/2005-create.sql").text.indexOf("create table many_column_table (id bigint identity not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/2005-create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value varchar(MAX), primary key (stored_key));\r
+create table many_column_table (id bigint identity not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));\r
+"""
         file("build/generated-schema/2005-drop.sql").exists()
-        file("build/generated-schema/2005-drop.sql").text.indexOf("drop table key_value_store;") > -1
-        file("build/generated-schema/2005-drop.sql").text.indexOf("drop table many_column_table;") > -1
+        file("build/generated-schema/2005-drop.sql").text == """drop table key_value_store;\r
+drop table many_column_table;\r
+"""
         // script2003
         file("build/generated-schema/2003-create.sql").exists()
-        file("build/generated-schema/2003-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value varchar(32768), primary key (stored_key));") > -1
-        file("build/generated-schema/2003-create.sql").text.indexOf("create table many_column_table (id numeric(19,0) identity not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/2003-create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at datetime, stored_value varchar(32768), primary key (stored_key));\r
+create table many_column_table (id numeric(19,0) identity not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));\r
+"""
         file("build/generated-schema/2003-drop.sql").exists()
-        file("build/generated-schema/2003-drop.sql").text.indexOf("drop table key_value_store;") > -1
-        file("build/generated-schema/2003-drop.sql").text.indexOf("drop table many_column_table;") > -1
+        file("build/generated-schema/2003-drop.sql").text == """drop table key_value_store;\r
+drop table many_column_table;\r
+"""
     }
 }

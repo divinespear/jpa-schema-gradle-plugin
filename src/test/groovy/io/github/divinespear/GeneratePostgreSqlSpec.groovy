@@ -19,10 +19,6 @@ package io.github.divinespear
  * under the License.
  */
 
-import groovy.sql.Sql
-
-import java.sql.Types
-
 import org.gradle.test.FunctionalSpec
 
 class GeneratePostgreSqlSpec extends FunctionalSpec {
@@ -61,13 +57,15 @@ class GeneratePostgreSqlSpec extends FunctionalSpec {
         run "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR(255), COLUMN01 VARCHAR(255), COLUMN02 VARCHAR(255), COLUMN03 VARCHAR(255), COLUMN04 VARCHAR(255), COLUMN05 VARCHAR(255), COLUMN06 VARCHAR(255), COLUMN07 VARCHAR(255), COLUMN08 VARCHAR(255), COLUMN09 VARCHAR(255), COLUMN10 VARCHAR(255), COLUMN11 VARCHAR(255), COLUMN12 VARCHAR(255), COLUMN13 VARCHAR(255), COLUMN14 VARCHAR(255), COLUMN15 VARCHAR(255), COLUMN16 VARCHAR(255), COLUMN17 VARCHAR(255), COLUMN18 VARCHAR(255), COLUMN19 VARCHAR(255), COLUMN20 VARCHAR(255), COLUMN21 VARCHAR(255), COLUMN22 VARCHAR(255), COLUMN23 VARCHAR(255), COLUMN24 VARCHAR(255), COLUMN25 VARCHAR(255), COLUMN26 VARCHAR(255), COLUMN27 VARCHAR(255), COLUMN28 VARCHAR(255), COLUMN29 VARCHAR(255), PRIMARY KEY (ID));") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;") > -1
+        file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));\r
+CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR(255), COLUMN01 VARCHAR(255), COLUMN02 VARCHAR(255), COLUMN03 VARCHAR(255), COLUMN04 VARCHAR(255), COLUMN05 VARCHAR(255), COLUMN06 VARCHAR(255), COLUMN07 VARCHAR(255), COLUMN08 VARCHAR(255), COLUMN09 VARCHAR(255), COLUMN10 VARCHAR(255), COLUMN11 VARCHAR(255), COLUMN12 VARCHAR(255), COLUMN13 VARCHAR(255), COLUMN14 VARCHAR(255), COLUMN15 VARCHAR(255), COLUMN16 VARCHAR(255), COLUMN17 VARCHAR(255), COLUMN18 VARCHAR(255), COLUMN19 VARCHAR(255), COLUMN20 VARCHAR(255), COLUMN21 VARCHAR(255), COLUMN22 VARCHAR(255), COLUMN23 VARCHAR(255), COLUMN24 VARCHAR(255), COLUMN25 VARCHAR(255), COLUMN26 VARCHAR(255), COLUMN27 VARCHAR(255), COLUMN28 VARCHAR(255), COLUMN29 VARCHAR(255), PRIMARY KEY (ID));\r
+CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;\r
+"""
         file("build/generated-schema/drop.sql").exists()
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE KEY_VALUE_STORE CASCADE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE CASCADE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE;") > -1
+        file("build/generated-schema/drop.sql").text == """DROP TABLE KEY_VALUE_STORE CASCADE;\r
+DROP TABLE MANY_COLUMN_TABLE CASCADE;\r
+DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
+"""
     }
 
     def shouldWorkHibernate() {
@@ -112,13 +110,15 @@ class GeneratePostgreSqlSpec extends FunctionalSpec {
         then:
         // script82above
         file("build/generated-schema/82-create.sql").exists()
-        file("build/generated-schema/82-create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at timestamp, stored_value varchar(32768), primary key (stored_key));") > -1
-        file("build/generated-schema/82-create.sql").text.indexOf("create table many_column_table (id int8 not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
-        file("build/generated-schema/82-create.sql").text.indexOf("create sequence hibernate_sequence;") > -1
+        file("build/generated-schema/82-create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at timestamp, stored_value varchar(32768), primary key (stored_key));\r
+create table many_column_table (id int8 not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));\r
+create sequence hibernate_sequence;\r
+"""
         file("build/generated-schema/82-drop.sql").exists()
-        file("build/generated-schema/82-drop.sql").text.indexOf("drop table if exists key_value_store cascade;") > -1
-        file("build/generated-schema/82-drop.sql").text.indexOf("drop table if exists many_column_table cascade;") > -1
-        file("build/generated-schema/82-drop.sql").text.indexOf("drop sequence hibernate_sequence;") > -1
+        file("build/generated-schema/82-drop.sql").text == """drop table if exists key_value_store cascade;\r
+drop table if exists many_column_table cascade;\r
+drop sequence hibernate_sequence;\r
+"""
         // script81below
     }
 }
