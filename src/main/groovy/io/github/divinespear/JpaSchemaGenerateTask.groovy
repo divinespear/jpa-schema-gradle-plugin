@@ -198,7 +198,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
     }
     
     String format(String s) {
-        s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)$/, "\r\n\$0").replaceAll(/(\)?[^\),]*,)\s*/, "\$1\r\n\t")
+        s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/(\)?[^\),]*,)\s*/, "\$1\r\n\t")
     }
 
     @TaskAction

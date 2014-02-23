@@ -67,13 +67,15 @@ class GenerateH2Spec extends FunctionalSpec {
         run "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR, COLUMN01 VARCHAR, COLUMN02 VARCHAR, COLUMN03 VARCHAR, COLUMN04 VARCHAR, COLUMN05 VARCHAR, COLUMN06 VARCHAR, COLUMN07 VARCHAR, COLUMN08 VARCHAR, COLUMN09 VARCHAR, COLUMN10 VARCHAR, COLUMN11 VARCHAR, COLUMN12 VARCHAR, COLUMN13 VARCHAR, COLUMN14 VARCHAR, COLUMN15 VARCHAR, COLUMN16 VARCHAR, COLUMN17 VARCHAR, COLUMN18 VARCHAR, COLUMN19 VARCHAR, COLUMN20 VARCHAR, COLUMN21 VARCHAR, COLUMN22 VARCHAR, COLUMN23 VARCHAR, COLUMN24 VARCHAR, COLUMN25 VARCHAR, COLUMN26 VARCHAR, COLUMN27 VARCHAR, COLUMN28 VARCHAR, COLUMN29 VARCHAR, PRIMARY KEY (ID));") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;") > -1
+        file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));\r
+CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR, COLUMN01 VARCHAR, COLUMN02 VARCHAR, COLUMN03 VARCHAR, COLUMN04 VARCHAR, COLUMN05 VARCHAR, COLUMN06 VARCHAR, COLUMN07 VARCHAR, COLUMN08 VARCHAR, COLUMN09 VARCHAR, COLUMN10 VARCHAR, COLUMN11 VARCHAR, COLUMN12 VARCHAR, COLUMN13 VARCHAR, COLUMN14 VARCHAR, COLUMN15 VARCHAR, COLUMN16 VARCHAR, COLUMN17 VARCHAR, COLUMN18 VARCHAR, COLUMN19 VARCHAR, COLUMN20 VARCHAR, COLUMN21 VARCHAR, COLUMN22 VARCHAR, COLUMN23 VARCHAR, COLUMN24 VARCHAR, COLUMN25 VARCHAR, COLUMN26 VARCHAR, COLUMN27 VARCHAR, COLUMN28 VARCHAR, COLUMN29 VARCHAR, PRIMARY KEY (ID));\r
+CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;\r
+"""
         file("build/generated-schema/drop.sql").exists()
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE KEY_VALUE_STORE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE;") > -1
+        file("build/generated-schema/drop.sql").text == """DROP TABLE KEY_VALUE_STORE;\r
+DROP TABLE MANY_COLUMN_TABLE;\r
+DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
+"""
         file("build/generated-schema/test.h2.db").exists()
         def sql = Sql.newInstance("jdbc:h2:nio:" + file("build/generated-schema/test").toString(), "sa", null, "org.h2.Driver")
         try {
@@ -124,51 +126,59 @@ class GenerateH2Spec extends FunctionalSpec {
         run "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE KEY_VALUE_STORE (") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tSTORED_KEY VARCHAR(128) NOT NULL,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCREATED_AT TIMESTAMP,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tSTORED_VALUE VARCHAR(32768),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tPRIMARY KEY (STORED_KEY)") > -1
-        file("build/generated-schema/create.sql").text.indexOf(");") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE TABLE MANY_COLUMN_TABLE (") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tID BIGINT NOT NULL,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN00 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN01 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN02 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN03 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN04 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN05 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN06 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN07 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN08 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN09 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN10 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN11 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN12 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN13 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN14 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN15 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN16 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN17 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN18 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN19 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN20 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN21 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN22 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN23 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN24 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN25 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN26 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN27 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN28 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tCOLUMN29 VARCHAR,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tPRIMARY KEY (ID)") > -1
-        file("build/generated-schema/create.sql").text.indexOf(");") > -1
-        file("build/generated-schema/create.sql").text.indexOf("CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;") > -1
+        file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (\r
+\tSTORED_KEY VARCHAR(128) NOT NULL,\r
+\tCREATED_AT TIMESTAMP,\r
+\tSTORED_VALUE VARCHAR(32768),\r
+\tPRIMARY KEY (STORED_KEY)\r
+);\r
+\r
+CREATE TABLE MANY_COLUMN_TABLE (\r
+\tID BIGINT NOT NULL,\r
+\tCOLUMN00 VARCHAR,\r
+\tCOLUMN01 VARCHAR,\r
+\tCOLUMN02 VARCHAR,\r
+\tCOLUMN03 VARCHAR,\r
+\tCOLUMN04 VARCHAR,\r
+\tCOLUMN05 VARCHAR,\r
+\tCOLUMN06 VARCHAR,\r
+\tCOLUMN07 VARCHAR,\r
+\tCOLUMN08 VARCHAR,\r
+\tCOLUMN09 VARCHAR,\r
+\tCOLUMN10 VARCHAR,\r
+\tCOLUMN11 VARCHAR,\r
+\tCOLUMN12 VARCHAR,\r
+\tCOLUMN13 VARCHAR,\r
+\tCOLUMN14 VARCHAR,\r
+\tCOLUMN15 VARCHAR,\r
+\tCOLUMN16 VARCHAR,\r
+\tCOLUMN17 VARCHAR,\r
+\tCOLUMN18 VARCHAR,\r
+\tCOLUMN19 VARCHAR,\r
+\tCOLUMN20 VARCHAR,\r
+\tCOLUMN21 VARCHAR,\r
+\tCOLUMN22 VARCHAR,\r
+\tCOLUMN23 VARCHAR,\r
+\tCOLUMN24 VARCHAR,\r
+\tCOLUMN25 VARCHAR,\r
+\tCOLUMN26 VARCHAR,\r
+\tCOLUMN27 VARCHAR,\r
+\tCOLUMN28 VARCHAR,\r
+\tCOLUMN29 VARCHAR,\r
+\tPRIMARY KEY (ID)\r
+);\r
+\r
+CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;\r
+\r
+"""
         file("build/generated-schema/drop.sql").exists()
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE KEY_VALUE_STORE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP TABLE MANY_COLUMN_TABLE;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("DROP SEQUENCE SEQ_GEN_SEQUENCE;") > -1
+        file("build/generated-schema/drop.sql").text == """DROP TABLE KEY_VALUE_STORE;\r
+\r
+DROP TABLE MANY_COLUMN_TABLE;\r
+\r
+DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
+\r
+"""
     }
 
     def shouldWorkHibernate() {
@@ -208,11 +218,13 @@ class GenerateH2Spec extends FunctionalSpec {
         run "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/create.sql").text.indexOf("create table key_value_store (stored_key varchar(128) not null, created_at timestamp, stored_value varchar(32768), primary key (stored_key));") > -1
-        file("build/generated-schema/create.sql").text.indexOf("create table many_column_table (id bigint generated by default as identity, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));") > -1
+        file("build/generated-schema/create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at timestamp, stored_value varchar(32768), primary key (stored_key));\r
+create table many_column_table (id bigint generated by default as identity, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));\r
+"""
         file("build/generated-schema/drop.sql").exists()
-        file("build/generated-schema/drop.sql").text.indexOf("drop table key_value_store if exists;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("drop table many_column_table if exists;") > -1
+        file("build/generated-schema/drop.sql").text == """drop table key_value_store if exists;\r
+drop table many_column_table if exists;\r
+"""
         file("build/generated-schema/test.h2.db").exists()
         def sql = Sql.newInstance("jdbc:h2:nio:" + file("build/generated-schema/test").toString(), "sa", null, "org.h2.Driver")
         try {
@@ -265,48 +277,54 @@ class GenerateH2Spec extends FunctionalSpec {
         run "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/create.sql").text.indexOf("create table key_value_store (") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tstored_key varchar(128) not null,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcreated_at timestamp,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tstored_value varchar(32768),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tprimary key (stored_key)") > -1
-        file("build/generated-schema/create.sql").text.indexOf(");") > -1
-        file("build/generated-schema/create.sql").text.indexOf("create table many_column_table (") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tid bigint generated by default as identity,") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn00 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn01 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn02 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn03 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn04 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn05 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn06 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn07 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn08 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn09 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn10 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn11 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn12 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn13 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn14 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn15 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn16 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn17 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn18 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn19 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn20 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn21 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn22 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn23 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn24 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn25 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn26 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn27 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn28 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tcolumn29 varchar(255),") > -1
-        file("build/generated-schema/create.sql").text.indexOf("\tprimary key (id)") > -1
-        file("build/generated-schema/create.sql").text.indexOf(");") > -1
+        file("build/generated-schema/create.sql").text == """create table key_value_store (\r
+\tstored_key varchar(128) not null,\r
+\tcreated_at timestamp,\r
+\tstored_value varchar(32768),\r
+\tprimary key (stored_key)\r
+);\r
+\r
+create table many_column_table (\r
+\tid bigint generated by default as identity,\r
+\tcolumn00 varchar(255),\r
+\tcolumn01 varchar(255),\r
+\tcolumn02 varchar(255),\r
+\tcolumn03 varchar(255),\r
+\tcolumn04 varchar(255),\r
+\tcolumn05 varchar(255),\r
+\tcolumn06 varchar(255),\r
+\tcolumn07 varchar(255),\r
+\tcolumn08 varchar(255),\r
+\tcolumn09 varchar(255),\r
+\tcolumn10 varchar(255),\r
+\tcolumn11 varchar(255),\r
+\tcolumn12 varchar(255),\r
+\tcolumn13 varchar(255),\r
+\tcolumn14 varchar(255),\r
+\tcolumn15 varchar(255),\r
+\tcolumn16 varchar(255),\r
+\tcolumn17 varchar(255),\r
+\tcolumn18 varchar(255),\r
+\tcolumn19 varchar(255),\r
+\tcolumn20 varchar(255),\r
+\tcolumn21 varchar(255),\r
+\tcolumn22 varchar(255),\r
+\tcolumn23 varchar(255),\r
+\tcolumn24 varchar(255),\r
+\tcolumn25 varchar(255),\r
+\tcolumn26 varchar(255),\r
+\tcolumn27 varchar(255),\r
+\tcolumn28 varchar(255),\r
+\tcolumn29 varchar(255),\r
+\tprimary key (id)\r
+);\r
+\r
+"""
         file("build/generated-schema/drop.sql").exists()
-        file("build/generated-schema/drop.sql").text.indexOf("drop table key_value_store if exists;") > -1
-        file("build/generated-schema/drop.sql").text.indexOf("drop table many_column_table if exists;") > -1
+        file("build/generated-schema/drop.sql").text == """drop table key_value_store if exists;\r
+\r
+drop table many_column_table if exists;\r
+\r
+"""
     }
 }
