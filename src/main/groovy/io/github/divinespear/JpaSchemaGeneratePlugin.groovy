@@ -297,6 +297,7 @@ class SchemaGenerationConfig {
         this(name)
 
         this.skip = (target?.skip ?: false) ? target.skip : base.skip
+        this.format = (target?.format ?: false) ? target.format : base.format
         this.scanTestClasses = (target?.scanTestClasses ?: false) ? target.scanTestClasses : base.scanTestClasses
 
         this.persistenceXml = target?.persistenceXml ?: base.persistenceXml

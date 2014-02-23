@@ -184,7 +184,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                             line.replaceAll(/(?i)((?:create|drop|alter)\s+(?:table|view|sequence))/, ";\$1").split(";").each {
                                 def s = it?.trim() ?: ""
                                 if (!s.empty) {
-                                    tmp << s + ";\r\n"
+                                    tmp << (target.format ? format(s) : s) + ";\r\n" + (target.format ? "\r\n" : "")
                                 }
                             }
                         }
@@ -195,6 +195,10 @@ class JpaSchemaGenerateTask extends DefaultTask {
                 }
             }
         }
+    }
+    
+    String format(String s) {
+        s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)$/, "\r\n\$0").replaceAll(/(\)?[^\),]*,)\s*/, "\$1\r\n\t")
     }
 
     @TaskAction
