@@ -96,6 +96,7 @@ Here is full list of parameters of `generateSchema`.
 | name | type | description |
 | ---- | ---- | ---- |
 | `skip` | `boolean` | skip schema generation<p>default value is `false`.</p> |
+| `format` | `boolean` | generate as formatted<p>default value is `false`.</p> |
 | `scanTestClasses` | `boolean`| scan test classes<p>default value is `false`.</p> |
 | `persistenceXml` | `string` | location of `persistence.xml` file<p>Note for Hibernate: **current version (4.3.0.beta3) DOES NOT SUPPORT custom location.** (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
 | `persistenceUnitName` | `string` | unit name of `persistence.xml`<p>default value is `default`.</p> |
