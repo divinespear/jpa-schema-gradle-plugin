@@ -1,5 +1,3 @@
-package io.github.divinespear
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,8 @@ package io.github.divinespear
  * specific language governing permissions and limitations
  * under the License.
  */
+
+package io.github.divinespear
 
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.gradle.api.Plugin
