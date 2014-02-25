@@ -34,6 +34,8 @@
         <h1>
 <a name="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin"><span class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
+<p><strong>Version 0.1.7</strong></p>
+
 <p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.</p>
 
 <p>Currently support <a href="http://www.eclipse.org/eclipselink">EclipseLink</a> (Reference Implementation) and <a href="http://hibernate.org">Hibernate</a>.</p>
@@ -156,7 +158,7 @@
 <tr>
 <td><code>persistenceXml</code></td>
 <td><code>string</code></td>
-<td>location of <code>persistence.xml</code> file<p>Note for Hibernate: <strong>current version (4.3.0.beta3) DOES NOT SUPPORT custom location.</strong> (<code>SchemaExport</code> support it, but JPA 2.1 schema generator does NOT.)</p>
+<td>location of <code>persistence.xml</code> file<p>Note for Hibernate: <strong>current version (4.3.1.Final) DOES NOT SUPPORT custom location.</strong> (<code>SchemaExport</code> support it, but JPA 2.1 schema generator does NOT.)</p>
 <p>default value is <code>META-INF/persistence.xml</code>.</p>
 </td>
 </tr>
@@ -326,6 +328,73 @@
 </tr>
 </tbody>
 </table><h2>
+<a name="database-product-names" class="anchor" href="#database-product-names"><span class="octicon octicon-link"></span></a>Database Product Names</h2>
+
+<p>It's about <code>databaseProductName</code> property. If not listed below, will work as basic standard SQL.</p>
+
+<h3>
+<a name="for-eclipselink" class="anchor" href="#for-eclipselink"><span class="octicon octicon-link"></span></a>for EclipseLink</h3>
+
+<p><code>databaseMajorVersion</code> and <code>databaseMinorVersion</code> is not required.</p>
+
+<ul>
+<li>
+<code>Oracle 12</code>: Oracle 12g</li>
+<li>
+<code>Oracle 11</code>: Oracle 11g</li>
+<li>
+<code>Oracle 10</code>: Oracle 10g</li>
+<li>
+<code>Oracle 9</code>: Oracle 9i</li>
+<li>
+<code>Oracle</code>: Oracle with default compatibility</li>
+<li><code>Microsoft SQL Server</code></li>
+<li><code>DB2</code></li>
+<li><code>MySQL</code></li>
+<li><code>PostgreSQL</code></li>
+<li><code>SQL Anywhere</code></li>
+<li><code>Sybase SQL Server</code></li>
+<li>
+<code>Adaptive Server Enterprise</code> = Sybase</li>
+<li><code>Pointbase</code></li>
+<li><code>Informix Dynamic Server</code></li>
+<li><code>Firebird</code></li>
+<li><code>ingres</code></li>
+<li><code>Apache Derby</code></li>
+<li><code>H2</code></li>
+<li><code>HSQL Database Engine</code></li>
+</ul><h3>
+<a name="for-hibernate-1" class="anchor" href="#for-hibernate-1"><span class="octicon octicon-link"></span></a>for Hibernate</h3>
+
+<p>some products uses different dialect by <code>databaseMajorVersion</code> and/or <code>databaseMinorVersion</code>.</p>
+
+<ul>
+<li><code>CUBRID</code></li>
+<li><code>HSQL Database Engine</code></li>
+<li><code>H2</code></li>
+<li>
+<code>MySQL</code>: 5.0 or above, 4.x or below</li>
+<li>
+<code>PostgreSQL</code>: 9.x, 8.x (8.2 or above), 8.1 or below</li>
+<li>
+<code>Apache Derby</code>: 10.7 or above, 10.6, 10.5, 10.4 or below</li>
+<li>
+<code>ingres</code>: 10.x, 9.x (9.2 or above), 9.1 or below</li>
+<li>
+<code>Microsoft SQL Server</code>: 11.x, 10.x, 9.x, 8.x or below</li>
+<li><code>Sybase SQL Server</code></li>
+<li>
+<code>Adaptive Server Enterprise</code> = Sybase</li>
+<li>
+<code>Adaptive Server Anywhere</code> = Sybase Anywhere</li>
+<li><code>Informix Dynamic Server</code></li>
+<li><code>DB2 UDB for AS/400</code></li>
+<li> start with <code>DB2/</code>
+</li>
+<li>
+<code>Oracle</code>: 11.x, 10.x, 9.x, 8.x</li>
+<li><code>Firebird</code></li>
+</ul><h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Source Copyright © 2013 Sin-young "Divinespear" Kang. Distributed under the <a href="http://www.apache.org/licenses">Apache License, Version 2.0</a>.</p>
