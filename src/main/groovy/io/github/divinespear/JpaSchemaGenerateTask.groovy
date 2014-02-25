@@ -80,7 +80,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
     }
 
     Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
-        def Map<String, Object> map = [:]
+        Map<String, Object> map = [:]
 
         /*
          * common
@@ -139,8 +139,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
         // auto-detect
         map[AvailableSettings.AUTODETECTION] = "class,hbm"
         // dialect (without jdbc connection)
-        if (target.dialect == null && target.jdbcUrl == null) {
-            def info = new DialectResolutionInfo() {
+        if (target.dialect == null && (target.jdbcUrl ?: "").empty) {
+            DialectResolutionInfo info = new DialectResolutionInfo() {
                         String getDriverName() { null };
                         int getDriverMajorVersion() { 0};
                         int getDriverMinorVersion() { 0 };
@@ -153,6 +153,9 @@ class JpaSchemaGenerateTask extends DefaultTask {
         }
         if (target.dialect != null) {
             map[org.hibernate.cfg.AvailableSettings.DIALECT] = target.dialect
+        }
+        if (!target.databaseTarget && (target.jdbcUrl ?: "").empty) {
+            map[AvailableSettings.SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
         }
 
         return map

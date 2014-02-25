@@ -168,11 +168,19 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
             generateSchema {
                 namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
                 targets {
-                    script82above {
+                    script90 {
                         scriptAction = "drop-and-create"
                         databaseProductName = "PostgreSQL"
                         databaseMajorVersion = 9
                         databaseMinorVersion = 0
+                        createOutputFileName = "90-create.sql"
+                        dropOutputFileName = "90-drop.sql"
+                    }
+                    script82above {
+                        scriptAction = "drop-and-create"
+                        databaseProductName = "PostgreSQL"
+                        databaseMajorVersion = 8
+                        databaseMinorVersion = 2
                         createOutputFileName = "82-create.sql"
                         dropOutputFileName = "82-drop.sql"
                     }
@@ -190,6 +198,17 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
         when:
         run "generateSchema"
         then:
+        // script90
+        file("build/generated-schema/90-create.sql").exists()
+        file("build/generated-schema/90-create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at timestamp, stored_value varchar(32768), primary key (stored_key));\r
+create table many_column_table (id int8 not null, column00 varchar(255), column01 varchar(255), column02 varchar(255), column03 varchar(255), column04 varchar(255), column05 varchar(255), column06 varchar(255), column07 varchar(255), column08 varchar(255), column09 varchar(255), column10 varchar(255), column11 varchar(255), column12 varchar(255), column13 varchar(255), column14 varchar(255), column15 varchar(255), column16 varchar(255), column17 varchar(255), column18 varchar(255), column19 varchar(255), column20 varchar(255), column21 varchar(255), column22 varchar(255), column23 varchar(255), column24 varchar(255), column25 varchar(255), column26 varchar(255), column27 varchar(255), column28 varchar(255), column29 varchar(255), primary key (id));\r
+create sequence hibernate_sequence;\r
+"""
+        file("build/generated-schema/90-drop.sql").exists()
+        file("build/generated-schema/90-drop.sql").text == """drop table key_value_store cascade;\r
+drop table many_column_table cascade;\r
+drop sequence hibernate_sequence;\r
+"""
         // script82above
         file("build/generated-schema/82-create.sql").exists()
         file("build/generated-schema/82-create.sql").text == """create table key_value_store (stored_key varchar(128) not null, created_at timestamp, stored_value varchar(32768), primary key (stored_key));\r
@@ -223,11 +242,19 @@ drop sequence hibernate_sequence;\r
                 format = true
                 namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
                 targets {
-                    script82above {
+                    script90 {
                         scriptAction = "drop-and-create"
                         databaseProductName = "PostgreSQL"
                         databaseMajorVersion = 9
                         databaseMinorVersion = 0
+                        createOutputFileName = "90-create.sql"
+                        dropOutputFileName = "90-drop.sql"
+                    }
+                    script82above {
+                        scriptAction = "drop-and-create"
+                        databaseProductName = "PostgreSQL"
+                        databaseMajorVersion = 8
+                        databaseMinorVersion = 2
                         createOutputFileName = "82-create.sql"
                         dropOutputFileName = "82-drop.sql"
                     }
@@ -245,6 +272,61 @@ drop sequence hibernate_sequence;\r
         when:
         run "generateSchema"
         then:
+        // script90
+        file("build/generated-schema/90-create.sql").exists()
+        file("build/generated-schema/90-create.sql").text == """create table key_value_store (\r
+\tstored_key varchar(128) not null,\r
+\tcreated_at timestamp,\r
+\tstored_value varchar(32768),\r
+\tprimary key (stored_key)\r
+);\r
+\r
+create table many_column_table (\r
+\tid int8 not null,\r
+\tcolumn00 varchar(255),\r
+\tcolumn01 varchar(255),\r
+\tcolumn02 varchar(255),\r
+\tcolumn03 varchar(255),\r
+\tcolumn04 varchar(255),\r
+\tcolumn05 varchar(255),\r
+\tcolumn06 varchar(255),\r
+\tcolumn07 varchar(255),\r
+\tcolumn08 varchar(255),\r
+\tcolumn09 varchar(255),\r
+\tcolumn10 varchar(255),\r
+\tcolumn11 varchar(255),\r
+\tcolumn12 varchar(255),\r
+\tcolumn13 varchar(255),\r
+\tcolumn14 varchar(255),\r
+\tcolumn15 varchar(255),\r
+\tcolumn16 varchar(255),\r
+\tcolumn17 varchar(255),\r
+\tcolumn18 varchar(255),\r
+\tcolumn19 varchar(255),\r
+\tcolumn20 varchar(255),\r
+\tcolumn21 varchar(255),\r
+\tcolumn22 varchar(255),\r
+\tcolumn23 varchar(255),\r
+\tcolumn24 varchar(255),\r
+\tcolumn25 varchar(255),\r
+\tcolumn26 varchar(255),\r
+\tcolumn27 varchar(255),\r
+\tcolumn28 varchar(255),\r
+\tcolumn29 varchar(255),\r
+\tprimary key (id)\r
+);\r
+\r
+create sequence hibernate_sequence;\r
+\r
+"""
+        file("build/generated-schema/90-drop.sql").exists()
+        file("build/generated-schema/90-drop.sql").text == """drop table key_value_store cascade;\r
+\r
+drop table many_column_table cascade;\r
+\r
+drop sequence hibernate_sequence;\r
+\r
+"""
         // script82above
         file("build/generated-schema/82-create.sql").exists()
         file("build/generated-schema/82-create.sql").text == """create table key_value_store (\r

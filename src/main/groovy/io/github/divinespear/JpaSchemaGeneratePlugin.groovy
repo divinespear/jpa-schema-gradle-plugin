@@ -331,4 +331,8 @@ class SchemaGenerationConfig {
     boolean isScriptTarget() {
         return !PersistenceUnitProperties.SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(scriptAction)
     }
+
+    boolean isDatabaseTarget() {
+        return !PersistenceUnitProperties.SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(databaseAction)
+    }
 }

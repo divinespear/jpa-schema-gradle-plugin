@@ -165,7 +165,7 @@ DROP TABLE MANY_COLUMN_TABLE;\r
                     scriptdefault {
                         scriptAction = "drop-and-create"
                         databaseProductName = "MySQL"
-                        databaseMajorVersion = 5
+                        databaseMajorVersion = 4
                         databaseMinorVersion = 1
                         createOutputFileName = "default-create.sql"
                         dropOutputFileName = "default-drop.sql"
@@ -175,7 +175,6 @@ DROP TABLE MANY_COLUMN_TABLE;\r
                         databaseProductName = "MySQL"
                         databaseMajorVersion = 5
                         databaseMinorVersion = 1
-                        dialect = "org.hibernate.dialect.MySQL5Dialect"
                         createOutputFileName = "default-5-create.sql"
                         dropOutputFileName = "default-5-drop.sql"
                     }
@@ -191,7 +190,7 @@ DROP TABLE MANY_COLUMN_TABLE;\r
                     scriptinnodb {
                         scriptAction = "drop-and-create"
                         databaseProductName = "MySQL"
-                        databaseMajorVersion = 5
+                        databaseMajorVersion = 4
                         databaseMinorVersion = 1
                         dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
                         createOutputFileName = "innodb-create.sql"
@@ -281,7 +280,7 @@ drop table if exists many_column_table;\r
                     scriptdefault {
                         scriptAction = "drop-and-create"
                         databaseProductName = "MySQL"
-                        databaseMajorVersion = 5
+                        databaseMajorVersion = 4
                         databaseMinorVersion = 1
                         createOutputFileName = "default-create.sql"
                         dropOutputFileName = "default-drop.sql"
@@ -291,7 +290,6 @@ drop table if exists many_column_table;\r
                         databaseProductName = "MySQL"
                         databaseMajorVersion = 5
                         databaseMinorVersion = 1
-                        dialect = "org.hibernate.dialect.MySQL5Dialect"
                         createOutputFileName = "default-5-create.sql"
                         dropOutputFileName = "default-5-drop.sql"
                     }
@@ -307,7 +305,7 @@ drop table if exists many_column_table;\r
                     scriptinnodb {
                         scriptAction = "drop-and-create"
                         databaseProductName = "MySQL"
-                        databaseMajorVersion = 5
+                        databaseMajorVersion = 4
                         databaseMinorVersion = 1
                         dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
                         createOutputFileName = "innodb-create.sql"
