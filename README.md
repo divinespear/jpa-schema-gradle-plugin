@@ -14,6 +14,7 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
+
 ## How-to Use
 
 Put this to your `build.gradle`
@@ -118,6 +119,54 @@ Here is full list of parameters of `generateSchema`.
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `namingStrategy` | `string` | naming strategy that implements `org.hibernate.cfg.NamingStrategy`<p>this is Hibernate-only option.</p> |
 | `dialect` | `string` | dialect class<p>use this parameter if you want use custom dialect class. default is detect from JDBC connection or using `databaseProductName`, `databaseMajorVersion`, and `databaseMinorVersion`.</p><p>this is Hibernate-only option.</p> |
+
+
+## Database Product Names
+
+It's about `databaseProductName` property. If not listed below, will work as basic standard SQL.
+
+### for EclipseLink
+`databaseMajorVersion` and `databaseMinorVersion` is not required.
+
+* `Oracle 12`: Oracle 12g
+* `Oracle 11`: Oracle 11g
+* `Oracle 10`: Oracle 10g
+* `Oracle 9`: Oracle 9i
+* `Oracle`: Oracle with default compatibility
+* `Microsoft SQL Server`
+* `DB2`
+* `MySQL`
+* `PostgreSQL`
+* `SQL Anywhere`
+* `Sybase SQL Server`
+* `Adaptive Server Enterprise` = Sybase
+* `Pointbase`
+* `Informix Dynamic Server`
+* `Firebird`
+* `ingres`
+* `Apache Derby`
+* `H2`
+* `HSQL Database Engine`
+
+### for Hibernate
+some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`.
+
+* `CUBRID`
+* `HSQL Database Engine`
+* `H2`
+* `MySQL`: 5.0 or above, 4.x or below
+* `PostgreSQL`: 9.x, 8.x (8.2 or above), 8.1 or below
+* `Apache Derby`: 10.7 or above, 10.6, 10.5, 10.4 or below
+* `ingres`: 10.x, 9.x (9.2 or above), 9.1 or below
+* `Microsoft SQL Server`: 11.x, 10.x, 9.x, 8.x or below
+* `Sybase SQL Server`
+* `Adaptive Server Enterprise` = Sybase
+* `Adaptive Server Anywhere` = Sybase Anywhere
+* `Informix Dynamic Server`
+* `DB2 UDB for AS/400`
+*  start with `DB2/`
+* `Oracle`: 11.x, 10.x, 9.x, 8.x
+* `Firebird`
 
 
 ## License
