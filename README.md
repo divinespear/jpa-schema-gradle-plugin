@@ -99,7 +99,7 @@ Here is full list of parameters of `generateSchema`.
 | `skip` | `boolean` | skip schema generation<p>default value is `false`.</p> |
 | `format` | `boolean` | generate as formatted<p>default value is `false`.</p> |
 | `scanTestClasses` | `boolean`| scan test classes<p>default value is `false`.</p> |
-| `persistenceXml` | `string` | location of `persistence.xml` file<p>Note for Hibernate: **current version (4.3.0.beta3) DOES NOT SUPPORT custom location.** (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
+| `persistenceXml` | `string` | location of `persistence.xml` file<p>Note for Hibernate: **current version (4.3.1.Final) DOES NOT SUPPORT custom location.** (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
 | `persistenceUnitName` | `string` | unit name of `persistence.xml`<p>default value is `default`.</p> |
 | `databaseAction` | `string` | schema generation action for database<p>support value is one of <ul><li>`none`</li><li>`create`</li><li>`drop`</li><li>`drop-and-create`</li><li>`create-or-extend-tables` (only for EclipseLink with database target)</li></ul></p><p>default value is `none`.</p> |
 | `scriptAction` | `string` | schema generation action for script<p>support value is one of <ul><li>`none`</li><li>`create`</li><li>`drop`</li><li>`drop-and-create`</li></ul></p><p>default value is `none`.</p> |
