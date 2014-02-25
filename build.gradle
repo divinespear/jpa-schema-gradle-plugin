@@ -27,7 +27,7 @@ version = "0.1.7-SNAPSHOT"
 
 ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 ext.version_eclipselink = "2.5.1"
-ext.version_hibernate = "4.3.0.Beta3"
+ext.version_hibernate = "4.3.1.Final"
 
 // deploy config
 ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
