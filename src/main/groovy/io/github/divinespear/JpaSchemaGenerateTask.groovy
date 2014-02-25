@@ -1,5 +1,3 @@
-package io.github.divinespear
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,6 +17,8 @@ package io.github.divinespear
  * under the License.
  */
 
+package io.github.divinespear
+
 import java.sql.Driver
 import java.sql.DriverManager
 
@@ -27,8 +27,8 @@ import javax.persistence.Persistence
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.hibernate.engine.jdbc.dialect.internal.StandardDatabaseInfoDialectResolver
-import org.hibernate.engine.jdbc.dialect.spi.DatabaseInfoDialectResolver.DatabaseInfo
+import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
+import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo
 import org.hibernate.jpa.AvailableSettings
 
 class JpaSchemaGenerateTask extends DefaultTask {
@@ -75,12 +75,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
         classURLs.each {
             logger.info("  * classpath: " + it)
         }
-        
+
         return new URLClassLoader(classURLs.toArray(new URL[0]), this.class.classLoader)
     }
 
     Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
-        def Map<String, Object> map = [:]
+        Map<String, Object> map = [:]
 
         /*
          * common
@@ -139,28 +139,23 @@ class JpaSchemaGenerateTask extends DefaultTask {
         // auto-detect
         map[AvailableSettings.AUTODETECTION] = "class,hbm"
         // dialect (without jdbc connection)
-        if (target.dialect == null && target.jdbcUrl == null) {
-            DatabaseInfo databaseInfo = new DatabaseInfo() {
-                        @Override
-                        public String getDatabaseName() {
-                            return target.databaseProductName
-                        }
-
-                        @Override
-                        public int getDatabaseMajorVersion() {
-                            return target.databaseMajorVersion ?: 0
-                        }
-
-                        @Override
-                        public int getDatabaseMinorVersion() {
-                            return target.databaseMinorVersion ?: 0
-                        }
+        if (target.dialect == null && (target.jdbcUrl ?: "").empty) {
+            DialectResolutionInfo info = new DialectResolutionInfo() {
+                        String getDriverName() { null };
+                        int getDriverMajorVersion() { 0};
+                        int getDriverMinorVersion() { 0 };
+                        String getDatabaseName() { target.databaseProductName };
+                        int getDatabaseMajorVersion() { target.databaseMajorVersion ?: 0 };
+                        int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 };
                     }
-            def detectedDialect = new StandardDatabaseInfoDialectResolver().resolve(databaseInfo)
+            def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
             target.dialect = detectedDialect.getClass().getName()
         }
         if (target.dialect != null) {
             map[org.hibernate.cfg.AvailableSettings.DIALECT] = target.dialect
+        }
+        if (!target.databaseTarget && (target.jdbcUrl ?: "").empty) {
+            map[AvailableSettings.SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
         }
 
         return map
@@ -196,7 +191,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
             }
         }
     }
-    
+
     String format(String s) {
         s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t")
     }
