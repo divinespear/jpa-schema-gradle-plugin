@@ -45,7 +45,7 @@ class GenerateH2Spec extends FunctionalSpec {
                     output.resourcesDir output.classesDir
                 }
             }
-            
+
             generateSchema {
                 targets {
                     h2script {

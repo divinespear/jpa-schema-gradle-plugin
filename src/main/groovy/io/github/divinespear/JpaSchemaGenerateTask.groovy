@@ -67,7 +67,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         }
 
         // dependency artifacts to url
-        project.configurations.compile.each {
+        project.configurations.runtime.each {
             classURLs << it.toURI().toURL()
         }
 

@@ -69,8 +69,6 @@ dependencies {
     runtime "org.springframework.data:spring-data-jpa:1.5.0.RELEASE"
     runtime "joda-time:joda-time:2.3"
     runtime "org.joda:joda-convert:1.6"
-    // additional requested
-    runtime "javax.validation:validation-api:1.1.0.Final"
 
     // deploy
     deployerJars "org.apache.maven.wagon:wagon-http:2.2"
