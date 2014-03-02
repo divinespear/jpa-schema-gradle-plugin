@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.github.divinespear:jpa-schema-gradle-plugin:0.1.0"
+        classpath "io.github.divinespear:jpa-schema-gradle-plugin:0.1.7-1"
         // jdbc drivers also here
         ...
     }
