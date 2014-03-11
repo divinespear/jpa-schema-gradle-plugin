@@ -154,9 +154,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
         if (target.dialect != null) {
             map[org.hibernate.cfg.AvailableSettings.DIALECT] = target.dialect
         }
+        // issue-3: pass mock connection
         if (!target.databaseTarget && (target.jdbcUrl ?: "").empty) {
             map[AvailableSettings.SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
         }
+        // issue-5: pass "none" for avoid validation while schema generating
+        map[AvailableSettings.VALIDATION_MODE] = "none"
 
         return map
     }
