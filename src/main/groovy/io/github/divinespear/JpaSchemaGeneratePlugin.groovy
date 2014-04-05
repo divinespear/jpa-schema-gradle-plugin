@@ -263,6 +263,14 @@ class SchemaGenerationConfig {
      * </ul>
      */
     Integer databaseMinorVersion
+    
+    /**
+     * database platform class or name (eclipselink) / dialect class (hibernate)
+     * <p>
+     * use this parameter if you want use custom dialect class. default is detect from JDBC connection or using
+     * {@link #databaseProductName}, {@link #databaseMajorVersion}, and {@link #databaseMinorVersion}.
+     */
+    String databasePlatform;
 
     /**
      * naming strategy that implements {@link org.hibernate.cfg.NamingStrategy}
@@ -282,6 +290,7 @@ class SchemaGenerationConfig {
      * this is Hibernate-only option.
      * 
      * @category Hibernate
+     * @deprecated use <code>databasePlatform</code> instead.
      */
     String dialect
 
@@ -323,6 +332,7 @@ class SchemaGenerationConfig {
         this.databaseProductName = target?.databaseProductName ?: base.databaseProductName
         this.databaseMajorVersion = target?.databaseMajorVersion ?: base.databaseMajorVersion
         this.databaseMinorVersion = target?.databaseMinorVersion ?: base.databaseMinorVersion
+        this.databasePlatform = target?.databasePlatform ?: base.databasePlatform
 
         this.namingStrategy = target?.namingStrategy ?: base.namingStrategy
         this.dialect = target?.dialect ?: base.dialect
