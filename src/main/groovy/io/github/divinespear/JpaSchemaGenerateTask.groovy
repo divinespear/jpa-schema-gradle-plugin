@@ -23,6 +23,7 @@ import java.sql.Driver
 import java.sql.DriverManager
 
 import javax.persistence.Persistence
+import javax.persistence.PersistenceProperty;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.gradle.api.DefaultTask
@@ -124,6 +125,28 @@ class JpaSchemaGenerateTask extends DefaultTask {
         } else {
             map[PersistenceUnitProperties.SCHEMA_GENERATION_DROP_SCRIPT_SOURCE] = target.dropSourceFile.toURI().toString()
         }
+        
+        // database platform (without jdbc connection)
+        if (target.databasePlatform == null) {
+            if (target.dialect != null) {
+                target.databasePlatform = target.dialect;
+            } else if ((target.jdbcUrl ?: "").empty) {
+                DialectResolutionInfo info = new DialectResolutionInfo() {
+                            String getDriverName() { null };
+                            int getDriverMajorVersion() { 0};
+                            int getDriverMinorVersion() { 0 };
+                            String getDatabaseName() { target.databaseProductName };
+                            int getDatabaseMajorVersion() { target.databaseMajorVersion ?: 0 };
+                            int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 };
+                        }
+                def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
+                target.databasePlatform = detectedDialect.getClass().getName()
+            }
+        }
+        if (target.databasePlatform != null) {
+            map[org.hibernate.cfg.AvailableSettings.DIALECT] = target.databasePlatform
+            map[PersistenceUnitProperties.TARGET_DATABASE] = target.databasePlatform
+        }
 
         /*
          * EclipseLink specific
@@ -138,22 +161,6 @@ class JpaSchemaGenerateTask extends DefaultTask {
         map[AvailableSettings.NAMING_STRATEGY] = target.namingStrategy
         // auto-detect
         map[AvailableSettings.AUTODETECTION] = "class,hbm"
-        // dialect (without jdbc connection)
-        if (target.dialect == null && (target.jdbcUrl ?: "").empty) {
-            DialectResolutionInfo info = new DialectResolutionInfo() {
-                        String getDriverName() { null };
-                        int getDriverMajorVersion() { 0};
-                        int getDriverMinorVersion() { 0 };
-                        String getDatabaseName() { target.databaseProductName };
-                        int getDatabaseMajorVersion() { target.databaseMajorVersion ?: 0 };
-                        int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 };
-                    }
-            def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
-            target.dialect = detectedDialect.getClass().getName()
-        }
-        if (target.dialect != null) {
-            map[org.hibernate.cfg.AvailableSettings.DIALECT] = target.dialect
-        }
         // issue-3: pass mock connection
         if (!target.databaseTarget && (target.jdbcUrl ?: "").empty) {
             map[AvailableSettings.SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
