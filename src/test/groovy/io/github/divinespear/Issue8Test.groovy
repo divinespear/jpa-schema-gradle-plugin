@@ -32,4 +32,13 @@ class Issue8Test {
         def task = getTask()
         assertThat(task.format(from), is(expected))
     }
+    
+    @Test
+    void shouldFormatCreateIndex() {
+        def from = "CREATE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED ON USER_ACCOUNT (ENABLED,DELETED);"
+        def expected = """CREATE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED\r
+\tON USER_ACCOUNT (ENABLED,DELETED);"""
+        def task = getTask()
+        assertThat(task.format(from), is(expected))
+    }
 }
