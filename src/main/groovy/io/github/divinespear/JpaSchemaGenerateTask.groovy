@@ -196,7 +196,35 @@ class JpaSchemaGenerateTask extends DefaultTask {
     }
 
     String format(String s) {
-        s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t")
+        if (s =~ /(?i)^create\s+(?:table|view)/ ) {
+            def result = ""
+            def parts = s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t").split("\r\n")
+            def completed = true
+            parts.each {
+                if (it =~ /^\S/) {
+                    if (!completed) {
+                        result += '\r\n'
+                    }
+                    result += (it + '\r\n')
+                } else if (completed) {
+                    if (it =~ /^\s*[^(]+(?:[^(),\s]+|\S\([^)]+\)[^),]*),\s*$/) {
+                        result += (it + '\r\n')
+                    } else {
+                        result += it
+                        completed = false
+                    }
+                } else {
+                    result += it.trim()
+                    if (it =~ /[^)]+\).*$/) {
+                        result += '\r\n'
+                        completed = true
+                    }
+                }
+            }
+            result.trim()
+        } else {
+            s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t")
+        }
     }
 
     @TaskAction
