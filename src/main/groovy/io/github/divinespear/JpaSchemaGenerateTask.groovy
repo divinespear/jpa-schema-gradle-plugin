@@ -197,9 +197,10 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
     String format(String s) {
         s = s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t")
+        def result = ""
+        def completed = true
         if (s =~ /(?i)^create\s+(?:table|view)/) {
-            def result = ""
-            def completed = true
+            // create table/view
             s.split("\r\n").each {
                 if (it =~ /^\S/) {
                     if (!completed) {
@@ -221,10 +222,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
                     }
                 }
             }
-            result.trim()
         } else if (s =~  /(?i)^create\s+index/) {
-            def result = ""
-            def completed = true
+            // create index
             s.replaceAll(/(?i)^(create\s+index\s+\S+)\s*/, '\$1\r\n\t').split("\r\n").each {
                 if (result.isEmpty()) {
                     result += (it + '\r\n')
@@ -243,10 +242,30 @@ class JpaSchemaGenerateTask extends DefaultTask {
                     }
                 }
             }
-            result.trim()
+        } else if (s =~  /(?i)^alter\s+table/) {
+            // alter table
+            s.replaceAll(/(?i)^(alter\s+table\s+\S+)\s*/, '\$1\r\n\t').replaceAll(/(?i)\)\s*(references)/, ')\r\n\t\$1').split("\r\n").each {
+                if (result.isEmpty()) {
+                    result += (it + '\r\n')
+                } else if (completed) {
+                    if (it =~ /^\s*[^(]+(?:[^(),\s]+|\S\([^)]+\)[^),]*),\s*$/) {
+                        result += (it + '\r\n')
+                    } else {
+                        result += it
+                        completed = false
+                    }
+                } else {
+                    result += it.trim()
+                    if (it =~ /[^)]+\).*$/) {
+                        result += '\r\n'
+                        completed = true
+                    }
+                }
+            }
         } else {
-            s
+            result = s
         }
+        result.trim()
     }
 
     @TaskAction

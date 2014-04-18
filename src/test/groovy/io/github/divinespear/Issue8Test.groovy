@@ -41,4 +41,14 @@ class Issue8Test {
         def task = getTask()
         assertThat(task.format(from), is(expected))
     }
+    
+    @Test
+    void shouldFormatAlterTable() {
+        def from = "ALTER TABLE PRODUCT_CATEGORY ADD CONSTRAINT PRODUCTCATEGORYPRENTID FOREIGN KEY (PARENT_ID) REFERENCES PRODUCT_CATEGORY (ID);"
+        def expected = """ALTER TABLE PRODUCT_CATEGORY\r
+\tADD CONSTRAINT PRODUCTCATEGORYPRENTID FOREIGN KEY (PARENT_ID)\r
+\tREFERENCES PRODUCT_CATEGORY (ID);"""
+        def task = getTask()
+        assertThat(task.format(from), is(expected))
+    }
 }
