@@ -242,6 +242,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                     }
                 }
             }
+            result = result.replaceAll(/(?i)(asc|desc)\s*(on)/, '\$2')
         } else if (s =~  /(?i)^alter\s+table/) {
             // alter table
             s.replaceAll(/(?i)^(alter\s+table\s+\S+)\s*/, '\$1\r\n\t').replaceAll(/(?i)\)\s*(references)/, ')\r\n\t\$1').split("\r\n").each {
