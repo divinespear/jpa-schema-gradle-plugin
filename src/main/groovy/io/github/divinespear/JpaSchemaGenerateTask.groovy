@@ -199,7 +199,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         s = s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t")
         def result = ""
         def completed = true
-        if (s =~ /(?i)^create\s+(?:table|view)/) {
+        if (s =~ /(?i)^create(\s+\S+)?\s+(?:table|view)/) {
             // create table/view
             s.split("\r\n").each {
                 if (it =~ /^\S/) {
@@ -222,9 +222,9 @@ class JpaSchemaGenerateTask extends DefaultTask {
                     }
                 }
             }
-        } else if (s =~  /(?i)^create\s+index/) {
+        } else if (s =~  /(?i)^create(\s+\S+)?\s+index/) {
             // create index
-            s.replaceAll(/(?i)^(create\s+index\s+\S+)\s*/, '\$1\r\n\t').split("\r\n").each {
+            s.replaceAll(/(?i)^(create(\s+\S+)?\s+index\s+\S+)\s*/, '\$1\r\n\t').split("\r\n").each {
                 if (result.isEmpty()) {
                     result += (it + '\r\n')
                 } else if (completed) {
