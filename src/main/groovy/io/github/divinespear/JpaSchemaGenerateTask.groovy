@@ -164,10 +164,15 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return map
     }
 
+    private Map<String, String> LINE_SEPARAOR_MAP = ["CRLF": "\r\n", "LF": "\n", "CR": "\r"]
+
     void postProcess(SchemaGenerationConfig target) {
         if (target.outputDirectory == null) {
             return
         }
+
+        final def linesep = LINE_SEPARAOR_MAP[target.lineSeparator?.toUpperCase()]?: System.lineSeparator()
+
         def files = [
             new File(target.outputDirectory, target.createOutputFileName),
             new File(target.outputDirectory, target.dropOutputFileName)
@@ -182,7 +187,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                             line.replaceAll(/(?i)((?:create|drop|alter)\s+(?:table|view|sequence))/, ";\$1").split(";").each {
                                 def s = it?.trim() ?: ""
                                 if (!s.empty) {
-                                    tmp << (target.format ? format(s) : s) + ";\r\n" + (target.format ? "\r\n" : "")
+                                    tmp << (target.format ? format(s, linesep) : s) + ";" + linesep + (target.format ? linesep : "")
                                 }
                             }
                         }
@@ -195,7 +200,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         }
     }
 
-    String format(String s) {
+    String format(String s, String linesep) {
         s = s.replaceAll(/^([^(]+\()/, "\$1\r\n\t").replaceAll(/\)[^()]*$/, "\r\n\$0").replaceAll(/((?:[^(),\s]+|\S\([^)]+\)[^),]*),)\s*/, "\$1\r\n\t")
         def result = ""
         def completed = true
@@ -204,12 +209,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
             s.split("\r\n").each {
                 if (it =~ /^\S/) {
                     if (!completed) {
-                        result += '\r\n'
+                        result += linesep
                     }
-                    result += (it + '\r\n')
+                    result += (it + linesep)
                 } else if (completed) {
                     if (it =~ /^\s*[^(]+(?:[^(),\s]+|\S\([^)]+\)[^),]*),\s*$/) {
-                        result += (it + '\r\n')
+                        result += (it + linesep)
                     } else {
                         result += it
                         completed = false
@@ -217,7 +222,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                 } else {
                     result += it.trim()
                     if (it =~ /[^)]+\).*$/) {
-                        result += '\r\n'
+                        result += linesep
                         completed = true
                     }
                 }
@@ -226,10 +231,10 @@ class JpaSchemaGenerateTask extends DefaultTask {
             // create index
             s.replaceAll(/(?i)^(create(\s+\S+)?\s+index\s+\S+)\s*/, '\$1\r\n\t').split("\r\n").each {
                 if (result.isEmpty()) {
-                    result += (it + '\r\n')
+                    result += (it + linesep)
                 } else if (completed) {
                     if (it =~ /^\s*[^(]+(?:[^(),\s]+|\S\([^)]+\)[^),]*),\s*$/) {
-                        result += (it + '\r\n')
+                        result += (it + linesep)
                     } else {
                         result += it
                         completed = false
@@ -237,7 +242,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                 } else {
                     result += it.trim()
                     if (it =~ /[^)]+\).*$/) {
-                        result += '\r\n'
+                        result += linesep
                         completed = true
                     }
                 }
@@ -247,10 +252,10 @@ class JpaSchemaGenerateTask extends DefaultTask {
             // alter table
             s.replaceAll(/(?i)^(alter\s+table\s+\S+)\s*/, '\$1\r\n\t').replaceAll(/(?i)\)\s*(references)/, ')\r\n\t\$1').split("\r\n").each {
                 if (result.isEmpty()) {
-                    result += (it + '\r\n')
+                    result += (it + linesep)
                 } else if (completed) {
                     if (it =~ /^\s*[^(]+(?:[^(),\s]+|\S\([^)]+\)[^),]*),\s*$/) {
-                        result += (it + '\r\n')
+                        result += (it + linesep)
                     } else {
                         result += it
                         completed = false
@@ -258,7 +263,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                 } else {
                     result += it.trim()
                     if (it =~ /[^)]+\).*$/) {
-                        result += '\r\n'
+                        result += linesep
                         completed = true
                     }
                 }

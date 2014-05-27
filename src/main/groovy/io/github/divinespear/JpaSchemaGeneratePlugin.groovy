@@ -48,6 +48,8 @@ class JpaSchemaGeneratePlugin implements Plugin<Project> {
 
             createSourceMode = PersistenceUnitProperties.SCHEMA_GENERATION_METADATA_SOURCE
             dropSourceMode = PersistenceUnitProperties.SCHEMA_GENERATION_METADATA_SOURCE
+
+            lineSeparator = "LF"
         }
         project.generateSchema.extensions.targets = project.container(SchemaGenerationConfig)
     }
@@ -285,6 +287,18 @@ class SchemaGenerationConfig {
      */
     String dialect
 
+    /**
+     * line separator for generated schema file.
+     * <p>
+     * support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code>
+     * (classic mac), in case-insensitive.
+     * <p>
+     * default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>,
+     * then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git
+     * <code>core.autocrlf</code> handling</a>.
+     */
+    String lineSeparator
+
     SchemaGenerationConfig() {
         this(null)
     }
@@ -326,6 +340,8 @@ class SchemaGenerationConfig {
 
         this.namingStrategy = target?.namingStrategy ?: base.namingStrategy
         this.dialect = target?.dialect ?: base.dialect
+
+        this.lineSeparator = target?.lineSeparator ?: base.lineSeparator
     }
 
     boolean isScriptTarget() {
