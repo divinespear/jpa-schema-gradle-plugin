@@ -2,10 +2,12 @@ language: groovy
 
 jdk:
   - openjdk6
-  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
 
-script: TERM=dumb ./gradlew uploadArchives
-install: TERM=dumb ./gradlew check
+install: TERM=dumb ./gradlew assemble
+script: TERM=dumb ./gradlew check
+after_success: TERM=dumb ./gradlew uploadArchives
 
 branches:
   only:
