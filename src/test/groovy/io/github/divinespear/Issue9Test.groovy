@@ -19,10 +19,10 @@ class Issue9Test {
     @Test
     void shouldOverrideCreateIndex() {
         def from = "CREATE INDEX INDEX_SYSTEM_CURRENCY_RATE_VERSION DESC ON SYSTEM_CURRENCY_RATE (VERSION DESC);"
-        def expected = """CREATE INDEX INDEX_SYSTEM_CURRENCY_RATE_VERSION\r
+        def expected = """CREATE INDEX INDEX_SYSTEM_CURRENCY_RATE_VERSION
 \tON SYSTEM_CURRENCY_RATE (VERSION DESC);"""
         def task = getTask()
-        assertThat(task.format(from), is(expected))
+        assertThat(task.format(from, System.lineSeparator()), is(expected))
     }
 
 }
