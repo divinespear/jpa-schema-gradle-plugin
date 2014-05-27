@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.github.divinespear:jpa-schema-gradle-plugin:0.1.9-1"
+        classpath "io.github.divinespear:jpa-schema-gradle-plugin:0.1.10"
         // jdbc drivers also here
         ...
     }
@@ -119,6 +119,7 @@ Here is full list of parameters of `generateSchema`.
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `namingStrategy` | `string` | naming strategy that implements `org.hibernate.cfg.NamingStrategy`<p>this is Hibernate-only option.</p> |
 | `dialect` | `string` | dialect class<p>use this parameter if you want use custom dialect class. default is detect from JDBC connection or using `databaseProductName`, `databaseMajorVersion`, and `databaseMinorVersion`.</p><p>this is Hibernate-only option.</p> |
+| `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 
 
 ## Database Product Names
@@ -128,10 +129,10 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 ### for EclipseLink
 `databaseMajorVersion` and `databaseMinorVersion` is not required.
 
-* `Oracle 12`: Oracle 12g
-* `Oracle 11`: Oracle 11g
-* `Oracle 10`: Oracle 10g
-* `Oracle 9`: Oracle 9i
+* `Oracle12`: Oracle 12g
+* `Oracle11`: Oracle 11g
+* `Oracle10`: Oracle 10g
+* `Oracle9`: Oracle 9i
 * `Oracle`: Oracle with default compatibility
 * `Microsoft SQL Server`
 * `DB2`
@@ -155,9 +156,9 @@ some products uses different dialect by `databaseMajorVersion` and/or `databaseM
 * `HSQL Database Engine`
 * `H2`
 * `MySQL`: 5.0 or above, 4.x or below
-* `PostgreSQL`: 9.x, 8.x (8.2 or above), 8.1 or below
+* `PostgreSQL`: 9.x, 8.2 or above, 8.1 or below
 * `Apache Derby`: 10.7 or above, 10.6, 10.5, 10.4 or below
-* `ingres`: 10.x, 9.x (9.2 or above), 9.1 or below
+* `ingres`: 10.x, 9.2 or above, 9.1 or below
 * `Microsoft SQL Server`: 11.x, 10.x, 9.x, 8.x or below
 * `Sybase SQL Server`
 * `Adaptive Server Enterprise` = Sybase
