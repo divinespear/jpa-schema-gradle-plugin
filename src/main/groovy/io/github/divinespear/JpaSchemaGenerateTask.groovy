@@ -171,7 +171,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
             return
         }
 
-        final def linesep = LINE_SEPARAOR_MAP[target.lineSeparator?.toUpperCase()]?: System.lineSeparator()
+        final def linesep = LINE_SEPARAOR_MAP[target.lineSeparator?.toUpperCase()]?: (System.properties["line.separator"]?:"\n")
 
         def files = [
             new File(target.outputDirectory, target.createOutputFileName),

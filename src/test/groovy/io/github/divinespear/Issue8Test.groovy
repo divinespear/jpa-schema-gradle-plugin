@@ -7,6 +7,8 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
 class Issue8Test {
+    
+    static final String linesep = System.properties["line.separator"]?:"\n"
 
     JpaSchemaGenerateTask getTask() {
         def project = ProjectBuilder.builder().build()
@@ -30,7 +32,7 @@ class Issue8Test {
 \tPRIMARY KEY (VERSION,REFERENCE_ID)
 );"""
         def task = getTask()
-        assertThat(task.format(from, System.lineSeparator()), is(expected))
+        assertThat(task.format(from, linesep), is(expected))
     }
 
     @Test
@@ -47,7 +49,7 @@ class Issue8Test {
 \tPRIMARY KEY (VERSION,REFERENCE_ID)
 );"""
         def task = getTask()
-        assertThat(task.format(from, System.lineSeparator()), is(expected))
+        assertThat(task.format(from, linesep), is(expected))
     }
 
     @Test
@@ -56,7 +58,7 @@ class Issue8Test {
         def expected = """CREATE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED
 \tON USER_ACCOUNT (ENABLED,DELETED);"""
         def task = getTask()
-        assertThat(task.format(from, System.lineSeparator()), is(expected))
+        assertThat(task.format(from, linesep), is(expected))
     }
 
     @Test
@@ -65,7 +67,7 @@ class Issue8Test {
         def expected = """CREATE UNIQUE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED
 \tON USER_ACCOUNT (ENABLED,DELETED);"""
         def task = getTask()
-        assertThat(task.format(from, System.lineSeparator()), is(expected))
+        assertThat(task.format(from, linesep), is(expected))
     }
 
     @Test
@@ -75,6 +77,6 @@ class Issue8Test {
 \tADD CONSTRAINT PRODUCTCATEGORYPRENTID FOREIGN KEY (PARENT_ID)
 \tREFERENCES PRODUCT_CATEGORY (ID);"""
         def task = getTask()
-        assertThat(task.format(from, System.lineSeparator()), is(expected))
+        assertThat(task.format(from, linesep), is(expected))
     }
 }
