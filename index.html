@@ -34,7 +34,7 @@
         <h1>
 <a name="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin"><span class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
-<p><strong>Version 0.1.9-1</strong></p>
+<p><strong>Version 0.1.10</strong></p>
 
 <p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.</p>
 
@@ -57,7 +57,7 @@
         <span class="n">mavenCentral</span><span class="o">()</span>
     <span class="o">}</span>
     <span class="n">dependencies</span> <span class="o">{</span>
-        <span class="n">classpath</span> <span class="s2">"io.github.divinespear:jpa-schema-gradle-plugin:0.1.9-1"</span>
+        <span class="n">classpath</span> <span class="s2">"io.github.divinespear:jpa-schema-gradle-plugin:0.1.10"</span>
         <span class="c1">// jdbc drivers also here</span>
         <span class="o">...</span>
     <span class="o">}</span>
@@ -326,6 +326,13 @@
 <p>this is Hibernate-only option.</p>
 </td>
 </tr>
+<tr>
+<td><code>lineSeparator</code></td>
+<td><code>string</code></td>
+<td>line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p>
+<p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p>
+</td>
+</tr>
 </tbody>
 </table><h2>
 <a name="database-product-names" class="anchor" href="#database-product-names"><span class="octicon octicon-link"></span></a>Database Product Names</h2>
@@ -339,13 +346,13 @@
 
 <ul>
 <li>
-<code>Oracle 12</code>: Oracle 12g</li>
+<code>Oracle12</code>: Oracle 12g</li>
 <li>
-<code>Oracle 11</code>: Oracle 11g</li>
+<code>Oracle11</code>: Oracle 11g</li>
 <li>
-<code>Oracle 10</code>: Oracle 10g</li>
+<code>Oracle10</code>: Oracle 10g</li>
 <li>
-<code>Oracle 9</code>: Oracle 9i</li>
+<code>Oracle9</code>: Oracle 9i</li>
 <li>
 <code>Oracle</code>: Oracle with default compatibility</li>
 <li><code>Microsoft SQL Server</code></li>
@@ -375,11 +382,11 @@
 <li>
 <code>MySQL</code>: 5.0 or above, 4.x or below</li>
 <li>
-<code>PostgreSQL</code>: 9.x, 8.x (8.2 or above), 8.1 or below</li>
+<code>PostgreSQL</code>: 9.x, 8.2 or above, 8.1 or below</li>
 <li>
 <code>Apache Derby</code>: 10.7 or above, 10.6, 10.5, 10.4 or below</li>
 <li>
-<code>ingres</code>: 10.x, 9.x (9.2 or above), 9.1 or below</li>
+<code>ingres</code>: 10.x, 9.2 or above, 9.1 or below</li>
 <li>
 <code>Microsoft SQL Server</code>: 11.x, 10.x, 9.x, 8.x or below</li>
 <li><code>Sybase SQL Server</code></li>
