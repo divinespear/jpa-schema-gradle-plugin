@@ -321,8 +321,8 @@ class SchemaGenerationConfig {
         this.scriptAction = target?.scriptAction ?: base.scriptAction
 
         this.outputDirectory = target?.outputDirectory ?: base.outputDirectory
-        this.createOutputFileName = target?.createOutputFileName ?: base.createOutputFileName
-        this.dropOutputFileName = target?.dropOutputFileName ?: base.dropOutputFileName
+        this.createOutputFileName = target?.createOutputFileName ?: (name + "-" + base.createOutputFileName)
+        this.dropOutputFileName = target?.dropOutputFileName ?: (name + "-" + base.dropOutputFileName)
 
         this.createSourceMode = target?.createSourceMode ?: base.createSourceMode
         this.createSourceFile = target?.createSourceFile ?: base.createSourceFile
