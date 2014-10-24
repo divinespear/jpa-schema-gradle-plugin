@@ -160,6 +160,11 @@ class JpaSchemaGenerateTask extends DefaultTask {
         }
         // issue-5: pass "none" for avoid validation while schema generating
         map[AvailableSettings.VALIDATION_MODE] = "none"
+        
+        // issue-13: disable JTA and datasources
+        map[PersistenceUnitProperties.TRANSACTION_TYPE] = "RESOURCE_LOCAL"
+        map[PersistenceUnitProperties.JTA_DATASOURCE] = null
+        map[PersistenceUnitProperties.NON_JTA_DATASOURCE] = null
 
         return map
     }
