@@ -34,7 +34,7 @@
         <h1>
 <a name="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin"><span class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
-<p><strong>Version 0.1.11</strong></p>
+<p><strong>Version 0.1.12</strong></p>
 
 <p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.</p>
 
@@ -57,7 +57,7 @@
         <span class="n">mavenCentral</span><span class="o">()</span>
     <span class="o">}</span>
     <span class="n">dependencies</span> <span class="o">{</span>
-        <span class="n">classpath</span> <span class="s2">"io.github.divinespear:jpa-schema-gradle-plugin:0.1.11"</span>
+        <span class="n">classpath</span> <span class="s2">"io.github.divinespear:jpa-schema-gradle-plugin:0.1.12"</span>
         <span class="c1">// jdbc drivers also here</span>
         <span class="o">...</span>
     <span class="o">}</span>
@@ -131,11 +131,13 @@
 <p>Here is full list of parameters of <code>generateSchema</code>.</p>
 
 <table>
-<thead><tr>
+<thead>
+<tr>
 <th>name</th>
 <th>type</th>
 <th>description</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr>
 <td><code>skip</code></td>
@@ -334,7 +336,9 @@
 </td>
 </tr>
 </tbody>
-</table><h2>
+</table>
+
+<h2>
 <a name="database-product-names" class="anchor" href="#database-product-names"><span class="octicon octicon-link"></span></a>Database Product Names</h2>
 
 <p>It's about <code>databaseProductName</code> property. If not listed below, will work as basic standard SQL.</p>
@@ -370,7 +374,9 @@
 <li><code>Apache Derby</code></li>
 <li><code>H2</code></li>
 <li><code>HSQL Database Engine</code></li>
-</ul><h3>
+</ul>
+
+<h3>
 <a name="for-hibernate-1" class="anchor" href="#for-hibernate-1"><span class="octicon octicon-link"></span></a>for Hibernate</h3>
 
 <p>some products uses different dialect by <code>databaseMajorVersion</code> and/or <code>databaseMinorVersion</code>.</p>
@@ -401,7 +407,9 @@
 <li>
 <code>Oracle</code>: 11.x, 10.x, 9.x, 8.x</li>
 <li><code>Firebird</code></li>
-</ul><h2>
+</ul>
+
+<h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Source Copyright © 2013 Sin-young "Divinespear" Kang. Distributed under the <a href="http://www.apache.org/licenses">Apache License, Version 2.0</a>.</p>
