@@ -27,7 +27,7 @@ version = "0.1.13-SNAPSHOT"
 
 ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 ext.version_eclipselink = "2.5.2"
-ext.version_hibernate = "4.3.6.Final"
+ext.version_hibernate = "4.3.8.Final"
 
 // deploy config
 ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
@@ -66,7 +66,7 @@ dependencies {
     }
 
     // for jpa generation using spring-data
-    runtime "org.springframework.data:spring-data-jpa:1.+"
+    runtime "org.springframework.data:spring-data-jpa:1.7.+"
     runtime "joda-time:joda-time:+"
     runtime "org.joda:joda-convert:+"
 
