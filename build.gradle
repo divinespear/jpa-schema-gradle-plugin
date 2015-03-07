@@ -23,7 +23,7 @@ apply plugin: "signing"
 apply plugin: "eclipse"
 
 group = "io.github.divinespear"
-version = "0.1.13-SNAPSHOT"
+version = "0.1.12-1"
 
 ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 ext.version_eclipselink = "2.5.2"
@@ -49,8 +49,8 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    testCompile "junit:junit:4.+"
-    testCompile "org.hamcrest:hamcrest-all:1.+"
+    testCompile "junit:junit:4.12"
+    testCompile "org.hamcrest:hamcrest-all:1.3"
     testCompile("org.spockframework:spock-core:0.7-groovy-1.8") {
         exclude module: "junit-dep"
         exclude module: "groovy-all"
@@ -66,9 +66,9 @@ dependencies {
     }
 
     // for jpa generation using spring-data
-    runtime "org.springframework.data:spring-data-jpa:1.7.+"
-    runtime "joda-time:joda-time:+"
-    runtime "org.joda:joda-convert:+"
+    runtime "org.springframework.data:spring-data-jpa:1.7.2.RELEASE"
+    runtime "joda-time:joda-time:2.7"
+    runtime "org.joda:joda-convert:1.7"
 
     // deploy
     deployerJars "org.apache.maven.wagon:wagon-http:2.2"
