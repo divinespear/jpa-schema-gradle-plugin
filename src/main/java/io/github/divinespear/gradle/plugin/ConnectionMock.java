@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package io.github.divinespear;
+package io.github.divinespear.gradle.plugin;
 
 import java.sql.Array;
 import java.sql.Blob;
