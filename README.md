@@ -12,6 +12,7 @@ Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference I
 ## 0.2.x Plan
 * Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related [#14](//github.com/divinespear/jpa-schema-gradle-plugin/issues/14)
 * Support more JPA 2.1 implementations (and also support JPA 2.0 implementations if possible)
+* [Drop support Java 1.6](http://www.oracle.com/technetwork/java/javase/eol-135779.html)
 
 * Change codebase to Java
 * and may drop support Gradle 1.x

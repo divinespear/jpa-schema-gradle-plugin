@@ -307,21 +307,26 @@ final class ConnectionMock
         return null;
     }
 
+    @Override
     public void setSchema(String schema) throws SQLException {
     }
 
+    @Override
     public String getSchema() throws SQLException {
         return null;
     }
 
+    @Override
     public void abort(Executor executor) throws SQLException {
     }
 
+    @Override
     public void setNetworkTimeout(Executor executor,
                                   int milliseconds) throws SQLException {
 
     }
 
+    @Override
     public int getNetworkTimeout() throws SQLException {
         return 0;
     }
@@ -1254,6 +1259,7 @@ final class ConnectionMock
             return false;
         }
 
+        @Override
         public ResultSet getPseudoColumns(String catalog,
                                           String schemaPattern,
                                           String tableNamePattern,
@@ -1261,6 +1267,7 @@ final class ConnectionMock
             return null;
         }
 
+        @Override
         public boolean generatedKeyAlwaysReturned() throws SQLException {
             return false;
         }

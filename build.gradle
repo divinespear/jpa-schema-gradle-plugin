@@ -39,7 +39,7 @@ apply plugin: 'propdeps-eclipse'
 group = "io.github.divinespear"
 version = "0.2.0-SNAPSHOT"
 
-sourceCompatibility = JavaVersion.VERSION_1_6
+sourceCompatibility = JavaVersion.VERSION_1_7.toString()
 
 ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
 ext.version_eclipselink = "2.6.0"
