@@ -17,17 +17,18 @@
  * under the License.
  */
 
-apply plugin: "groovy"
+apply plugin: "java"
 apply plugin: "maven"
 apply plugin: "signing"
 apply plugin: "eclipse"
 
 group = "io.github.divinespear"
-version = "0.1.13-SNAPSHOT"
+version = "0.2.0-SNAPSHOT"
 
 ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
-ext.version_eclipselink = "2.5.2"
-ext.version_hibernate = "4.3.8.Final"
+ext.version_eclipselink = "2.6.0"
+ext.version_hibernate = "4.3.10.Final"
+ext.version_datanucleus = "4.1.2"
 
 // deploy config
 ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
@@ -41,21 +42,29 @@ repositories {
 configurations {
     deployerJars
 
-    // uses hamcrest-all
-    all*.exclude module: "hamcrest-core"
+    eclipse {
+        project {
+            natures 'org.springsource.ide.eclipse.gradle.core.nature'
+        }
+        classpath {
+            downloadSources = true
+            downloadJavadoc = false
+            file {
+                whenMerged { classpath ->
+                    def entries = classpath.entries
+                    entries.findAll { it.kind == 'lib' }*.exported = false
+                }
+            }
+        }
+    }
 }
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
 
-    testCompile "junit:junit:4.12"
-    testCompile "org.hamcrest:hamcrest-all:1.3"
-    testCompile("org.spockframework:spock-core:0.7-groovy-1.8") {
-        exclude module: "junit-dep"
-        exclude module: "groovy-all"
-    }
-    testRuntime "com.h2database:h2:1.3.173"
+    testCompile 'junit:junit:4.+'
+    testCompile 'org.hamcrest:hamcrest-all:+'
+    testRuntime 'com.h2database:h2:1.+'
     testRuntime fileTree(dir: "lib", include: "*.jar")
 
     // jpa
@@ -64,11 +73,10 @@ dependencies {
     compile("org.hibernate:hibernate-entitymanager:${version_hibernate}") {
         exclude group: "org.hibernate.javax.persistence"
     }
+    compile "org.datanucleus:datanucleus-api-jpa:${version_datanucleus}"
 
     // for jpa generation using spring-data
-    runtime "org.springframework.data:spring-data-jpa:1.7.2.RELEASE"
-    runtime "joda-time:joda-time:2.7"
-    runtime "org.joda:joda-convert:1.7"
+    runtime "org.springframework.data:spring-data-jpa:1.8.1.RELEASE"
 
     // deploy
     deployerJars "org.apache.maven.wagon:wagon-http:2.2"
@@ -113,11 +121,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from 'build/docs/javadoc'
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'groovydoc'
-    from 'build/docs/groovydoc'
-}
-
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
     classifier = 'sources'
@@ -126,7 +129,6 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives jar
     archives javadocJar
-    archives groovydocJar
     archives sourcesJar
 }
 
