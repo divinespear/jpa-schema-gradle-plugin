@@ -4,9 +4,17 @@ jpa-schema-gradle-plugin
 [![Build Status](https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png)](http://travis-ci.org/divinespear/jpa-schema-gradle-plugin)
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
+for Maven, see [Maven Plugin](https://github.com/divinespear/jpa-schema-maven-plugin).
 
 Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference Implementation) and [Hibernate](http://hibernate.org).
 
+
+## 0.2.x Plan
+* Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related #14
+* Support more JPA 2.1 implementations (and also support JPA 2.0 implementations if possible)
+
+* Change codebase to Java
+* and may drop support Gradle 1.x
 
 ## Before Announce...
 
