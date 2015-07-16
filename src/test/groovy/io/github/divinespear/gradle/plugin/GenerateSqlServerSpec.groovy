@@ -19,11 +19,9 @@ package io.github.divinespear.gradle.plugin
  * under the License.
  */
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
-
-class GenerateSqlServerSpec extends FunctionalSpec {
+class GenerateSqlServerSpec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -56,7 +54,7 @@ class GenerateSqlServerSpec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/mssqlscript-create.sql").exists()
         file("build/generated-schema/mssqlscript-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT DATETIME NULL, STORED_VALUE VARCHAR(32768) NULL, PRIMARY KEY (STORED_KEY));
@@ -92,7 +90,7 @@ DROP TABLE MANY_COLUMN_TABLE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (
@@ -189,7 +187,7 @@ DROP TABLE MANY_COLUMN_TABLE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script2008
         file("build/generated-schema/2008-create.sql").exists()
@@ -264,7 +262,7 @@ drop table many_column_table;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script2008
         file("build/generated-schema/2008-create.sql").exists()

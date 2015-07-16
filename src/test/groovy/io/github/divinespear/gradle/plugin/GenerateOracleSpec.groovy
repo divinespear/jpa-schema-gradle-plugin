@@ -1,10 +1,8 @@
 package io.github.divinespear.gradle.plugin
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
-
-class GenerateOracleSpec extends FunctionalSpec {
+class GenerateOracleSpec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -27,13 +25,13 @@ class GenerateOracleSpec extends FunctionalSpec {
             
             generateSchema {
                 targets {
-                    script12g {
+                    script12c {
                         scriptAction = "drop-and-create"
                         databaseProductName = "Oracle"
                         databaseMajorVersion = 12
                         databaseMinorVersion = 0
-                        createOutputFileName = "12g-create.sql"
-                        dropOutputFileName = "12g-drop.sql"
+                        createOutputFileName = "12c-create.sql"
+                        dropOutputFileName = "12c-drop.sql"
                     }
                     script11g {
                         scriptAction = "drop-and-create"
@@ -71,16 +69,16 @@ class GenerateOracleSpec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script12g
-        file("build/generated-schema/12g-create.sql").exists()
-        file("build/generated-schema/12g-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR2(128) NOT NULL, CREATED_AT TIMESTAMP NULL, STORED_VALUE VARCHAR2(32768) NULL, PRIMARY KEY (STORED_KEY));
+        file("build/generated-schema/12c-create.sql").exists()
+        file("build/generated-schema/12c-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR2(128) NOT NULL, CREATED_AT TIMESTAMP NULL, STORED_VALUE VARCHAR2(32768) NULL, PRIMARY KEY (STORED_KEY));
 CREATE TABLE MANY_COLUMN_TABLE (ID NUMBER(19) NOT NULL, COLUMN00 VARCHAR2(255) NULL, COLUMN01 VARCHAR2(255) NULL, COLUMN02 VARCHAR2(255) NULL, COLUMN03 VARCHAR2(255) NULL, COLUMN04 VARCHAR2(255) NULL, COLUMN05 VARCHAR2(255) NULL, COLUMN06 VARCHAR2(255) NULL, COLUMN07 VARCHAR2(255) NULL, COLUMN08 VARCHAR2(255) NULL, COLUMN09 VARCHAR2(255) NULL, COLUMN10 VARCHAR2(255) NULL, COLUMN11 VARCHAR2(255) NULL, COLUMN12 VARCHAR2(255) NULL, COLUMN13 VARCHAR2(255) NULL, COLUMN14 VARCHAR2(255) NULL, COLUMN15 VARCHAR2(255) NULL, COLUMN16 VARCHAR2(255) NULL, COLUMN17 VARCHAR2(255) NULL, COLUMN18 VARCHAR2(255) NULL, COLUMN19 VARCHAR2(255) NULL, COLUMN20 VARCHAR2(255) NULL, COLUMN21 VARCHAR2(255) NULL, COLUMN22 VARCHAR2(255) NULL, COLUMN23 VARCHAR2(255) NULL, COLUMN24 VARCHAR2(255) NULL, COLUMN25 VARCHAR2(255) NULL, COLUMN26 VARCHAR2(255) NULL, COLUMN27 VARCHAR2(255) NULL, COLUMN28 VARCHAR2(255) NULL, COLUMN29 VARCHAR2(255) NULL, PRIMARY KEY (ID));
 CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;
 """
-        file("build/generated-schema/12g-drop.sql").exists()
-        file("build/generated-schema/12g-drop.sql").text == """DROP TABLE KEY_VALUE_STORE CASCADE CONSTRAINTS;
+        file("build/generated-schema/12c-drop.sql").exists()
+        file("build/generated-schema/12c-drop.sql").text == """DROP TABLE KEY_VALUE_STORE CASCADE CONSTRAINTS;
 DROP TABLE MANY_COLUMN_TABLE CASCADE CONSTRAINTS;
 DROP SEQUENCE SEQ_GEN_SEQUENCE;
 """
@@ -148,13 +146,13 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;
             generateSchema {
                 format = true
                 targets {
-                    script12g {
+                    script12c {
                         scriptAction = "drop-and-create"
                         databaseProductName = "Oracle"
                         databaseMajorVersion = 12
                         databaseMinorVersion = 0
-                        createOutputFileName = "12g-create.sql"
-                        dropOutputFileName = "12g-drop.sql"
+                        createOutputFileName = "12c-create.sql"
+                        dropOutputFileName = "12c-drop.sql"
                     }
                     script11g {
                         scriptAction = "drop-and-create"
@@ -192,12 +190,12 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
 
         // script12g
-        file("build/generated-schema/12g-create.sql").exists()
-        file("build/generated-schema/12g-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (
+        file("build/generated-schema/12c-create.sql").exists()
+        file("build/generated-schema/12c-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (
 \tSTORED_KEY VARCHAR2(128) NOT NULL,
 \tCREATED_AT TIMESTAMP NULL,
 \tSTORED_VALUE VARCHAR2(32768) NULL,
@@ -242,8 +240,8 @@ CREATE TABLE MANY_COLUMN_TABLE (
 CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;
 
 """
-        file("build/generated-schema/12g-drop.sql").exists()
-        file("build/generated-schema/12g-drop.sql").text == """DROP TABLE KEY_VALUE_STORE CASCADE CONSTRAINTS;
+        file("build/generated-schema/12c-drop.sql").exists()
+        file("build/generated-schema/12c-drop.sql").text == """DROP TABLE KEY_VALUE_STORE CASCADE CONSTRAINTS;
 
 DROP TABLE MANY_COLUMN_TABLE CASCADE CONSTRAINTS;
 
@@ -526,7 +524,7 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script11g
         file("build/generated-schema/11g-create.sql").exists()
@@ -629,7 +627,7 @@ drop sequence hibernate_sequence;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script11g
         file("build/generated-schema/11g-create.sql").exists()

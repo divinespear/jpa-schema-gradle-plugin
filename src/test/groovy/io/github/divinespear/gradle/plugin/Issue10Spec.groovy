@@ -1,10 +1,8 @@
 package io.github.divinespear.gradle.plugin
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;;
-
-class Issue10Spec extends FunctionalSpec {
+class Issue10Spec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -34,7 +32,7 @@ class Issue10Spec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));\r
@@ -72,7 +70,7 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));

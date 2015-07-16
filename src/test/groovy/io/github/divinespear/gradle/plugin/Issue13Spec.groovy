@@ -20,13 +20,12 @@ package io.github.divinespear.gradle.plugin
  */
 
 import groovy.sql.Sql
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
 
 import java.sql.Types
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-class Issue13Spec extends FunctionalSpec {
+class Issue13Spec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -65,7 +64,7 @@ class Issue13Spec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/h2script-create.sql").exists()
         file("build/generated-schema/h2script-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));

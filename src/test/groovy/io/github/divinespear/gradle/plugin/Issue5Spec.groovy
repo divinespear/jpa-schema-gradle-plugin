@@ -1,10 +1,8 @@
 package io.github.divinespear.gradle.plugin
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
-
-class Issue5Spec extends FunctionalSpec {
+class Issue5Spec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -47,7 +45,7 @@ class Issue5Spec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """create table key_value_store (

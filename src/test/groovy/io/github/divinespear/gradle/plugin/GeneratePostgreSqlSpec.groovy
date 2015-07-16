@@ -19,11 +19,9 @@ package io.github.divinespear.gradle.plugin
  * under the License.
  */
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
-
-class GeneratePostgreSqlSpec extends FunctionalSpec {
+class GeneratePostgreSqlSpec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -56,7 +54,7 @@ class GeneratePostgreSqlSpec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/postgresscript-create.sql").exists()
         file("build/generated-schema/postgresscript-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));
@@ -94,7 +92,7 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (
@@ -198,7 +196,7 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script90
         file("build/generated-schema/90-create.sql").exists()
@@ -272,7 +270,7 @@ drop sequence hibernate_sequence;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // script90
         file("build/generated-schema/90-create.sql").exists()

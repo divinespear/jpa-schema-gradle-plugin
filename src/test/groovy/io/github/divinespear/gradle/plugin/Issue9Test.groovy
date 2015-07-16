@@ -2,18 +2,15 @@ package io.github.divinespear.gradle.plugin
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.*
+import nebula.test.ProjectSpec
 
-import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGenerateTask;;
-
-class Issue9Test {
+class Issue9Test extends ProjectSpec {
 
     static final String linesep = System.properties["line.separator"]?:"\n"
 
     JpaSchemaGenerateTask getTask() {
-        def project = ProjectBuilder.builder().build()
         project.apply plugin: "jpa-schema-generate"
 
         assertThat(project.tasks.generateSchema, instanceOf(JpaSchemaGenerateTask))

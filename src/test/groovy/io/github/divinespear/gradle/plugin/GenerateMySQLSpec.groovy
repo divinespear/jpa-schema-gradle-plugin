@@ -19,11 +19,9 @@ package io.github.divinespear.gradle.plugin
  * under the License.
  */
 
-import org.gradle.test.FunctionalSpec
+import nebula.test.IntegrationSpec
 
-import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
-
-class GenerateMySQLSpec extends FunctionalSpec {
+class GenerateMySQLSpec extends IntegrationSpec {
 
     def setup() {
         buildFile << applyPlugin(JpaSchemaGeneratePlugin)
@@ -56,7 +54,7 @@ class GenerateMySQLSpec extends FunctionalSpec {
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/mysql5script-create.sql").exists()
         file("build/generated-schema/mysql5script-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT DATETIME, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));
@@ -92,7 +90,7 @@ DROP TABLE MANY_COLUMN_TABLE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (
@@ -211,7 +209,7 @@ DROP TABLE MANY_COLUMN_TABLE;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // scriptdefault
         file("build/generated-schema/default-create.sql").exists()
@@ -326,7 +324,7 @@ drop table if exists many_column_table;
             }
         """
         when:
-        run "generateSchema"
+        runTasks "generateSchema"
         then:
         // scriptdefault
         file("build/generated-schema/default-create.sql").exists()
