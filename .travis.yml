@@ -7,7 +7,7 @@ jdk:
 
 before_script:
  - "echo $JAVA_OPTS"
- - "export JAVA_OPTS='$JAVA_OPTS -Xmx512m'"
+ - 'export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=256m"'
 install: TERM=dumb ./gradlew assemble
 script: TERM=dumb ./gradlew check
 after_success: TERM=dumb ./gradlew uploadArchives
