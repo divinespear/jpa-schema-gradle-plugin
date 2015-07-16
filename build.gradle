@@ -28,7 +28,7 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'eclipse'
@@ -77,9 +77,14 @@ configurations {
 
 dependencies {
     compile gradleApi()
+    compile localGroovy()
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
+    testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {
+        exclude module: 'junit-dep'
+        exclude module: 'groovy-all'
+    }
     testRuntime 'com.h2database:h2:1.4.187'
     testRuntime fileTree(dir: "lib", include: "*.jar")
 

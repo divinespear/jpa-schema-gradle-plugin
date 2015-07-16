@@ -17,7 +17,9 @@
  * under the License.
  */
 
-package io.github.divinespear
+package io.github.divinespear.gradle.plugin
+
+import io.github.divinespear.gradle.plugin.config.Configuration
 
 import java.sql.Driver
 import java.sql.DriverManager
@@ -33,11 +35,11 @@ import org.hibernate.jpa.AvailableSettings
 
 class JpaSchemaGenerateTask extends DefaultTask {
 
-    List<SchemaGenerationConfig> getTargets() {
-        def List<SchemaGenerationConfig> list = []
+    List<Configuration> getTargets() {
+        def List<Configuration> list = []
 
         project.generateSchema.targets.all { target ->
-            list.add(new SchemaGenerationConfig(target.name, project.generateSchema, target))
+            list.add(new Configuration(target.name, project.generateSchema, target))
         }
         if (list.empty) {
             list.add(project.generateSchema)
@@ -79,7 +81,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return new URLClassLoader(classURLs.toArray(new URL[0]), this.class.classLoader)
     }
 
-    Map<String, Object> persistenceProperties(SchemaGenerationConfig target) {
+    Map<String, Object> persistenceProperties(Configuration target) {
         Map<String, Object> map = [:]
 
         /*
@@ -171,7 +173,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
     private Map<String, String> LINE_SEPARAOR_MAP = ["CRLF": "\r\n", "LF": "\n", "CR": "\r"]
 
-    void postProcess(SchemaGenerationConfig target) {
+    void postProcess(Configuration target) {
         if (target.outputDirectory == null) {
             return
         }

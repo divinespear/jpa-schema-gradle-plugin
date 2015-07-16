@@ -1,10 +1,12 @@
-package io.github.divinespear
+package io.github.divinespear.gradle.plugin
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.*
 
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
+
+import io.github.divinespear.gradle.plugin.JpaSchemaGenerateTask;
 
 class Issue8Test {
     

@@ -1,4 +1,4 @@
-package io.github.divinespear
+package io.github.divinespear.gradle.plugin
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,6 +20,8 @@ package io.github.divinespear
  */
 
 import org.gradle.test.FunctionalSpec
+
+import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
 
 class GeneratePostgreSqlSpec extends FunctionalSpec {
 

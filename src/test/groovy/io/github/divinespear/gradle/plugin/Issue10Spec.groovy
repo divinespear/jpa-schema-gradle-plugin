@@ -1,6 +1,8 @@
-package io.github.divinespear
+package io.github.divinespear.gradle.plugin
 
-import org.gradle.test.FunctionalSpec;
+import org.gradle.test.FunctionalSpec
+
+import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;;
 
 class Issue10Spec extends FunctionalSpec {
 

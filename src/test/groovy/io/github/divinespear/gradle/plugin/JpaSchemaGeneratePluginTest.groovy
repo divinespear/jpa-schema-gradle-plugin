@@ -1,4 +1,4 @@
-package io.github.divinespear
+package io.github.divinespear.gradle.plugin
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,6 +25,8 @@ import static org.junit.Assert.*
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
+import io.github.divinespear.gradle.plugin.config.Configuration;
+
 class JpaSchemaGeneratePluginTest {
 
     @Test
@@ -35,10 +37,10 @@ class JpaSchemaGeneratePluginTest {
         // task
         assertThat(project.tasks.generateSchema, instanceOf(JpaSchemaGenerateTask))
         // extensions
-        assertThat(project.generateSchema, instanceOf(SchemaGenerationConfig))
+        assertThat(project.generateSchema, instanceOf(Configuration))
         assertThat(project.generateSchema.skip, is(false))
         assertThat(project.generateSchema.outputDirectory, is(new File(project.buildDir, "generated-schema")))
-        assertThat(project.generateSchema.targets, emptyIterableOf(SchemaGenerationConfig))
+        assertThat(project.generateSchema.targets, emptyIterableOf(Configuration))
     }
 
     @Test

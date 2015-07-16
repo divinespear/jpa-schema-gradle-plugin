@@ -1,4 +1,4 @@
-package io.github.divinespear
+package io.github.divinespear.gradle.plugin
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,6 +20,7 @@ package io.github.divinespear
  */
 
 import groovy.sql.Sql
+import io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin;
 
 import java.sql.Types
 

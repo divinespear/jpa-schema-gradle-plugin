@@ -14,7 +14,6 @@ Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference I
 * Support more JPA 2.1 implementations (and also support JPA 2.0 implementations if possible)
 * [Drop support Java 1.6](http://www.oracle.com/technetwork/java/javase/eol-135779.html)
 
-* Change codebase to Java
 * and may drop support Gradle 1.x
 
 ## Before Announce...

@@ -1,13 +1,16 @@
 package org.gradle.test
 
-import spock.lang.Specification
-import org.junit.Rule
-import org.gradle.GradleLauncher
-import org.gradle.StartParameter
-import org.gradle.api.execution.TaskExecutionListener
-import org.gradle.api.Task
-import org.gradle.api.tasks.TaskState
 import org.gradle.BuildResult
+import org.gradle.StartParameter
+import org.gradle.api.Task
+import org.gradle.api.execution.TaskExecutionListener
+import org.gradle.api.tasks.TaskState
+import org.gradle.initialization.GradleLauncher;
+import org.gradle.internal.FileUtils
+import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+
+import spock.lang.Specification
 
 abstract class FunctionalSpec extends Specification {
 
