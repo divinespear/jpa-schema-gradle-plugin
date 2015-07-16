@@ -14,7 +14,7 @@ Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference I
 * Support more JPA 2.1 implementations (and also support JPA 2.0 implementations if possible)
 * [Drop support Java 1.6](http://www.oracle.com/technetwork/java/javase/eol-135779.html)
 
-* and may drop support Gradle 1.x
+* and Drop support Gradle 1.x
 
 ## Before Announce...
 
@@ -137,7 +137,6 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 ### for EclipseLink
 `databaseMajorVersion` and `databaseMinorVersion` is not required.
 
-* `Oracle12`: Oracle 12g
 * `Oracle11`: Oracle 11g
 * `Oracle10`: Oracle 10g
 * `Oracle9`: Oracle 9i
