@@ -48,10 +48,10 @@ sourceSets {
 }
 
 generateSchema {
+    scriptAction = "drop-and-create"
     namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
     targets {
         h2script {
-            scriptAction = "drop-and-create"
             databaseProductName = "H2"
             databaseMajorVersion = 1
             databaseMinorVersion = 4
@@ -59,98 +59,82 @@ generateSchema {
             dropOutputFileName = "h2-drop.sql"
         }
         h2database {
-            databaseAction = "drop-and-create"
             jdbcDriver = "org.h2.Driver"
             jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
             jdbcUser = "sa"
         }
         mysql {
-            scriptAction = "drop-and-create"
             databaseProductName = "MySQL"
             databaseMajorVersion = 4
             databaseMinorVersion = 1
         }
         mysql5 {
-            scriptAction = "drop-and-create"
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
         }
         "mysql-myisam" {
-            scriptAction = "drop-and-create"
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
             dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
         }
         "mysql-innodb" {
-            scriptAction = "drop-and-create"
             databaseProductName = "MySQL"
             databaseMajorVersion = 4
             databaseMinorVersion = 1
             dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
         }
         "mysql5-innodb" {
-            scriptAction = "drop-and-create"
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
             dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
         }
         postgres90 {
-            scriptAction = "drop-and-create"
             databaseProductName = "PostgreSQL"
             databaseMajorVersion = 9
             databaseMinorVersion = 0
         }
         postgres82 {
-            scriptAction = "drop-and-create"
             databaseProductName = "PostgreSQL"
             databaseMajorVersion = 8
             databaseMinorVersion = 2
         }
         postgres81 {
-            scriptAction = "drop-and-create"
             databaseProductName = "PostgreSQL"
             databaseMajorVersion = 8
             databaseMinorVersion = 0
         }
         "oracle-11g" {
-            scriptAction = "drop-and-create"
             databaseProductName = "Oracle"
             databaseMajorVersion = 11
             databaseMinorVersion = 0
         }
         "oracle-10g" {
-            scriptAction = "drop-and-create"
             databaseProductName = "Oracle"
             databaseMajorVersion = 10
             databaseMinorVersion = 0
         }
         "oracle-9i" {
-            scriptAction = "drop-and-create"
             databaseProductName = "Oracle"
             databaseMajorVersion = 9
             databaseMinorVersion = 0
         }
         "oracle-8i" {
-            scriptAction = "drop-and-create"
             databaseProductName = "Oracle"
             databaseMajorVersion = 8
             databaseMinorVersion = 0
         }
         mssql2008 {
-            scriptAction = "drop-and-create"
             databaseProductName = "Microsoft SQL Server"
             databaseMajorVersion = 10
         }
         mssql2005 {
-            scriptAction = "drop-and-create"
             databaseProductName = "Microsoft SQL Server"
             databaseMajorVersion = 9
         }
         mssql2003 {
-            scriptAction = "drop-and-create"
             databaseProductName = "Microsoft SQL Server"
             databaseMajorVersion = 8
         }
