@@ -12,6 +12,7 @@ after_success: TERM=dumb ./gradlew uploadArchives
 branches:
   only:
     - master
+    - /^stable-.*$/
     - /^issue-.*$/
     - /^pull-.*$/
 
