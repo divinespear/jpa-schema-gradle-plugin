@@ -49,7 +49,6 @@ sourceSets {
 
 generateSchema {
     scriptAction = "drop-and-create"
-    namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
     targets {
         h2script {
             databaseProductName = "H2"
@@ -79,19 +78,25 @@ generateSchema {
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
-            dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
+            properties = [
+                "hibernate.dialect": "org.hibernate.dialect.MySQLMyISAMDialect"
+            ]
         }
         "mysql-innodb" {
             databaseProductName = "MySQL"
             databaseMajorVersion = 4
             databaseMinorVersion = 1
-            dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
+            properties = [
+                "hibernate.dialect": "org.hibernate.dialect.MySQLInnoDBDialect"
+            ]
         }
         "mysql5-innodb" {
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
-            dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
+            properties = [
+                "hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect"
+            ]
         }
         postgres90 {
             databaseProductName = "PostgreSQL"
@@ -203,7 +208,6 @@ sourceSets {
 generateSchema {
     format = true
     scriptAction = "drop-and-create"
-    namingStrategy = "org.hibernate.cfg.ImprovedNamingStrategy"
     targets {
         h2script {
             databaseProductName = "H2"
@@ -226,19 +230,25 @@ generateSchema {
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
-            dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
+            properties = [
+                "hibernate.dialect": "org.hibernate.dialect.MySQLMyISAMDialect"
+            ] 
         }
         "mysql-innodb" {
             databaseProductName = "MySQL"
             databaseMajorVersion = 4
             databaseMinorVersion = 1
-            dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
+            properties = [
+                "hibernate.dialect": "org.hibernate.dialect.MySQLInnoDBDialect"
+            ]
         }
         "mysql5-innodb" {
             databaseProductName = "MySQL"
             databaseMajorVersion = 5
             databaseMinorVersion = 1
-            dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
+            properties = [
+                "hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect"
+            ]
         }
         postgres90 {
             databaseProductName = "PostgreSQL"

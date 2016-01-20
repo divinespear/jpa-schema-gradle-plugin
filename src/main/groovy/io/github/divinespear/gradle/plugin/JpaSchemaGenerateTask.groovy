@@ -84,9 +84,6 @@ class JpaSchemaGenerateTask extends DefaultTask {
     Map<String, Object> persistenceProperties(Configuration target) {
         Map<String, Object> map = [:]
 
-        /*
-         * common
-         */
         // mode
         map[PersistenceUnitProperties.SCHEMA_GENERATION_DATABASE_ACTION] = target.databaseAction.toLowerCase()
         map[PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION] = target.scriptAction.toLowerCase()
@@ -136,12 +133,9 @@ class JpaSchemaGenerateTask extends DefaultTask {
         /*
          * Hibernate specific
          */
-        // naming strategy
-        map[AvailableSettings.NAMING_STRATEGY] = target.namingStrategy
-        // auto-detect
         map[AvailableSettings.AUTODETECTION] = "class,hbm"
         // dialect (without jdbc connection)
-        if (target.dialect == null && (target.jdbcUrl ?: "").empty) {
+        if ((target.jdbcUrl ?: "").empty) {
             DialectResolutionInfo info = new DialectResolutionInfo() {
                         String getDriverName() { null };
                         int getDriverMajorVersion() { 0};
@@ -151,11 +145,14 @@ class JpaSchemaGenerateTask extends DefaultTask {
                         int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 };
                     }
             def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
-            target.dialect = detectedDialect.getClass().getName()
+            map[org.hibernate.cfg.AvailableSettings.DIALECT] = detectedDialect.getClass().getName()
         }
-        if (target.dialect != null) {
-            map[org.hibernate.cfg.AvailableSettings.DIALECT] = target.dialect
-        }
+
+        /*
+         * Override properties
+         */
+        map.putAll(target.properties)
+
         // issue-3: pass mock connection
         if (!target.databaseTarget && (target.jdbcUrl ?: "").empty) {
             map[AvailableSettings.SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
@@ -167,6 +164,10 @@ class JpaSchemaGenerateTask extends DefaultTask {
         map[PersistenceUnitProperties.TRANSACTION_TYPE] = "RESOURCE_LOCAL"
         map[PersistenceUnitProperties.JTA_DATASOURCE] = null
         map[PersistenceUnitProperties.NON_JTA_DATASOURCE] = null
+        
+        logger.info('--- configuration begin ---');
+        logger.info(map.toString);
+        logger.info('--- configuration end ---');
 
         return map
     }
@@ -276,7 +277,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                 }
             }
         } else {
-            result = s
+            result = (s.trim() + linesep);
         }
         result.trim()
     }

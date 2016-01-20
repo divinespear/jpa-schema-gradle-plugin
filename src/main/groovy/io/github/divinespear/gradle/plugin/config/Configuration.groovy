@@ -215,27 +215,6 @@ class Configuration {
     Integer databaseMinorVersion
 
     /**
-     * naming strategy that implements {@link org.hibernate.cfg.NamingStrategy}
-     * <p>
-     * this is Hibernate-only option.
-     *
-     * @category Hibernate
-     */
-    String namingStrategy
-
-    /**
-     * dialect class
-     * <p>
-     * use this parameter if you want use custom dialect class. default is detect from JDBC connection or using
-     * {@link #databaseProductName}, {@link #databaseMajorVersion}, and {@link #databaseMinorVersion}.
-     * <p>
-     * this is Hibernate-only option.
-     *
-     * @category Hibernate
-     */
-    String dialect
-
-    /**
      * line separator for generated schema file.
      * <p>
      * support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code>
@@ -246,6 +225,13 @@ class Configuration {
      * <code>core.autocrlf</code> handling</a>.
      */
     String lineSeparator
+
+    /**
+     * JPA provider-specific properties
+     * <p>
+     * @since 0.2.0
+     */
+    Map<String, Object> properties = [:];
 
     Configuration() {
         this(null)
@@ -286,10 +272,13 @@ class Configuration {
         this.databaseMajorVersion = target?.databaseMajorVersion ?: base.databaseMajorVersion
         this.databaseMinorVersion = target?.databaseMinorVersion ?: base.databaseMinorVersion
 
-        this.namingStrategy = target?.namingStrategy ?: base.namingStrategy
-        this.dialect = target?.dialect ?: base.dialect
-
         this.lineSeparator = target?.lineSeparator ?: base.lineSeparator
+        if (base.properties != null) {
+            this.properties.putAll(base.properties)
+        }
+        if (target?.properties != null) {
+            this.properties.putAll(target?.properties)
+        }
     }
 
     boolean isScriptTarget() {
