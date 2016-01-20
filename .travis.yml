@@ -6,7 +6,7 @@ jdk:
   - oraclejdk8
 
 install: TERM=dumb ./gradlew assemble
-script: TERM=dumb GRADLE_OPTS="-Xmx256m" ./gradlew check
+script: TERM=dumb ./gradlew check
 after_success: TERM=dumb ./gradlew uploadArchives
 
 branches:
