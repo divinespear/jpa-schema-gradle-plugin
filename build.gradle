@@ -134,7 +134,7 @@ eclipse {
 }
 
 test {
-    jvmArgs += ["-XX:MaxPermSize=256m"]
+    jvmArgs += ["-XX:MaxPermSize=128m"]
     systemProperty "pluginVersion", version
 
     testLogging.showStandardStreams = true
