@@ -201,7 +201,7 @@ You can override using `hibernate.dialect` property.
     * `org.hibernate.dialect.H2Dialect` = all version
 * `MySQL`
     * `org.hibernate.dialect.MySQL5Dialect` = 5.x
-    * `org.hibernate.dialect.MySQL5Dialect` = 4.x or below
+    * `org.hibernate.dialect.MySQLDialect` = 4.x or below
     * `org.hibernate.dialect.MySQLMyISAMDialect`
     * `org.hibernate.dialect.MySQLInnoDBDialect`
     * `org.hibernate.dialect.MySQL5InnoDBDialect`
