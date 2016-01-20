@@ -17,7 +17,7 @@
  * under the License.
  */
 
- import org.gradle.api.JavaVersion;
+import org.gradle.api.JavaVersion;
 
 buildscript {
     repositories {
@@ -41,15 +41,18 @@ version = "0.2.0-SNAPSHOT"
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 
-ext.isReleaseVersion = !version.endsWith("-SNAPSHOT")
-ext.version_eclipselink = "2.6.0"
-ext.version_hibernate = "4.3.11.Final"
-ext.version_datanucleus = "4.1.2"
+ext {
+    isReleaseVersion = !version.endsWith("-SNAPSHOT")
+    // deploy
+    deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
+    deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: sonatypeDeployUserName
+    deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
+}
 
-// deploy config
-ext.deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
-ext.deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: sonatypeDeployUserName
-ext.deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
+// versions
+ext['eclipselink.version'] = '2.6.1'
+ext['hibernate.version'] = '5.0.7.Final'
+ext['datanucleus.version'] = '4.1.8'
 
 repositories {
     mavenCentral()
@@ -89,12 +92,12 @@ dependencies {
     testRuntime fileTree(dir: "lib", include: "*.jar")
 
     // jpa
-    provided "org.eclipse.persistence:org.eclipse.persistence.jpa:${version_eclipselink}"
-    provided "org.eclipse.persistence:org.eclipse.persistence.oracle:${version_eclipselink}"
-    provided "org.hibernate:hibernate-entitymanager:${version_hibernate}"
-    provided "org.datanucleus:datanucleus-core:${version_datanucleus}"
-    provided "org.datanucleus:datanucleus-rdbms:${version_datanucleus}"
-    provided "org.datanucleus:datanucleus-api-jpa:${version_datanucleus}"
+    provided "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
+    provided "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
+    provided "org.hibernate:hibernate-entitymanager:${property('hibernate.version')}"
+    provided "org.datanucleus:datanucleus-core:${property('datanucleus.version')}"
+    provided "org.datanucleus:datanucleus-rdbms:${property('datanucleus.version')}"
+    provided "org.datanucleus:datanucleus-api-jpa:${property('datanucleus.version')}"
 
     // for jpa generation using spring-data
     compile "org.springframework.data:spring-data-jpa:+"
