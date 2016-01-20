@@ -169,7 +169,8 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 ### for EclipseLink
 `databaseMajorVersion` and `databaseMinorVersion` is not required.
 
-* `Oracle11`: Oracle 11g
+* `Oracle12` = Oracle 12c
+* `Oracle11` = Oracle 11g
 * `Oracle10`: Oracle 10g
 * `Oracle9`: Oracle 9i
 * `Oracle`: Oracle with default compatibility
@@ -189,24 +190,62 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 * `HSQL Database Engine`
 
 ### for Hibernate
-some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`.
+Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`.
+You can override using `hibernate.dialect` property.
 
 * `CUBRID`
+    * `org.hibernate.dialect.CUBRIDDialect` = all version
 * `HSQL Database Engine`
+    * `org.hibernate.dialect.HSQLDialect` = all version
 * `H2`
-* `MySQL`: 5.0 or above, 4.x or below
-* `PostgreSQL`: 9.x, 8.2 or above, 8.1 or below
-* `Apache Derby`: 10.7 or above, 10.6, 10.5, 10.4 or below
-* `ingres`: 10.x, 9.2 or above, 9.1 or below
-* `Microsoft SQL Server`: 11.x, 10.x, 9.x, 8.x or below
+    * `org.hibernate.dialect.H2Dialect` = all version
+* `MySQL`
+    * `org.hibernate.dialect.MySQL5Dialect` = 5.x
+    * `org.hibernate.dialect.MySQL5Dialect` = 4.x or below
+    * `org.hibernate.dialect.MySQLMyISAMDialect`
+    * `org.hibernate.dialect.MySQLInnoDBDialect`
+    * `org.hibernate.dialect.MySQL5InnoDBDialect`
+    * `org.hibernate.dialect.MySQL57InnoDBDialect`
+* `PostgreSQL`
+    * `org.hibernate.dialect.PostgreSQL94Dialect` = 9.4 or above
+    * `org.hibernate.dialect.PostgreSQL92Dialect` = 9.2 or above
+    * `org.hibernate.dialect.PostgreSQL9Dialect` = 9.x
+    * `org.hibernate.dialect.PostgreSQL82Dialect` = 8.2 or above
+    * `org.hibernate.dialect.PostgreSQL81Dialect` = 8.1 or below
+* `Apache Derby`
+    * `org.hibernate.dialect.DerbyTenSevenDialect` = 10.7 or above
+    * `org.hibernate.dialect.DerbyTenSixDialect` = 10.6
+    * `org.hibernate.dialect.DerbyTenFiveDialect` = 10.5
+    * `org.hibernate.dialect.DerbyDialect` = 10.4 or below
+* `ingres`
+    * `org.hibernate.dialect.Ingres10Dialect` = 10.x
+    * `org.hibernate.dialect.Ingres9Dialect` = 9.2 or above
+    * `org.hibernate.dialect.IngresDialect` = 9.1 or below
+* `Microsoft SQL Server`
+    * `org.hibernate.dialect.SQLServer2012Dialect` = 11.x
+    * `org.hibernate.dialect.SQLServer2008Dialect` = 10.x
+    * `org.hibernate.dialect.SQLServer2005Dialect` = 9.x
+    * `org.hibernate.dialect.SQLServerDialect` = 8.x or below
 * `Sybase SQL Server`
+    * `org.hibernate.dialect.SybaseASE15Dialect` = all version
+    * `org.hibernate.dialect.SybaseASE17Dialect`
 * `Adaptive Server Enterprise` = Sybase
-* `Adaptive Server Anywhere` = Sybase Anywhere
+* `Adaptive Server Anywhere`
+    * `org.hibernate.dialect.SybaseAnywhereDialect` = all version
 * `Informix Dynamic Server`
+    * `org.hibernate.dialect.InformixDialect` = all version
 * `DB2 UDB for AS/400`
+    * `org.hibernate.dialect.DB2390Dialect`
+    * `org.hibernate.dialect.DB2400Dialect` = all version
 *  start with `DB2/`
-* `Oracle`: 11.x, 10.x, 9.x, 8.x
+    * `org.hibernate.dialect.DB2Dialect` = all version
+* `Oracle`
+    * `org.hibernate.dialect.Oracle12cDialect` = 12.x
+    * `org.hibernate.dialect.Oracle10gDialect` = 11.x, 10.x
+    * `org.hibernate.dialect.Oracle9iDialect` = 9.x
+    * `org.hibernate.dialect.Oracle8iDialect` = 8.x or below
 * `Firebird`
+    * `org.hibernate.dialect.FirebirdDialect` = all version
 
 
 ## License
