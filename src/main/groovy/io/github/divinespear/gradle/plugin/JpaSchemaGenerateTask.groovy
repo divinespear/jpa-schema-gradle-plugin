@@ -146,7 +146,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
          */
         map[AvailableSettings.AUTODETECTION] = "class,hbm"
         // dialect (without jdbc connection)
-        if ((target.jdbcUrl ?: "").empty) {
+        if ((target.jdbcUrl ?: "").empty && (map[org.hibernate.cfg.AvailableSettings.DIALECT] ?: "").empty) {
             DialectResolutionInfo info = new DialectResolutionInfo() {
                         String getDriverName() { null }
                         int getDriverMajorVersion() { 0}
