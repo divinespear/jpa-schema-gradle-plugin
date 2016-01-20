@@ -14,10 +14,10 @@ class Issue5Spec extends IntegrationSpec {
             sourceSets {
                 main {
                     java {
-                        srcDir file("../../../../src/test/resources/unit/hibernate/src")
+                        srcDir file("../../../../src/test/resources/unit/src")
                     }
                     resources {
-                        srcDir file("../../../../src/test/resources/unit/hibernate/resources")
+                        srcDir file("../../../../src/test/resources/unit/resources/hibernate")
                     }
                     output.resourcesDir output.classesDir
                 }

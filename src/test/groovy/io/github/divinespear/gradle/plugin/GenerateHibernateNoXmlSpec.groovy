@@ -38,10 +38,10 @@ class GenerateHibernateNoXmlSpec
 sourceSets {
     main {
         java {
-            srcDir file("../../../../src/test/resources/unit/hibernate-noxml/src")
+            srcDir file("../../../../src/test/resources/unit/src")
         }
         resources {
-            srcDir file("../../../../src/test/resources/unit/hibernate-noxml/resources")
+            srcDir file("../../../../src/test/resources/unit/resources/hibernate-noxml")
         }
         output.resourcesDir output.classesDir
     }
@@ -198,10 +198,10 @@ generateSchema {
 sourceSets {
     main {
         java {
-            srcDir file("../../../../src/test/resources/unit/hibernate/src")
+            srcDir file("../../../../src/test/resources/unit/src")
         }
         resources {
-            srcDir file("../../../../src/test/resources/unit/hibernate/resources")
+            srcDir file("../../../../src/test/resources/unit/resources/hibernate-noxml")
         }
         output.resourcesDir output.classesDir
     }

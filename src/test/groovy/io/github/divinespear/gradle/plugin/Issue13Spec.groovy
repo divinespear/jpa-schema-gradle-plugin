@@ -37,10 +37,10 @@ class Issue13Spec extends IntegrationSpec {
             sourceSets {
                 main {
                     java {
-                        srcDir file("../../../../src/test/resources/unit/eclipselink/src")
+                        srcDir file("../../../../src/test/resources/unit/src")
                     }
                     resources {
-                        srcDir file("../../../../src/test/resources/unit/issue13/resources")
+                        srcDir file("../../../../src/test/resources/unit/resources/issue-13")
                     }
                     output.resourcesDir output.classesDir
                 }
@@ -69,12 +69,13 @@ class Issue13Spec extends IntegrationSpec {
         file("build/generated-schema/h2script-create.sql").exists()
         file("build/generated-schema/h2script-create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));
 CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR, COLUMN01 VARCHAR, COLUMN02 VARCHAR, COLUMN03 VARCHAR, COLUMN04 VARCHAR, COLUMN05 VARCHAR, COLUMN06 VARCHAR, COLUMN07 VARCHAR, COLUMN08 VARCHAR, COLUMN09 VARCHAR, COLUMN10 VARCHAR, COLUMN11 VARCHAR, COLUMN12 VARCHAR, COLUMN13 VARCHAR, COLUMN14 VARCHAR, COLUMN15 VARCHAR, COLUMN16 VARCHAR, COLUMN17 VARCHAR, COLUMN18 VARCHAR, COLUMN19 VARCHAR, COLUMN20 VARCHAR, COLUMN21 VARCHAR, COLUMN22 VARCHAR, COLUMN23 VARCHAR, COLUMN24 VARCHAR, COLUMN25 VARCHAR, COLUMN26 VARCHAR, COLUMN27 VARCHAR, COLUMN28 VARCHAR, COLUMN29 VARCHAR, PRIMARY KEY (ID));
-CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;
+CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME));
+INSERT INTO SEQUENCE(SEQ_NAME, SEQ_COUNT) values ('SEQ_GEN', 0);
 """
         file("build/generated-schema/h2script-drop.sql").exists()
         file("build/generated-schema/h2script-drop.sql").text == """DROP TABLE KEY_VALUE_STORE;
 DROP TABLE MANY_COLUMN_TABLE;
-DROP SEQUENCE SEQ_GEN_SEQUENCE;
+DELETE FROM SEQUENCE WHERE SEQ_NAME = 'SEQ_GEN';
 """
         file("build/generated-schema/test.h2.db").exists()
         def sql = Sql.newInstance("jdbc:h2:nio:" + file("build/generated-schema/test").toString(), "sa", null, "org.h2.Driver")

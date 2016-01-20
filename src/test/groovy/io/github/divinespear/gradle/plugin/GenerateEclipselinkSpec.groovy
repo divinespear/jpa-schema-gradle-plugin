@@ -38,10 +38,10 @@ class GenerateEclipselinkSpec
 sourceSets {
     main {
         java {
-            srcDir file("../../../../src/test/resources/unit/eclipselink/src")
+            srcDir file("../../../../src/test/resources/unit/src")
         }
         resources {
-            srcDir file("../../../../src/test/resources/unit/eclipselink/resources")
+            srcDir file("../../../../src/test/resources/unit/resources/eclipselink")
         }
         output.resourcesDir output.classesDir
     }
@@ -151,10 +151,10 @@ generateSchema {
 sourceSets {
     main {
         java {
-            srcDir file("../../../../src/test/resources/unit/eclipselink/src")
+            srcDir file("../../../../src/test/resources/unit/src")
         }
         resources {
-            srcDir file("../../../../src/test/resources/unit/eclipselink/resources")
+            srcDir file("../../../../src/test/resources/unit/resources/eclipselink")
         }
         output.resourcesDir output.classesDir
     }

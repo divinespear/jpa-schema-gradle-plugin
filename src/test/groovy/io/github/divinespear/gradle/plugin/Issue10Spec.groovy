@@ -14,10 +14,10 @@ class Issue10Spec extends IntegrationSpec {
             sourceSets {
                 main {
                     java {
-                        srcDir file("../../../../src/test/resources/unit/eclipselink/src")
+                        srcDir file("../../../../src/test/resources/unit/src")
                     }
                     resources {
-                        srcDir file("../../../../src/test/resources/unit/eclipselink/resources")
+                        srcDir file("../../../../src/test/resources/unit/resources/eclipselink")
                     }
                     output.resourcesDir output.classesDir
                 }
@@ -37,12 +37,13 @@ class Issue10Spec extends IntegrationSpec {
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));\r
 CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR, COLUMN01 VARCHAR, COLUMN02 VARCHAR, COLUMN03 VARCHAR, COLUMN04 VARCHAR, COLUMN05 VARCHAR, COLUMN06 VARCHAR, COLUMN07 VARCHAR, COLUMN08 VARCHAR, COLUMN09 VARCHAR, COLUMN10 VARCHAR, COLUMN11 VARCHAR, COLUMN12 VARCHAR, COLUMN13 VARCHAR, COLUMN14 VARCHAR, COLUMN15 VARCHAR, COLUMN16 VARCHAR, COLUMN17 VARCHAR, COLUMN18 VARCHAR, COLUMN19 VARCHAR, COLUMN20 VARCHAR, COLUMN21 VARCHAR, COLUMN22 VARCHAR, COLUMN23 VARCHAR, COLUMN24 VARCHAR, COLUMN25 VARCHAR, COLUMN26 VARCHAR, COLUMN27 VARCHAR, COLUMN28 VARCHAR, COLUMN29 VARCHAR, PRIMARY KEY (ID));\r
-CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;\r
+CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME));\r
+INSERT INTO SEQUENCE(SEQ_NAME, SEQ_COUNT) values ('SEQ_GEN', 0);\r
 """
         file("build/generated-schema/drop.sql").exists()
         file("build/generated-schema/drop.sql").text == """DROP TABLE KEY_VALUE_STORE;\r
 DROP TABLE MANY_COLUMN_TABLE;\r
-DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
+DELETE FROM SEQUENCE WHERE SEQ_NAME = 'SEQ_GEN';\r
 """
     }
 
@@ -52,10 +53,10 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
             sourceSets {
                 main {
                     java {
-                        srcDir file("../../../../src/test/resources/unit/eclipselink/src")
+                        srcDir file("../../../../src/test/resources/unit/src")
                     }
                     resources {
-                        srcDir file("../../../../src/test/resources/unit/eclipselink/resources")
+                        srcDir file("../../../../src/test/resources/unit/resources/eclipselink")
                     }
                     output.resourcesDir output.classesDir
                 }
@@ -75,12 +76,13 @@ DROP SEQUENCE SEQ_GEN_SEQUENCE;\r
         file("build/generated-schema/create.sql").exists()
         file("build/generated-schema/create.sql").text == """CREATE TABLE KEY_VALUE_STORE (STORED_KEY VARCHAR(128) NOT NULL, CREATED_AT TIMESTAMP, STORED_VALUE VARCHAR(32768), PRIMARY KEY (STORED_KEY));
 CREATE TABLE MANY_COLUMN_TABLE (ID BIGINT NOT NULL, COLUMN00 VARCHAR, COLUMN01 VARCHAR, COLUMN02 VARCHAR, COLUMN03 VARCHAR, COLUMN04 VARCHAR, COLUMN05 VARCHAR, COLUMN06 VARCHAR, COLUMN07 VARCHAR, COLUMN08 VARCHAR, COLUMN09 VARCHAR, COLUMN10 VARCHAR, COLUMN11 VARCHAR, COLUMN12 VARCHAR, COLUMN13 VARCHAR, COLUMN14 VARCHAR, COLUMN15 VARCHAR, COLUMN16 VARCHAR, COLUMN17 VARCHAR, COLUMN18 VARCHAR, COLUMN19 VARCHAR, COLUMN20 VARCHAR, COLUMN21 VARCHAR, COLUMN22 VARCHAR, COLUMN23 VARCHAR, COLUMN24 VARCHAR, COLUMN25 VARCHAR, COLUMN26 VARCHAR, COLUMN27 VARCHAR, COLUMN28 VARCHAR, COLUMN29 VARCHAR, PRIMARY KEY (ID));
-CREATE SEQUENCE SEQ_GEN_SEQUENCE INCREMENT BY 50 START WITH 50;
+CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME));
+INSERT INTO SEQUENCE(SEQ_NAME, SEQ_COUNT) values ('SEQ_GEN', 0);
 """
         file("build/generated-schema/drop.sql").exists()
         file("build/generated-schema/drop.sql").text == """DROP TABLE KEY_VALUE_STORE;
 DROP TABLE MANY_COLUMN_TABLE;
-DROP SEQUENCE SEQ_GEN_SEQUENCE;
+DELETE FROM SEQUENCE WHERE SEQ_NAME = 'SEQ_GEN';
 """
     }
 }
