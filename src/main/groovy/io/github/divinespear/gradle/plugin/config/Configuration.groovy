@@ -41,10 +41,12 @@ class Configuration {
      * <p>
      * default is <code>META-INF/persistence.xml</code>.
      * <p>
-     * Note for Hibernate: <b>current version (4.3.1.Final) DOES NOT SUPPORT custom location.</b> ({@link SchemaExport}
-     * support it, but JPA 2.1 schema generator does NOT.)
+     * Note: Hibernate <b>DOES NOT SUPPORT custom location.</b> ({@link SchemaExport} support it, 
+     * but JPA 2.1 schema generator does NOT.)
      *
      * @category required
+     * @category Eclipselink
+     * @category DataNucleus
      */
     String persistenceXml
 

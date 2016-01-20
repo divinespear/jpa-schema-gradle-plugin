@@ -26,6 +26,7 @@ import java.sql.DriverManager
 
 import javax.persistence.Persistence
 
+import org.datanucleus.PropertyNames;
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -129,6 +130,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
          */
         // persistence.xml
         map[PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
+        map[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = target.persistenceXml
 
         /*
          * Hibernate specific
