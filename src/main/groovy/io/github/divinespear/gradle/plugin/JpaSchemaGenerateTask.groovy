@@ -25,14 +25,16 @@ import java.sql.Driver
 import java.sql.DriverManager
 
 import javax.persistence.Persistence
+import javax.persistence.spi.PersistenceProvider
 
-import org.datanucleus.PropertyNames;
+import org.datanucleus.PropertyNames
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
 import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo
 import org.hibernate.jpa.AvailableSettings
+import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
 
 class JpaSchemaGenerateTask extends DefaultTask {
 
@@ -103,6 +105,11 @@ class JpaSchemaGenerateTask extends DefaultTask {
         map[PersistenceUnitProperties.SCHEMA_DATABASE_MAJOR_VERSION] = target.databaseMajorVersion?.toString()
         map[PersistenceUnitProperties.SCHEMA_DATABASE_MINOR_VERSION] = target.databaseMinorVersion?.toString()
         // database options
+        if (target.databaseTarget) {
+            if (target.jdbcUrl == null) {
+                throw new IllegalArgumentException("jdbcUrl is REQUIRED for database generation.")
+            }
+        }
         map[PersistenceUnitProperties.JDBC_DRIVER] = target.jdbcDriver
         map[PersistenceUnitProperties.JDBC_URL] = target.jdbcUrl
         map[PersistenceUnitProperties.JDBC_USER] = target.jdbcUser
@@ -131,6 +138,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
         // persistence.xml
         map[PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
         map[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = target.persistenceXml
+        // weaving
+        map[PersistenceUnitProperties.WEAVING] = "false"
 
         /*
          * Hibernate specific
@@ -139,12 +148,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
         // dialect (without jdbc connection)
         if ((target.jdbcUrl ?: "").empty) {
             DialectResolutionInfo info = new DialectResolutionInfo() {
-                        String getDriverName() { null };
-                        int getDriverMajorVersion() { 0};
-                        int getDriverMinorVersion() { 0 };
-                        String getDatabaseName() { target.databaseProductName };
-                        int getDatabaseMajorVersion() { target.databaseMajorVersion ?: 0 };
-                        int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 };
+                        String getDriverName() { null }
+                        int getDriverMajorVersion() { 0}
+                        int getDriverMinorVersion() { 0 }
+                        String getDatabaseName() { target.databaseProductName }
+                        int getDatabaseMajorVersion() { target.databaseMajorVersion ?: 0 }
+                        int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 }
                     }
             def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
             map[org.hibernate.cfg.AvailableSettings.DIALECT] = detectedDialect.getClass().getName()
@@ -161,17 +170,17 @@ class JpaSchemaGenerateTask extends DefaultTask {
         }
         // issue-5: pass "none" for avoid validation while schema generating
         map[AvailableSettings.VALIDATION_MODE] = "none"
-        
+
         // issue-13: disable JTA and datasources
         map[PersistenceUnitProperties.TRANSACTION_TYPE] = "RESOURCE_LOCAL"
         map[PersistenceUnitProperties.JTA_DATASOURCE] = null
         map[PersistenceUnitProperties.NON_JTA_DATASOURCE] = null
-        
-        logger.info('--- configuration begin ---');
-        logger.info(map.toString);
-        logger.info('--- configuration end ---');
 
-        return map
+        logger.info('--- configuration begin ---')
+        logger.info(map.toString())
+        logger.info('--- configuration end ---')
+
+        map.findAll { it.value != null }
     }
 
     private Map<String, String> LINE_SEPARAOR_MAP = ["CRLF": "\r\n", "LF": "\n", "CR": "\r"]
@@ -279,7 +288,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
                 }
             }
         } else {
-            result = (s.trim() + linesep);
+            result = (s.trim() + linesep)
         }
         result.trim()
     }
@@ -303,12 +312,51 @@ class JpaSchemaGenerateTask extends DefaultTask {
             def contextClassLoader = thread.getContextClassLoader() as ClassLoader
             try {
                 thread.setContextClassLoader(classloader)
-                Persistence.generateSchema(target.persistenceUnitName, this.persistenceProperties(target))
+                if (target.vendor == null) {
+                    logger.info("* generate using persistence.xml")
+                    defaultGenerate(target)
+                } else {
+                    logger.info("* generate without persistence.xml")
+                    xmllessGenerate(target)
+                }
             } finally {
                 thread.setContextClassLoader(contextClassLoader)
             }
             // post-process
             this.postProcess(target)
         }
+    }
+
+    void defaultGenerate(Configuration config) {
+        Persistence.generateSchema(config.persistenceUnitName, persistenceProperties(config))
+    }
+
+    private static final Map<String, Class<PersistenceProvider>> PERSISTENCE_PROVIDER_MAP = [
+        "eclipselink": org.eclipse.persistence.jpa.PersistenceProvider.class,
+        "hibernate": org.hibernate.jpa.HibernatePersistenceProvider.class
+    ]
+
+    void xmllessGenerate(Configuration config) {
+        def vendorName = config.vendor
+        def provider = PERSISTENCE_PROVIDER_MAP[vendorName.toLowerCase()]?.newInstance()
+        if (provider == null && vendorName =~ /^.+Provider$/) {
+            provider = Class.forName(vendorName).newInstance() as PersistenceProvider
+        }
+
+        if (config.packageToScan.empty) {
+            throw new IllegalArgumentException("packageToScan is required on xml-less mode.")
+        }
+
+        def properties = persistenceProperties(config)
+        def manager = new DefaultPersistenceUnitManager()
+        manager.defaultPersistenceUnitName = config.persistenceUnitName
+        manager.packagesToScan = (manager.packagesToScan ?: []) + config.packageToScan as String[]
+        manager.afterPropertiesSet()
+
+        def info = manager.obtainDefaultPersistenceUnitInfo()
+        info.persistenceProviderClassName = provider.class.name
+        info.properties.putAll(properties)
+
+        provider.generateSchema(info, properties)
     }
 }

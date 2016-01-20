@@ -229,11 +229,29 @@ class Configuration {
     String lineSeparator
 
     /**
-     * JPA provider-specific properties
+     * JPA vendor-specific properties
      * <p>
      * @since 0.2.0
      */
-    Map<String, Object> properties = [:];
+    Map properties = [:];
+    
+    /**
+     * JPA vendor
+     * <p>
+     * this property is for xml-less work (like spring-boot)
+     * <p>
+     * support value is <code>eclipselink</code>, or <code>hibernate</code>.
+     * <p>
+     * @since 0.2.0
+     */
+    String vendor;
+
+    /**
+     * Packages to scan entities.
+     * <p>
+     * @since 0.2.0
+     */
+    List packageToScan = [];
 
     Configuration() {
         this(null)
@@ -281,6 +299,9 @@ class Configuration {
         if (target?.properties != null) {
             this.properties.putAll(target?.properties)
         }
+        
+        this.vendor = target?.vendor ?: base.vendor
+        this.packageToScan = (base.packageToScan.toSet() + target?.packageToScan.toSet()).toList() 
     }
 
     boolean isScriptTarget() {

@@ -75,6 +75,18 @@ or
 
 see also test cases `Generate*Spec.groovy`, as examples.
 
+#### without `persistence.xml`
+
+you **MUST** specify two options: `vendor` and `packageToScan`.
+```groovy
+generateSchema {
+    vendor = 'hibernate' // 'eclipselink' or 'hibernate'.
+                         // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
+    packageToScan = [ 'your.package.to.scan', ... ]
+    ...
+}
+```
+
 #### For Scala
 
 You MUST put `scala-library` to `dependencies` of `buildscript`.
@@ -127,11 +139,13 @@ Here is full list of parameters of `generateSchema`.
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 | `properties` | `java.util.Map` | JPA vendor specific properties. |
+| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of `eclipselink` (`org.eclipse.persistence.jpa.PersistenceProvider`) or `hibernate` (`org.hibernate.jpa.HibernatePersistenceProvider`)</p><p>**REQUIRED for project without `persistence.xml`** |
+| `packageToScan` | `java.util.List` | list of package name for scan entity classes |
 
 #### How-to config `properties`
 
 It's just groovy map, so you can config like this:
-```
+```groovy
 generateSchema {
     ...
     // global properties
