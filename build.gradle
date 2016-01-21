@@ -55,7 +55,7 @@ ext {
 // versions
 ext['eclipselink.version'] = '2.6.1'
 ext['hibernate.version'] = '5.0.7.Final'
-ext['datanucleus.version'] = '4.1.8'
+ext['datanucleus.version'] = '4.2.3'
 ext['spring-data-jpa.version'] = '1.9.2.RELEASE'
 
 repositories {
@@ -99,9 +99,7 @@ dependencies {
     provided "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
     provided "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
     provided "org.hibernate:hibernate-entitymanager:${property('hibernate.version')}"
-    provided "org.datanucleus:datanucleus-core:${property('datanucleus.version')}"
-    provided "org.datanucleus:datanucleus-rdbms:${property('datanucleus.version')}"
-    provided "org.datanucleus:datanucleus-api-jpa:${property('datanucleus.version')}"
+    provided "org.datanucleus:datanucleus-accessplatform-jpa-rdbms:${property('datanucleus.version')}"
 
     // for jpa generation using spring-data
     compile "org.springframework.data:spring-data-jpa:${property('spring-data-jpa.version')}"
