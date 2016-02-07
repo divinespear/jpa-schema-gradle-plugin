@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a id="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
+<a id="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
 <p><strong>Version 0.1.12-1</strong></p>
 
@@ -41,30 +41,30 @@
 <p>Currently support <a href="http://www.eclipse.org/eclipselink">EclipseLink</a> (Reference Implementation) and <a href="http://hibernate.org">Hibernate</a>.</p>
 
 <h2>
-<a id="before-announce" class="anchor" href="#before-announce" aria-hidden="true"><span class="octicon octicon-link"></span></a>Before Announce...</h2>
+<a id="before-announce" class="anchor" href="#before-announce" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Before Announce...</h2>
 
 <p>READ MY LIP; <strong>JPA DDL GENERATOR IS NOT SILVER BULLET</strong></p>
 
 <p>Sometimes (<em>most times</em> exactly :P) JPA will generate weird scripts so you <strong>SHOULD</strong> modify them properly.</p>
 
 <h2>
-<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How-to Use</h2>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How-to Use</h2>
 
 <p>Put this to your <code>build.gradle</code></p>
 
-<div class="highlight highlight-groovy"><pre>buildscript {
+<div class="highlight highlight-source-groovy"><pre>buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath <span class="pl-s1"><span class="pl-pds">"</span>io.github.divinespear:jpa-schema-gradle-plugin:+<span class="pl-pds">"</span></span>
+        classpath <span class="pl-s"><span class="pl-pds">"</span>io.github.divinespear:jpa-schema-gradle-plugin:+<span class="pl-pds">"</span></span>
         <span class="pl-c">// jdbc drivers also here</span>
         <span class="pl-k">..</span>.
     }
 }
 
-apply <span class="pl-c1">plugin</span>: <span class="pl-s1"><span class="pl-pds">"</span>java<span class="pl-pds">"</span></span>
-apply <span class="pl-c1">plugin</span>: <span class="pl-s1"><span class="pl-pds">"</span>jpa-schema-generate<span class="pl-pds">"</span></span>
+apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">"</span>java<span class="pl-pds">"</span></span>
+apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">"</span>jpa-schema-generate<span class="pl-pds">"</span></span>
 
 sourceSets {
     main {
@@ -100,31 +100,31 @@ generateSchema {
 <p>see also test cases <code>Generate*Spec.groovy</code>, as examples.</p>
 
 <h4>
-<a id="for-scala" class="anchor" href="#for-scala" aria-hidden="true"><span class="octicon octicon-link"></span></a>For Scala</h4>
+<a id="for-scala" class="anchor" href="#for-scala" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For Scala</h4>
 
 <p>You MUST put <code>scala-library</code> to <code>dependencies</code> of <code>buildscript</code>.</p>
 
-<div class="highlight highlight-groovy"><pre>buildscript {
+<div class="highlight highlight-source-groovy"><pre>buildscript {
     <span class="pl-k">..</span>.
     dependencies {
         <span class="pl-k">..</span>.
-        classpath <span class="pl-s1"><span class="pl-pds">"</span>org.scala-lang:scala-library:<span class="pl-s2"><span class="pl-pse">${</span>your_scala_version<span class="pl-pse">}</span></span><span class="pl-pds">"</span></span>
+        classpath <span class="pl-s"><span class="pl-pds">"</span>org.scala-lang:scala-library:<span class="pl-s1"><span class="pl-pse">${</span>your_scala_version<span class="pl-pse">}</span></span><span class="pl-pds">"</span></span>
         <span class="pl-k">..</span>.
     }
 }</pre></div>
 
 <h4>
-<a id="for-hibernate" class="anchor" href="#for-hibernate" aria-hidden="true"><span class="octicon octicon-link"></span></a>For Hibernate</h4>
+<a id="for-hibernate" class="anchor" href="#for-hibernate" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For Hibernate</h4>
 
 <p>Hibernate <strong>DOES NOT SUPPORT</strong> <code>@GeneratedValue(strategy = GenerationType.SEQUENCE)</code> for DBMS dosen't support <code>CREATE/DROP SEQUENCE</code>. <del>WTF?!</del> You should use <code>@GeneratedValue</code> instead.</p>
 
 <h4>
-<a id="for-eclipselink-with-oracle" class="anchor" href="#for-eclipselink-with-oracle" aria-hidden="true"><span class="octicon octicon-link"></span></a>For EclipseLink with Oracle</h4>
+<a id="for-eclipselink-with-oracle" class="anchor" href="#for-eclipselink-with-oracle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For EclipseLink with Oracle</h4>
 
 <p>EclipseLink's <code>Oracle{8,9,10,11}Platform</code> uses some type classes from Oracle's JDBC driver. you should have it in your dependency.</p>
 
 <h3>
-<a id="schemagenerationconfig" class="anchor" href="#schemagenerationconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>SchemaGenerationConfig</h3>
+<a id="schemagenerationconfig" class="anchor" href="#schemagenerationconfig" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SchemaGenerationConfig</h3>
 
 <p>Here is full list of parameters of <code>generateSchema</code>.</p>
 
@@ -337,12 +337,12 @@ generateSchema {
 </table>
 
 <h2>
-<a id="database-product-names" class="anchor" href="#database-product-names" aria-hidden="true"><span class="octicon octicon-link"></span></a>Database Product Names</h2>
+<a id="database-product-names" class="anchor" href="#database-product-names" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Database Product Names</h2>
 
 <p>It's about <code>databaseProductName</code> property. If not listed below, will work as basic standard SQL.</p>
 
 <h3>
-<a id="for-eclipselink" class="anchor" href="#for-eclipselink" aria-hidden="true"><span class="octicon octicon-link"></span></a>for EclipseLink</h3>
+<a id="for-eclipselink" class="anchor" href="#for-eclipselink" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>for EclipseLink</h3>
 
 <p><code>databaseMajorVersion</code> and <code>databaseMinorVersion</code> is not required.</p>
 
@@ -375,7 +375,7 @@ generateSchema {
 </ul>
 
 <h3>
-<a id="for-hibernate-1" class="anchor" href="#for-hibernate-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>for Hibernate</h3>
+<a id="for-hibernate-1" class="anchor" href="#for-hibernate-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>for Hibernate</h3>
 
 <p>some products uses different dialect by <code>databaseMajorVersion</code> and/or <code>databaseMinorVersion</code>.</p>
 
@@ -408,7 +408,7 @@ generateSchema {
 </ul>
 
 <h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
 <p>Source Copyright © 2013 Sin-young "Divinespear" Kang. Distributed under the <a href="http://www.apache.org/licenses">Apache License, Version 2.0</a>.</p>
       </section>
@@ -418,7 +418,7 @@ generateSchema {
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p class="copyright">jpa-schema-gradle-plugin maintained by <a href="https://github.com/divinespear">divinespear</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
