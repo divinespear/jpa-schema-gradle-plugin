@@ -98,7 +98,9 @@ dependencies {
     // jpa
     provided "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
     provided "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
-    provided "org.hibernate:hibernate-entitymanager:${property('hibernate.version')}"
+    provided("org.hibernate:hibernate-entitymanager:${property('hibernate.version')}") {
+        exclude group: 'org.hibernate.javax.persistence'
+    }
     provided "org.datanucleus:datanucleus-accessplatform-jpa-rdbms:${property('datanucleus.version')}"
 
     // for jpa generation using spring-data

@@ -84,6 +84,36 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return new URLClassLoader(classURLs.toArray(new URL[0]), this.class.classLoader)
     }
 
+    String detectVendor(Configuration config) {
+        def vendorName = config.vendor
+        // check vendor name
+        if (PERSISTENCE_PROVIDER_MAP[vendorName.toLowerCase()] != null) {
+            logger.info("using ${vendorName}")
+            return vendorName.toLowerCase()
+        }
+        // check vendor class name
+        PERSISTENCE_PROVIDER_MAP.each {
+            if (it.value == vendorName) {
+                vendorName = it.key
+                logger.info("found ${vendorName} from ${config.vendor}")
+            }
+        }
+        if (vendorName != null) {
+            return vendorName
+        }
+        // try persistence.xml
+        def xml = new File(config.persistenceXml).text
+        def matcher = xml =~ /<provider>([^<]+)<\/provider>/
+        PERSISTENCE_PROVIDER_MAP.each {
+            if (it.value == matcher[0][1]) {
+                vendorName = it.key
+                logger.info("found ${vendorName} from persistence.xml")
+            }
+        }
+        // no more match
+        return vendorName
+    }
+
     Map<String, Object> persistenceProperties(Configuration target) {
         Map<String, Object> map = [:]
 
@@ -137,7 +167,6 @@ class JpaSchemaGenerateTask extends DefaultTask {
          */
         // persistence.xml
         map[PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
-        map[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = target.persistenceXml
         // weaving
         map[PersistenceUnitProperties.WEAVING] = "false"
 
@@ -158,6 +187,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
             def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
             map[org.hibernate.cfg.AvailableSettings.DIALECT] = detectedDialect.getClass().getName()
         }
+
+        /*
+         * DataNucleus specific
+         */
+        // persistence.xml
+        map[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = target.persistenceXml
 
         /*
          * Override properties
@@ -296,6 +331,10 @@ class JpaSchemaGenerateTask extends DefaultTask {
     @TaskAction
     void generate() {
         this.getTargets().each { target ->
+            // update vendor name
+            if (target.vendor != null) {
+                target.vendor = detectVendor(target)
+            }
             // create output directory
             if (target.outputDirectory != null) {
                 target.outputDirectory.mkdirs()
@@ -328,18 +367,25 @@ class JpaSchemaGenerateTask extends DefaultTask {
     }
 
     void defaultGenerate(Configuration config) {
-        Persistence.generateSchema(config.persistenceUnitName, persistenceProperties(config))
+        def props = persistenceProperties(config)
+        // enhance datanucleus
+        if (config.vendor == "datanucleus") {
+            enhanceDataNucleus(config.persistenceUnitName, props)
+        }
+
+        Persistence.generateSchema(config.persistenceUnitName, props)
     }
 
     private static final Map<String, Class<PersistenceProvider>> PERSISTENCE_PROVIDER_MAP = [
         "eclipselink": org.eclipse.persistence.jpa.PersistenceProvider.class,
-        "hibernate": org.hibernate.jpa.HibernatePersistenceProvider.class
+        "hibernate": org.hibernate.jpa.HibernatePersistenceProvider.class,
+        "datanucleus": org.datanucleus.api.jpa.PersistenceProviderImpl.class
     ]
 
     void xmllessGenerate(Configuration config) {
         def vendorName = config.vendor
         def provider = PERSISTENCE_PROVIDER_MAP[vendorName.toLowerCase()]?.newInstance()
-        if (provider == null && vendorName =~ /^.+Provider$/) {
+        if (provider == null && PERSISTENCE_PROVIDER_MAP.values().contains(vendorName)) {
             provider = Class.forName(vendorName).newInstance() as PersistenceProvider
         }
 
@@ -347,7 +393,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
             throw new IllegalArgumentException("packageToScan is required on xml-less mode.")
         }
 
-        def properties = persistenceProperties(config)
+        def props = persistenceProperties(config)
         def manager = new DefaultPersistenceUnitManager()
         manager.defaultPersistenceUnitName = config.persistenceUnitName
         manager.packagesToScan = (manager.packagesToScan ?: []) + config.packageToScan as String[]
@@ -355,8 +401,29 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
         def info = manager.obtainDefaultPersistenceUnitInfo()
         info.persistenceProviderClassName = provider.class.name
-        info.properties.putAll(properties)
+        info.properties.putAll(props)
 
-        provider.generateSchema(info, properties)
+        if (config.vendor == "datanucleus") {
+            // datanucleus must need persistence.xml
+            final def persistencexml = File.createTempFile("persistence-", ".xml", project.sourceSets.main.output.classesDir)
+            persistencexml.deleteOnExit()
+            persistencexml << """<?xml version="1.0" encoding="utf-8" ?>
+<persistence version="2.1"
+    xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="${info.persistenceUnitName}" transaction-type="RESOURCE_LOCAL">
+        <provider>org.datanucleus.api.jpa.PersistenceProviderImpl</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    </persistence-unit>
+</persistence>"""
+            props[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = persistencexml.absoluteFile.toURI().toString()
+
+            // datanucleus does not support execution order...
+            props.remove(PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_SOURCE)
+            props.remove(PersistenceUnitProperties.SCHEMA_GENERATION_DROP_SOURCE)
+        }
+
+        provider.generateSchema(info, props)
     }
+
 }
