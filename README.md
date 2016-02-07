@@ -8,20 +8,29 @@ for Maven, see [Maven Plugin](//github.com/divinespear/jpa-schema-maven-plugin).
 
 Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference Implementation) and [Hibernate](http://hibernate.org).
 
-
-## 0.2.x Plan
-* Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related [#14](//github.com/divinespear/jpa-schema-gradle-plugin/issues/14)
-* Support more JPA 2.1 implementations (and also support JPA 2.0 implementations if possible)
-* [Drop support Java 1.6](http://www.oracle.com/technetwork/java/javase/eol-135779.html)
-
-* and Drop support Gradle 1.x
-
 ## Before Announce...
 
 READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
+
+## Announce 0.2
+
+Finally, I got some times, and 0.2 is here.
+
+* Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related [#14](//github.com/divinespear/jpa-schema-gradle-plugin/issues/14)
+* Add support DataNucleus
+* Changed default version of implementations.
+    * Eclipselink: `2.6.1`
+    * Hibernate: `5.0.7.Final`
+    * DataNucleus: `4.2.3`
+* Added `properties` property.
+* Removed properties `namingStrategy` and `dialect` cause Hibernate 4.x to 5.x is cataclysm. please use `properties` instead.
+
+On 0.2.x, plugin required
+* [Java 1.7 or above](http://www.oracle.com/technetwork/java/javase/eol-135779.html), and
+* Gradle 2.x. (developed on Gradle 2.5)
 
 ## How-to Use
 
@@ -75,9 +84,19 @@ or
 
 see also test cases `Generate*Spec.groovy`, as examples.
 
+#### change version of implementations
+
+You can change version with `ext`, like:
+```groovy
+ext['eclipselink.version'] = '2.6.1'
+ext['hibernate.version'] = '5.0.7.Final'
+ext['datanucleus.version'] = '4.2.3'
+```
+sure you should put `ext` into `buildscript` if you want change version.
+
 #### without `persistence.xml`
 
-you **MUST** specify two options: `vendor` and `packageToScan`.
+You **MUST** specify two options: `vendor` and `packageToScan`.
 ```groovy
 generateSchema {
     vendor = 'hibernate' // 'eclipselink' or 'hibernate'.
@@ -110,6 +129,10 @@ Hibernate **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUEN
 
 EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
 
+#### For DataNucleus
+
+DataNucleus **DOES NOT SUPPORT** generate DDL without database connection.
+
 ### SchemaGenerationConfig
 
 Here is full list of parameters of `generateSchema`.
@@ -139,10 +162,8 @@ Here is full list of parameters of `generateSchema`.
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 | `properties` | `java.util.Map` | JPA vendor specific properties. |
-| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of `eclipselink` (`org.eclipse.persistence.jpa.PersistenceProvider`) or `hibernate` (`org.hibernate.jpa.HibernatePersistenceProvider`)</p><p>**REQUIRED for project without `persistence.xml`**</p> |
+| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`datanucleus` (or `org.datanucleus.api.jpa.PersistenceProviderImpl`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
 | `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
-
-`namingStrategy` and `dialect` is removed cause Hibernate 4.x to 5.x is cataclysm. please use `properties` instead.
 
 #### How-to config `properties`
 
@@ -159,8 +180,6 @@ generateSchema {
     ...
 }
 ```
-
-Note: target properties will merged over global properties.
 
 ## Database Product Names
 
@@ -234,8 +253,9 @@ You can override using `hibernate.dialect` property.
     * `org.hibernate.dialect.SybaseAnywhereDialect` = all version
 * `Informix Dynamic Server`
     * `org.hibernate.dialect.InformixDialect` = all version
-* `DB2 UDB for AS/400`
+* ~~`DB2 UDB for AS/390`~~
     * `org.hibernate.dialect.DB2390Dialect`
+* `DB2 UDB for AS/400`
     * `org.hibernate.dialect.DB2400Dialect` = all version
 *  start with `DB2/`
     * `org.hibernate.dialect.DB2Dialect` = all version
