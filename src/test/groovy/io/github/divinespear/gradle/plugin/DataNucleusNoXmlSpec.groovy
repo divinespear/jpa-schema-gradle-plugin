@@ -35,6 +35,44 @@ class DataNucleusNoXmlSpec
         given:
         buildFile << """
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.datanucleus:javax.persistence:2.1.2'
+    compile 'org.datanucleus:datanucleus-accessplatform-jpa-rdbms:4.2.3'
+}
+
+classes << {
+    description "Enhance JPA model classes using DataNucleus Enhancer"
+
+    // define the entity classes
+    def entityFiles = fileTree(sourceSets.main.output.classesDir).matching {
+        include 'io/github/divinespear/**/*.class'
+    }
+
+    println "Enhancing with DataNucleus the following files"
+    entityFiles.getFiles().each {
+        println it
+    }
+
+    // define Ant task for DataNucleus Enhancer
+    ant.taskdef(
+        name : 'datanucleusenhancer',
+        classpath : sourceSets.main.runtimeClasspath.asPath,
+        classname : 'org.datanucleus.enhancer.EnhancerTask'
+    )
+
+    // run the DataNucleus Enhancer as an Ant task
+    ant.datanucleusenhancer(
+        classpath: sourceSets.main.runtimeClasspath.asPath,
+        verbose: true,
+        api: "JPA") {
+        entityFiles.addToAntBuilder(ant, 'fileset', FileCollection.AntType.FileSet)
+    }
+}
+
 sourceSets {
     main {
         java {
@@ -52,54 +90,12 @@ generateSchema {
     packageToScan = ["io.github.divinespear"]
     scriptAction = "drop-and-create"
     targets {
-        h2script {
-            databaseProductName = "H2"
-            databaseMajorVersion = 1
-            databaseMinorVersion = 4
-            createOutputFileName = "h2-create.sql"
-            dropOutputFileName = "h2-drop.sql"
-        }
         h2database {
             databaseAction = "drop-and-create"
             scriptAction = null
             jdbcDriver = "org.h2.Driver"
             jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
             jdbcUser = "sa"
-        }
-        mysql5 {
-            databaseProductName = "MySQL"
-            databaseMajorVersion = 5
-            databaseMinorVersion = 1
-        }
-        postgres {
-            databaseProductName = "PostgreSQL"
-            databaseMajorVersion = 9
-            databaseMinorVersion = 0
-        }
-        "oracle-11g" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 11
-            databaseMinorVersion = 0
-        }
-        "oracle-10g" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 10
-            databaseMinorVersion = 0
-        }
-        "oracle-9i" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 9
-            databaseMinorVersion = 0
-        }
-        "oracle-8i" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 8
-            databaseMinorVersion = 0
-        }
-        mssql {
-            databaseProductName = "Microsoft SQL Server"
-            databaseMajorVersion = 10
-            databaseMinorVersion = 0
         }
     }
 }
@@ -132,103 +128,6 @@ generateSchema {
         } finally {
             sql.close()
         }
-
-        // ddl script
-        def expect = file("../../../../src/test/resources/eclipselink-normal-result.txt").text
-        def actual = StringBuilder.newInstance()
-        ["h2", "mysql5", "postgres", "oracle-11g", "oracle-10g", "oracle-9i", "oracle-8i", "mssql"].each {
-            [it + "-create.sql", it + "-drop.sql"].each {
-                file("build/generated-schema/" + it).exists()
-                actual << "-- " + it + "\n"
-                actual << file("build/generated-schema/" + it).text
-            }
-        }
-        expect == actual.toString()
-    }
-
-    def shouldWorkFormatted() {
-        given:
-        buildFile << """
-
-sourceSets {
-    main {
-        java {
-            srcDir file("../../../../src/test/resources/unit/src")
-        }
-        resources {
-            srcDir file("../../../../src/test/resources/unit/resources/eclipselink-noxml")
-        }
-        output.resourcesDir output.classesDir
-    }
-}
-
-generateSchema {
-    vendor = "datanucleus"
-    packageToScan = ["io.github.divinespear"]
-    format = true
-    scriptAction = "drop-and-create"
-    targets {
-        h2script {
-            databaseProductName = "H2"
-            databaseMajorVersion = 1
-            databaseMinorVersion = 4
-            createOutputFileName = "h2-create.sql"
-            dropOutputFileName = "h2-drop.sql"
-        }
-        mysql5 {
-            databaseProductName = "MySQL"
-            databaseMajorVersion = 5
-            databaseMinorVersion = 1
-        }
-        postgres {
-            databaseProductName = "PostgreSQL"
-            databaseMajorVersion = 9
-            databaseMinorVersion = 0
-        }
-        "oracle-11g" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 11
-            databaseMinorVersion = 0
-        }
-        "oracle-10g" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 10
-            databaseMinorVersion = 0
-        }
-        "oracle-9i" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 9
-            databaseMinorVersion = 0
-        }
-        "oracle-8i" {
-            databaseProductName = "Oracle"
-            databaseMajorVersion = 8
-            databaseMinorVersion = 0
-        }
-        mssql {
-            databaseProductName = "Microsoft SQL Server"
-            databaseMajorVersion = 10
-            databaseMinorVersion = 0
-        }
-    }
-}
-"""
-
-        when:
-        runTasksSuccessfully "generateSchema"
-
-        then:
-        // ddl script
-        def expect = file("../../../../src/test/resources/eclipselink-format-result.txt").text
-        def actual = StringBuilder.newInstance()
-        ["h2", "mysql5", "postgres", "oracle-11g", "oracle-10g", "oracle-9i", "oracle-8i", "mssql"].each {
-            [it + "-create.sql", it + "-drop.sql"].each {
-                file("build/generated-schema/" + it).exists()
-                actual << "-- " + it + "\n"
-                actual << file("build/generated-schema/" + it).text
-            }
-        }
-        expect == actual.toString()
     }
 
 }
