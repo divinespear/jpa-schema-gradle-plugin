@@ -86,13 +86,13 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    testCompile 'junit:junit:4.+'
-    testCompile 'org.hamcrest:hamcrest-all:1.+'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
     testCompile('com.netflix.nebula:nebula-test:2.2.2') {
         exclude module: 'junit-dep'
         exclude module: 'groovy-all'
     }
-    testRuntime 'com.h2database:h2:1.+'
+    testRuntime 'com.h2database:h2:1.4.191'
     testRuntime fileTree(dir: "lib", include: "*.jar")
 
     // jpa
