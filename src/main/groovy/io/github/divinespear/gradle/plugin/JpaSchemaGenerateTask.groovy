@@ -368,11 +368,6 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
     void defaultGenerate(Configuration config) {
         def props = persistenceProperties(config)
-        // enhance datanucleus
-        if (config.vendor == "datanucleus") {
-            enhanceDataNucleus(config.persistenceUnitName, props)
-        }
-
         Persistence.generateSchema(config.persistenceUnitName, props)
     }
 
