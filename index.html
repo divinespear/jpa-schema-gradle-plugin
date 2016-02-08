@@ -34,9 +34,10 @@
         <h1>
 <a id="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
-<p><strong>Version 0.1.12-1</strong></p>
+<p><strong>Version 0.2.0</strong></p>
 
-<p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.</p>
+<p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.
+for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven Plugin</a>.</p>
 
 <p>Currently support <a href="http://www.eclipse.org/eclipselink">EclipseLink</a> (Reference Implementation) and <a href="http://hibernate.org">Hibernate</a>.</p>
 
@@ -46,6 +47,38 @@
 <p>READ MY LIP; <strong>JPA DDL GENERATOR IS NOT SILVER BULLET</strong></p>
 
 <p>Sometimes (<em>most times</em> exactly :P) JPA will generate weird scripts so you <strong>SHOULD</strong> modify them properly.</p>
+
+<h2>
+<a id="announce-02" class="anchor" href="#announce-02" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Announce 0.2</h2>
+
+<p>Finally, I got some times, and 0.2 is here.</p>
+
+<ul>
+<li>Support generate without <code>persistence.xml</code> (like spring-data, spring-boot, ...) related <a href="//github.com/divinespear/jpa-schema-gradle-plugin/issues/14">#14</a>
+</li>
+<li>Add support DataNucleus</li>
+<li>Changed default version of implementations.
+
+<ul>
+<li>Eclipselink: <code>2.6.1</code>
+</li>
+<li>Hibernate: <code>5.0.7.Final</code>
+</li>
+<li>DataNucleus: <code>4.2.3</code>
+</li>
+</ul>
+</li>
+<li>Added <code>properties</code> property.</li>
+<li>Removed properties <code>namingStrategy</code> and <code>dialect</code> cause Hibernate 4.x to 5.x is cataclysm. please use <code>properties</code> instead.</li>
+</ul>
+
+<p>On 0.2.x, plugin required</p>
+
+<ul>
+<li>
+<a href="http://www.oracle.com/technetwork/java/javase/eol-135779.html">Java 1.7 or above</a>, and</li>
+<li>Gradle 2.x. (developed on Gradle 2.5)</li>
+</ul>
 
 <h2>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How-to Use</h2>
@@ -100,6 +133,30 @@ generateSchema {
 <p>see also test cases <code>Generate*Spec.groovy</code>, as examples.</p>
 
 <h4>
+<a id="change-version-of-implementations" class="anchor" href="#change-version-of-implementations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>change version of implementations</h4>
+
+<p>You can change version with <code>ext</code>, like:</p>
+
+<div class="highlight highlight-source-groovy"><pre>ext[<span class="pl-s"><span class="pl-pds">'</span>eclipselink.version<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>2.6.1<span class="pl-pds">'</span></span>
+ext[<span class="pl-s"><span class="pl-pds">'</span>hibernate.version<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>5.0.7.Final<span class="pl-pds">'</span></span>
+ext[<span class="pl-s"><span class="pl-pds">'</span>datanucleus.version<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>4.2.3<span class="pl-pds">'</span></span></pre></div>
+
+<p>sure you should put <code>ext</code> into <code>buildscript</code> if you want change version.</p>
+
+<h4>
+<a id="without-persistencexml" class="anchor" href="#without-persistencexml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>without <code>persistence.xml</code>
+</h4>
+
+<p>You <strong>MUST</strong> specify two options: <code>vendor</code> and <code>packageToScan</code>.</p>
+
+<div class="highlight highlight-source-groovy"><pre>generateSchema {
+    vendor <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>hibernate<span class="pl-pds">'</span></span> <span class="pl-c">// 'eclipselink' or 'hibernate'.</span>
+                         <span class="pl-c">// you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')</span>
+    packageToScan <span class="pl-k">=</span> [ <span class="pl-s"><span class="pl-pds">'</span>your.package.to.scan<span class="pl-pds">'</span></span>, <span class="pl-k">..</span>. ]
+    <span class="pl-k">..</span>.
+}</pre></div>
+
+<h4>
 <a id="for-scala" class="anchor" href="#for-scala" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For Scala</h4>
 
 <p>You MUST put <code>scala-library</code> to <code>dependencies</code> of <code>buildscript</code>.</p>
@@ -122,6 +179,11 @@ generateSchema {
 <a id="for-eclipselink-with-oracle" class="anchor" href="#for-eclipselink-with-oracle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For EclipseLink with Oracle</h4>
 
 <p>EclipseLink's <code>Oracle{8,9,10,11}Platform</code> uses some type classes from Oracle's JDBC driver. you should have it in your dependency.</p>
+
+<h4>
+<a id="for-datanucleus" class="anchor" href="#for-datanucleus" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For DataNucleus</h4>
+
+<p>DataNucleus <strong>DOES NOT SUPPORT</strong> generate DDL without database connection.</p>
 
 <h3>
 <a id="schemagenerationconfig" class="anchor" href="#schemagenerationconfig" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SchemaGenerationConfig</h3>
@@ -158,7 +220,7 @@ generateSchema {
 <tr>
 <td><code>persistenceXml</code></td>
 <td><code>string</code></td>
-<td>location of <code>persistence.xml</code> file<p>Note for Hibernate: <strong>current version (4.3.1.Final) DOES NOT SUPPORT custom location.</strong> (<code>SchemaExport</code> support it, but JPA 2.1 schema generator does NOT.)</p>
+<td>location of <code>persistence.xml</code> file<p>Note: <strong>Hibernate DOES NOT SUPPORT custom location.</strong> (<code>SchemaExport</code> support it, but JPA 2.1 schema generator does NOT.)</p>
 <p>default value is <code>META-INF/persistence.xml</code>.</p>
 </td>
 </tr>
@@ -314,27 +376,57 @@ generateSchema {
 </td>
 </tr>
 <tr>
-<td><code>namingStrategy</code></td>
-<td><code>string</code></td>
-<td>naming strategy that implements <code>org.hibernate.cfg.NamingStrategy</code><p>this is Hibernate-only option.</p>
-</td>
-</tr>
-<tr>
-<td><code>dialect</code></td>
-<td><code>string</code></td>
-<td>dialect class<p>use this parameter if you want use custom dialect class. default is detect from JDBC connection or using <code>databaseProductName</code>, <code>databaseMajorVersion</code>, and <code>databaseMinorVersion</code>.</p>
-<p>this is Hibernate-only option.</p>
-</td>
-</tr>
-<tr>
 <td><code>lineSeparator</code></td>
 <td><code>string</code></td>
 <td>line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p>
 <p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p>
 </td>
 </tr>
+<tr>
+<td><code>properties</code></td>
+<td><code>java.util.Map</code></td>
+<td>JPA vendor specific properties.</td>
+</tr>
+<tr>
+<td><code>vendor</code></td>
+<td><code>string</code></td>
+<td>JPA vendor name or class name of vendor's <code>PersistenceProvider</code> implemention.<p>vendor name is one of </p>
+<ul>
+<li>
+<code>eclipselink</code>(or <code>org.eclipse.persistence.jpa.PersistenceProvider</code>)</li>
+<li>
+<code>hibernate</code> (or <code>org.hibernate.jpa.HibernatePersistenceProvider</code>)</li>
+<li>
+<code>datanucleus</code> (or <code>org.datanucleus.api.jpa.PersistenceProviderImpl</code>)</li>
+</ul>
+<p><strong>REQUIRED for project without <code>persistence.xml</code></strong></p>
+</td>
+</tr>
+<tr>
+<td><code>packageToScan</code></td>
+<td><code>java.util.List</code></td>
+<td>list of package name for scan entity classes<p><strong>REQUIRED for project without <code>persistence.xml</code></strong></p>
+</td>
+</tr>
 </tbody>
 </table>
+
+<h4>
+<a id="how-to-config-properties" class="anchor" href="#how-to-config-properties" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How-to config <code>properties</code>
+</h4>
+
+<p>It's just groovy map, so you can config like this:</p>
+
+<div class="highlight highlight-source-groovy"><pre>generateSchema {
+    <span class="pl-k">..</span>.
+    <span class="pl-c">// global properties</span>
+    properties <span class="pl-k">=</span> [
+        <span class="pl-s"><span class="pl-pds">"</span>hibernate.dialect<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>org.hibernate.dialect.MySQL5InnoDBDialect<span class="pl-pds">"</span></span>,
+        <span class="pl-k">..</span>.
+    ]
+    <span class="pl-c">// you can set target-specific too.</span>
+    <span class="pl-k">..</span>.
+}</pre></div>
 
 <h2>
 <a id="database-product-names" class="anchor" href="#database-product-names" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Database Product Names</h2>
@@ -348,9 +440,9 @@ generateSchema {
 
 <ul>
 <li>
-<code>Oracle12</code>: Oracle 12g</li>
+<code>Oracle12</code> = Oracle 12c</li>
 <li>
-<code>Oracle11</code>: Oracle 11g</li>
+<code>Oracle11</code> = Oracle 11g</li>
 <li>
 <code>Oracle10</code>: Oracle 10g</li>
 <li>
@@ -377,34 +469,175 @@ generateSchema {
 <h3>
 <a id="for-hibernate-1" class="anchor" href="#for-hibernate-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>for Hibernate</h3>
 
-<p>some products uses different dialect by <code>databaseMajorVersion</code> and/or <code>databaseMinorVersion</code>.</p>
+<p>Some products uses different dialect by <code>databaseMajorVersion</code> and/or <code>databaseMinorVersion</code>.
+You can override using <code>hibernate.dialect</code> property.</p>
 
 <ul>
-<li><code>CUBRID</code></li>
-<li><code>HSQL Database Engine</code></li>
-<li><code>H2</code></li>
 <li>
-<code>MySQL</code>: 5.0 or above, 4.x or below</li>
+<code>CUBRID</code>
+
+<ul>
 <li>
-<code>PostgreSQL</code>: 9.x, 8.2 or above, 8.1 or below</li>
+<code>org.hibernate.dialect.CUBRIDDialect</code> = all version</li>
+</ul>
+</li>
 <li>
-<code>Apache Derby</code>: 10.7 or above, 10.6, 10.5, 10.4 or below</li>
+<code>HSQL Database Engine</code>
+
+<ul>
 <li>
-<code>ingres</code>: 10.x, 9.2 or above, 9.1 or below</li>
+<code>org.hibernate.dialect.HSQLDialect</code> = all version</li>
+</ul>
+</li>
 <li>
-<code>Microsoft SQL Server</code>: 11.x, 10.x, 9.x, 8.x or below</li>
-<li><code>Sybase SQL Server</code></li>
+<code>H2</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.H2Dialect</code> = all version</li>
+</ul>
+</li>
+<li>
+<code>MySQL</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.MySQL5Dialect</code> = 5.x</li>
+<li>
+<code>org.hibernate.dialect.MySQLDialect</code> = 4.x or below</li>
+<li><code>org.hibernate.dialect.MySQLMyISAMDialect</code></li>
+<li><code>org.hibernate.dialect.MySQLInnoDBDialect</code></li>
+<li><code>org.hibernate.dialect.MySQL5InnoDBDialect</code></li>
+<li><code>org.hibernate.dialect.MySQL57InnoDBDialect</code></li>
+</ul>
+</li>
+<li>
+<code>PostgreSQL</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.PostgreSQL94Dialect</code> = 9.4 or above</li>
+<li>
+<code>org.hibernate.dialect.PostgreSQL92Dialect</code> = 9.2 or above</li>
+<li>
+<code>org.hibernate.dialect.PostgreSQL9Dialect</code> = 9.x</li>
+<li>
+<code>org.hibernate.dialect.PostgreSQL82Dialect</code> = 8.2 or above</li>
+<li>
+<code>org.hibernate.dialect.PostgreSQL81Dialect</code> = 8.1 or below</li>
+</ul>
+</li>
+<li>
+<code>Apache Derby</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.DerbyTenSevenDialect</code> = 10.7 or above</li>
+<li>
+<code>org.hibernate.dialect.DerbyTenSixDialect</code> = 10.6</li>
+<li>
+<code>org.hibernate.dialect.DerbyTenFiveDialect</code> = 10.5</li>
+<li>
+<code>org.hibernate.dialect.DerbyDialect</code> = 10.4 or below</li>
+</ul>
+</li>
+<li>
+<code>ingres</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.Ingres10Dialect</code> = 10.x</li>
+<li>
+<code>org.hibernate.dialect.Ingres9Dialect</code> = 9.2 or above</li>
+<li>
+<code>org.hibernate.dialect.IngresDialect</code> = 9.1 or below</li>
+</ul>
+</li>
+<li>
+<code>Microsoft SQL Server</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.SQLServer2012Dialect</code> = 11.x</li>
+<li>
+<code>org.hibernate.dialect.SQLServer2008Dialect</code> = 10.x</li>
+<li>
+<code>org.hibernate.dialect.SQLServer2005Dialect</code> = 9.x</li>
+<li>
+<code>org.hibernate.dialect.SQLServerDialect</code> = 8.x or below</li>
+</ul>
+</li>
+<li>
+<code>Sybase SQL Server</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.SybaseASE15Dialect</code> = all version</li>
+<li><code>org.hibernate.dialect.SybaseASE17Dialect</code></li>
+</ul>
+</li>
 <li>
 <code>Adaptive Server Enterprise</code> = Sybase</li>
 <li>
-<code>Adaptive Server Anywhere</code> = Sybase Anywhere</li>
-<li><code>Informix Dynamic Server</code></li>
-<li><code>DB2 UDB for AS/400</code></li>
-<li> start with <code>DB2/</code>
+<code>Adaptive Server Anywhere</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.SybaseAnywhereDialect</code> = all version</li>
+</ul>
 </li>
 <li>
-<code>Oracle</code>: 11.x, 10.x, 9.x, 8.x</li>
-<li><code>Firebird</code></li>
+<code>Informix Dynamic Server</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.InformixDialect</code> = all version</li>
+</ul>
+</li>
+<li>
+<del><code>DB2 UDB for AS/390</code></del>
+
+<ul>
+<li><code>org.hibernate.dialect.DB2390Dialect</code></li>
+</ul>
+</li>
+<li>
+<code>DB2 UDB for AS/400</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.DB2400Dialect</code> = all version</li>
+</ul>
+</li>
+<li> start with <code>DB2/</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.DB2Dialect</code> = all version</li>
+</ul>
+</li>
+<li>
+<code>Oracle</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.Oracle12cDialect</code> = 12.x</li>
+<li>
+<code>org.hibernate.dialect.Oracle10gDialect</code> = 11.x, 10.x</li>
+<li>
+<code>org.hibernate.dialect.Oracle9iDialect</code> = 9.x</li>
+<li>
+<code>org.hibernate.dialect.Oracle8iDialect</code> = 8.x or below</li>
+</ul>
+</li>
+<li>
+<code>Firebird</code>
+
+<ul>
+<li>
+<code>org.hibernate.dialect.FirebirdDialect</code> = all version</li>
+</ul>
+</li>
 </ul>
 
 <h2>
