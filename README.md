@@ -20,7 +20,7 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 Finally, I got some times, and 0.2 is here.
 
 * Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related [#14](//github.com/divinespear/jpa-schema-gradle-plugin/issues/14)
-* Add support DataNucleus
+* Add support DataNucleus - with very limited feature
 * Changed default version of implementations.
     * Eclipselink: `2.6.1`
     * Hibernate: `5.0.7.Final`
@@ -42,14 +42,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.github.divinespear:jpa-schema-gradle-plugin:+"
+        classpath 'io.github.divinespear:jpa-schema-gradle-plugin:+'
         // jdbc drivers also here
         ...
     }
 }
 
-apply plugin: "java"
-apply plugin: "jpa-schema-generate"
+apply plugin: 'java'
+apply plugin: 'jpa-schema-generate' // or 'io.github.divinespear.jpa-schema-generate'
 
 sourceSets {
     main {
@@ -99,7 +99,7 @@ sure you should put `ext` into `buildscript` if you want change version.
 You **MUST** specify two options: `vendor` and `packageToScan`.
 ```groovy
 generateSchema {
-    vendor = 'hibernate' // 'eclipselink' or 'hibernate'.
+    vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'datanucleus'.
                          // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
     packageToScan = [ 'your.package.to.scan', ... ]
     ...
@@ -173,7 +173,7 @@ generateSchema {
     ...
     // global properties
     properties = [
-        "hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect",
+        'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
         ...
     ]
     // you can set target-specific too.
