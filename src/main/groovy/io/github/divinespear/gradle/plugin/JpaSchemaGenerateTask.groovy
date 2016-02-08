@@ -371,18 +371,22 @@ class JpaSchemaGenerateTask extends DefaultTask {
         Persistence.generateSchema(config.persistenceUnitName, props)
     }
 
-    private static final Map<String, Class<PersistenceProvider>> PERSISTENCE_PROVIDER_MAP = [
-        "eclipselink": org.eclipse.persistence.jpa.PersistenceProvider.class,
-        "hibernate": org.hibernate.jpa.HibernatePersistenceProvider.class,
-        "datanucleus": org.datanucleus.api.jpa.PersistenceProviderImpl.class
+    private static final Map<String, String> PERSISTENCE_PROVIDER_MAP = [
+        'eclipselink': 'org.eclipse.persistence.jpa.PersistenceProvider',
+        'hibernate': 'org.hibernate.jpa.HibernatePersistenceProvider',
+        'datanucleus': 'org.datanucleus.api.jpa.PersistenceProviderImpl'
     ]
 
     void xmllessGenerate(Configuration config) {
         def vendorName = config.vendor
-        def provider = PERSISTENCE_PROVIDER_MAP[vendorName.toLowerCase()]?.newInstance()
-        if (provider == null && PERSISTENCE_PROVIDER_MAP.values().contains(vendorName)) {
-            provider = Class.forName(vendorName).newInstance() as PersistenceProvider
+        def providerClassName = PERSISTENCE_PROVIDER_MAP[vendorName.toLowerCase()]
+        if (providerClassName == null && PERSISTENCE_PROVIDER_MAP.values().contains(vendorName)) {
+            providerClassName = vendorName;
         }
+        if ((providerClassName ?: '').empty) {
+            throw new IllegalArgumentException("vendor name or provider class name is required on xml-less mode.")
+        }
+        def provider = Class.forName(providerClassName).newInstance() as PersistenceProvider
 
         if (config.packageToScan.empty) {
             throw new IllegalArgumentException("packageToScan is required on xml-less mode.")
