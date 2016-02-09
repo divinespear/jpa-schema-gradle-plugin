@@ -137,17 +137,20 @@ generateSchema {
 <h4>
 <a id="change-version-of-implementations" class="anchor" href="#change-version-of-implementations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>change version of implementations</h4>
 
-<p>You can change version using <code>configurations</code>, like:</p>
+<p>You can change version using <code>configurations</code> on <code>buildscript</code>, like:</p>
 
-<div class="highlight highlight-source-groovy"><pre>configurations<span class="pl-k">.</span>all {
-    resolutionStrategy<span class="pl-k">.</span>eachDependency { <span class="pl-k">DependencyResolveDetails</span> <span class="pl-v">details</span> <span class="pl-k">-&gt;</span>
-        <span class="pl-k">if</span> (details<span class="pl-k">.</span>requested<span class="pl-k">.</span>group <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>org.hibernate<span class="pl-pds">'</span></span>) {
-            details<span class="pl-k">.</span>useVersion <span class="pl-s"><span class="pl-pds">'</span>4.3.11.Final<span class="pl-pds">'</span></span>
+<div class="highlight highlight-source-groovy"><pre>buildscript {
+    <span class="pl-k">..</span>.
+    configurations<span class="pl-k">.</span>all {
+        resolutionStrategy<span class="pl-k">.</span>eachDependency { <span class="pl-k">DependencyResolveDetails</span> <span class="pl-v">details</span> <span class="pl-k">-&gt;</span>
+            <span class="pl-k">if</span> (details<span class="pl-k">.</span>requested<span class="pl-k">.</span>group <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>org.hibernate<span class="pl-pds">'</span></span>) {
+                details<span class="pl-k">.</span>useVersion <span class="pl-s"><span class="pl-pds">'</span>4.3.11.Final<span class="pl-pds">'</span></span>
+            }
         }
     }
 }</pre></div>
 
-<p>It should useful if you using Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.</p>
+<p>It should useful if you using Hibernate with Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.</p>
 
 <h4>
 <a id="without-persistencexml" class="anchor" href="#without-persistencexml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>without <code>persistence.xml</code>
