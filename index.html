@@ -34,7 +34,7 @@
         <h1>
 <a id="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
-<p><strong>Version 0.2.0</strong></p>
+<p><strong>Version 0.2.0-1</strong></p>
 
 <p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.
 for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven Plugin</a>.</p>
@@ -79,6 +79,8 @@ for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven 
 <a href="http://www.oracle.com/technetwork/java/javase/eol-135779.html">Java 1.7 or above</a>, and</li>
 <li>Gradle 2.x. (developed on Gradle 2.5)</li>
 </ul>
+
+<p>DataNucleus support is very very limited, and should so many buggy.</p>
 
 <h2>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How-to Use</h2>
@@ -135,13 +137,17 @@ generateSchema {
 <h4>
 <a id="change-version-of-implementations" class="anchor" href="#change-version-of-implementations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>change version of implementations</h4>
 
-<p>You can change version with <code>ext</code>, like:</p>
+<p>You can change version using <code>configurations</code>, like:</p>
 
-<div class="highlight highlight-source-groovy"><pre>ext[<span class="pl-s"><span class="pl-pds">'</span>eclipselink.version<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>2.6.1<span class="pl-pds">'</span></span>
-ext[<span class="pl-s"><span class="pl-pds">'</span>hibernate.version<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>5.0.7.Final<span class="pl-pds">'</span></span>
-ext[<span class="pl-s"><span class="pl-pds">'</span>datanucleus.version<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>4.2.3<span class="pl-pds">'</span></span></pre></div>
+<div class="highlight highlight-source-groovy"><pre>configurations<span class="pl-k">.</span>all {
+    resolutionStrategy<span class="pl-k">.</span>eachDependency { <span class="pl-k">DependencyResolveDetails</span> <span class="pl-v">details</span> <span class="pl-k">-&gt;</span>
+        <span class="pl-k">if</span> (details<span class="pl-k">.</span>requested<span class="pl-k">.</span>group <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>org.hibernate<span class="pl-pds">'</span></span>) {
+            details<span class="pl-k">.</span>useVersion <span class="pl-s"><span class="pl-pds">'</span>4.3.11.Final<span class="pl-pds">'</span></span>
+        }
+    }
+}</pre></div>
 
-<p>sure you should put <code>ext</code> into <code>buildscript</code> if you want change version.</p>
+<p>It should useful if you using Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.</p>
 
 <h4>
 <a id="without-persistencexml" class="anchor" href="#without-persistencexml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>without <code>persistence.xml</code>
