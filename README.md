@@ -88,17 +88,20 @@ see also test cases `Generate*Spec.groovy`, as examples.
 
 #### change version of implementations
 
-You can change version using `configurations`, like:
+You can change version using `configurations` on `buildscript`, like:
 ```groovy
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.group == 'org.hibernate') {
-            details.useVersion '4.3.11.Final'
+buildscript {
+    ...
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.hibernate') {
+                details.useVersion '4.3.11.Final'
+            }
         }
     }
 }
 ```
-It should useful if you using Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.
+It should useful if you using Hibernate with Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.
 
 #### without `persistence.xml`
 
