@@ -1,9 +1,8 @@
 package io.github.divinespear.gradle.plugin.config
 
-import org.eclipse.persistence.config.PersistenceUnitProperties
 
 class Configuration {
-    
+
     /**
      * target name
      */
@@ -233,8 +232,8 @@ class Configuration {
      * <p>
      * @since 0.2.0
      */
-    Map properties = [:];
-    
+    Map properties = [:]
+
     /**
      * JPA vendor
      * <p>
@@ -244,14 +243,14 @@ class Configuration {
      * <p>
      * @since 0.2.0
      */
-    String vendor;
+    String vendor
 
     /**
      * Packages to scan entities.
      * <p>
      * @since 0.2.0
      */
-    List packageToScan = [];
+    List packageToScan = []
 
     Configuration() {
         this(null)
@@ -299,16 +298,47 @@ class Configuration {
         if (target?.properties != null) {
             this.properties.putAll(target?.properties)
         }
-        
+
         this.vendor = target?.vendor ?: base.vendor
-        this.packageToScan = (base.packageToScan.toSet() + target?.packageToScan.toSet()).toList() 
+        this.packageToScan = (base.packageToScan.toSet() + target?.packageToScan.toSet()).toList()
     }
 
     boolean isScriptTarget() {
-        return !PersistenceUnitProperties.SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(scriptAction)
+        return !JAVAX_SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(scriptAction)
     }
 
     boolean isDatabaseTarget() {
-        return !PersistenceUnitProperties.SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(databaseAction)
+        return !JAVAX_SCHEMA_GENERATION_NONE_ACTION.equalsIgnoreCase(databaseAction)
     }
+
+    static final String JAVAX_SCHEMA_GENERATION_NONE_ACTION = 'none'
+    static final String JAVAX_SCHEMA_GENERATION_DATABASE_ACTION = 'javax.persistence.schema-generation.database.action'
+    static final String JAVAX_SCHEMA_GENERATION_SCRIPTS_ACTION = 'javax.persistence.schema-generation.scripts.action'
+    static final String JAVAX_SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET = 'javax.persistence.schema-generation.scripts.create-target'
+    static final String JAVAX_SCHEMA_GENERATION_SCRIPTS_DROP_TARGET = 'javax.persistence.schema-generation.scripts.drop-target'
+    static final String JAVAX_SCHEMA_DATABASE_PRODUCT_NAME = 'javax.persistence.database-product-name'
+    static final String JAVAX_SCHEMA_DATABASE_MAJOR_VERSION = 'javax.persistence.database-major-version'
+    static final String JAVAX_SCHEMA_DATABASE_MINOR_VERSION = 'javax.persistence.database-minor-version'
+    static final String JAVAX_JDBC_DRIVER = 'javax.persistence.jdbc.driver'
+    static final String JAVAX_JDBC_URL = 'javax.persistence.jdbc.url'
+    static final String JAVAX_JDBC_USER = 'javax.persistence.jdbc.user'
+    static final String JAVAX_JDBC_PASSWORD = 'javax.persistence.jdbc.password'
+    static final String JAVAX_SCHEMA_GENERATION_METADATA_SOURCE = 'metadata'
+    static final String JAVAX_SCHEMA_GENERATION_CREATE_SOURCE = 'javax.persistence.schema-generation.create-source'
+    static final String JAVAX_SCHEMA_GENERATION_DROP_SOURCE = 'javax.persistence.schema-generation.drop-source'
+    static final String JAVAX_SCHEMA_GENERATION_CREATE_SCRIPT_SOURCE = 'javax.persistence.schema-generation.create-script-source'
+    static final String JAVAX_SCHEMA_GENERATION_DROP_SCRIPT_SOURCE = 'javax.persistence.schema-generation.drop-script-source'
+    static final String JAVAX_SCHEMA_GEN_CONNECTION = 'javax.persistence.schema-generation-connection'
+    static final String JAVAX_VALIDATION_MODE = 'javax.persistence.validation.mode'
+    static final String JAVAX_TRANSACTION_TYPE = 'javax.persistence.transactionType'
+    static final String JAVAX_JTA_DATASOURCE = 'javax.persistence.jtaDataSource'
+    static final String JAVAX_NON_JTA_DATASOURCE = 'javax.persistence.nonJtaDataSource'
+    
+    static final String ECLIPSELINK_PERSISTENCE_XML = 'eclipselink.persistencexml'
+    static final String ECLIPSELINK_WEAVING = 'eclipselink.weaving'
+    
+    static final String HIBERNATE_AUTODETECTION = 'hibernate.archive.autodetection'
+    static final String HIBERNATE_DIALECT = 'hibernate.dialect'
+    
+    static final String DATANUCLEUS_PERSISTENCE_XML = 'datanucleus.persistenceXmlFilename'
 }

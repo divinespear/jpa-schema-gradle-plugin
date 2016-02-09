@@ -27,13 +27,10 @@ import java.sql.DriverManager
 import javax.persistence.Persistence
 import javax.persistence.spi.PersistenceProvider
 
-import org.datanucleus.PropertyNames
-import org.eclipse.persistence.config.PersistenceUnitProperties
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
 import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo
-import org.hibernate.jpa.AvailableSettings
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
 
 class JpaSchemaGenerateTask extends DefaultTask {
@@ -114,12 +111,13 @@ class JpaSchemaGenerateTask extends DefaultTask {
         return vendorName
     }
 
+
     Map<String, Object> persistenceProperties(Configuration target) {
         Map<String, Object> map = [:]
 
         // mode
-        map[PersistenceUnitProperties.SCHEMA_GENERATION_DATABASE_ACTION] = target.databaseAction.toLowerCase()
-        map[PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_ACTION] = target.scriptAction.toLowerCase()
+        map[Configuration.JAVAX_SCHEMA_GENERATION_DATABASE_ACTION] = target.databaseAction.toLowerCase()
+        map[Configuration.JAVAX_SCHEMA_GENERATION_SCRIPTS_ACTION] = target.scriptAction.toLowerCase()
         // output files
         if (target.scriptTarget) {
             if (target.outputDirectory == null) {
@@ -127,55 +125,55 @@ class JpaSchemaGenerateTask extends DefaultTask {
             }
             def outc = new File(target.outputDirectory, target.createOutputFileName).toURI().toString()
             def outd = new File(target.outputDirectory, target.dropOutputFileName).toURI().toString()
-            map[PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET] = outc
-            map[PersistenceUnitProperties.SCHEMA_GENERATION_SCRIPTS_DROP_TARGET] = outd
+            map[Configuration.JAVAX_SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET] = outc
+            map[Configuration.JAVAX_SCHEMA_GENERATION_SCRIPTS_DROP_TARGET] = outd
         }
         // database emulation options
-        map[PersistenceUnitProperties.SCHEMA_DATABASE_PRODUCT_NAME] = target.databaseProductName
-        map[PersistenceUnitProperties.SCHEMA_DATABASE_MAJOR_VERSION] = target.databaseMajorVersion?.toString()
-        map[PersistenceUnitProperties.SCHEMA_DATABASE_MINOR_VERSION] = target.databaseMinorVersion?.toString()
+        map[Configuration.JAVAX_SCHEMA_DATABASE_PRODUCT_NAME] = target.databaseProductName
+        map[Configuration.JAVAX_SCHEMA_DATABASE_MAJOR_VERSION] = target.databaseMajorVersion?.toString()
+        map[Configuration.JAVAX_SCHEMA_DATABASE_MINOR_VERSION] = target.databaseMinorVersion?.toString()
         // database options
         if (target.databaseTarget) {
             if (target.jdbcUrl == null) {
                 throw new IllegalArgumentException("jdbcUrl is REQUIRED for database generation.")
             }
         }
-        map[PersistenceUnitProperties.JDBC_DRIVER] = target.jdbcDriver
-        map[PersistenceUnitProperties.JDBC_URL] = target.jdbcUrl
-        map[PersistenceUnitProperties.JDBC_USER] = target.jdbcUser
-        map[PersistenceUnitProperties.JDBC_PASSWORD] = target.jdbcPassword
+        map[Configuration.JAVAX_JDBC_DRIVER] = target.jdbcDriver
+        map[Configuration.JAVAX_JDBC_URL] = target.jdbcUrl
+        map[Configuration.JAVAX_JDBC_USER] = target.jdbcUser
+        map[Configuration.JAVAX_JDBC_PASSWORD] = target.jdbcPassword
         // source selection
-        map[PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_SOURCE] = target.createSourceMode
+        map[Configuration.JAVAX_SCHEMA_GENERATION_CREATE_SOURCE] = target.createSourceMode
         if (target.createSourceFile == null) {
-            if (!PersistenceUnitProperties.SCHEMA_GENERATION_METADATA_SOURCE.equals(target.createSourceMode)) {
+            if (!Configuration.JAVAX_SCHEMA_GENERATION_METADATA_SOURCE.equals(target.createSourceMode)) {
                 throw new IllegalArgumentException("create source file is required for mode " + target.createSourceMode)
             }
         } else {
-            map[PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_SCRIPT_SOURCE] = target.createSourceFile.toURI().toString()
+            map[Configuration.JAVAX_SCHEMA_GENERATION_CREATE_SCRIPT_SOURCE] = target.createSourceFile.toURI().toString()
         }
-        map[PersistenceUnitProperties.SCHEMA_GENERATION_DROP_SOURCE] = target.dropSourceMode
+        map[Configuration.JAVAX_SCHEMA_GENERATION_DROP_SOURCE] = target.dropSourceMode
         if (target.dropSourceFile == null) {
-            if (!PersistenceUnitProperties.SCHEMA_GENERATION_METADATA_SOURCE.equals(target.dropSourceMode)) {
+            if (!Configuration.JAVAX_SCHEMA_GENERATION_METADATA_SOURCE.equals(target.dropSourceMode)) {
                 throw new IllegalArgumentException("drop source file is required for mode " + target.dropSourceMode)
             }
         } else {
-            map[PersistenceUnitProperties.SCHEMA_GENERATION_DROP_SCRIPT_SOURCE] = target.dropSourceFile.toURI().toString()
+            map[Configuration.JAVAX_SCHEMA_GENERATION_DROP_SCRIPT_SOURCE] = target.dropSourceFile.toURI().toString()
         }
 
         /*
          * EclipseLink specific
          */
         // persistence.xml
-        map[PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
+        map[Configuration.ECLIPSELINK_PERSISTENCE_XML] = target.persistenceXml
         // weaving
-        map[PersistenceUnitProperties.WEAVING] = "false"
+        map[Configuration.ECLIPSELINK_WEAVING] = "false"
 
         /*
          * Hibernate specific
          */
-        map[AvailableSettings.AUTODETECTION] = "class,hbm"
+        map[Configuration.HIBERNATE_AUTODETECTION] = "class,hbm"
         // dialect (without jdbc connection)
-        if ((target.jdbcUrl ?: "").empty && (map[org.hibernate.cfg.AvailableSettings.DIALECT] ?: "").empty) {
+        if ((target.jdbcUrl ?: "").empty && (map[Configuration.HIBERNATE_DIALECT] ?: "").empty) {
             DialectResolutionInfo info = new DialectResolutionInfo() {
                         String getDriverName() { null }
                         int getDriverMajorVersion() { 0}
@@ -185,14 +183,14 @@ class JpaSchemaGenerateTask extends DefaultTask {
                         int getDatabaseMinorVersion() { target.databaseMinorVersion ?: 0 }
                     }
             def detectedDialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
-            map[org.hibernate.cfg.AvailableSettings.DIALECT] = detectedDialect.getClass().getName()
+            map[Configuration.HIBERNATE_DIALECT] = detectedDialect.getClass().getName()
         }
 
         /*
          * DataNucleus specific
          */
         // persistence.xml
-        map[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = target.persistenceXml
+        map[Configuration.DATANUCLEUS_PERSISTENCE_XML] = target.persistenceXml
 
         /*
          * Override properties
@@ -201,15 +199,15 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
         // issue-3: pass mock connection
         if (!target.databaseTarget && (target.jdbcUrl ?: "").empty) {
-            map[AvailableSettings.SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
+            map[Configuration.JAVAX_SCHEMA_GEN_CONNECTION] =  new ConnectionMock(target.databaseProductName, target.databaseMajorVersion, target.databaseMinorVersion)
         }
         // issue-5: pass "none" for avoid validation while schema generating
-        map[AvailableSettings.VALIDATION_MODE] = "none"
+        map[Configuration.JAVAX_VALIDATION_MODE] = "none"
 
         // issue-13: disable JTA and datasources
-        map[PersistenceUnitProperties.TRANSACTION_TYPE] = "RESOURCE_LOCAL"
-        map[PersistenceUnitProperties.JTA_DATASOURCE] = null
-        map[PersistenceUnitProperties.NON_JTA_DATASOURCE] = null
+        map[Configuration.JAVAX_TRANSACTION_TYPE] = "RESOURCE_LOCAL"
+        map[Configuration.JAVAX_JTA_DATASOURCE] = null
+        map[Configuration.JAVAX_NON_JTA_DATASOURCE] = null
 
         logger.info('--- configuration begin ---')
         logger.info(map.toString())
@@ -381,12 +379,12 @@ class JpaSchemaGenerateTask extends DefaultTask {
         def vendorName = config.vendor
         def providerClassName = PERSISTENCE_PROVIDER_MAP[vendorName.toLowerCase()]
         if (providerClassName == null && PERSISTENCE_PROVIDER_MAP.values().contains(vendorName)) {
-            providerClassName = vendorName;
+            providerClassName = vendorName
         }
         if ((providerClassName ?: '').empty) {
             throw new IllegalArgumentException("vendor name or provider class name is required on xml-less mode.")
         }
-        def provider = Class.forName(providerClassName).newInstance() as PersistenceProvider
+        def provider = Class.forName(providerClassName).newInstance() as javax.persistence.spi.PersistenceProvider
 
         if (config.packageToScan.empty) {
             throw new IllegalArgumentException("packageToScan is required on xml-less mode.")
