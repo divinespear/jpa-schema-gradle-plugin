@@ -413,11 +413,11 @@ class JpaSchemaGenerateTask extends DefaultTask {
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
     </persistence-unit>
 </persistence>"""
-            props[PropertyNames.PROPERTY_PERSISTENCE_XML_FILENAME] = persistencexml.absoluteFile.toURI().toString()
+            props[Configuration.DATANUCLEUS_PERSISTENCE_XML] = persistencexml.absoluteFile.toURI().toString()
 
             // datanucleus does not support execution order...
-            props.remove(PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_SOURCE)
-            props.remove(PersistenceUnitProperties.SCHEMA_GENERATION_DROP_SOURCE)
+            props.remove(Configuration.JAVAX_SCHEMA_GENERATION_CREATE_SOURCE)
+            props.remove(Configuration.JAVAX_SCHEMA_GENERATION_DROP_SOURCE)
         }
 
         provider.generateSchema(info, props)
