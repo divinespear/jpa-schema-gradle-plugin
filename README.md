@@ -20,7 +20,7 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 Finally, I got some times, and 0.2 is here.
 
 * Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related [#14](//github.com/divinespear/jpa-schema-gradle-plugin/issues/14)
-* Add support DataNucleus - with very limited feature
+* Add support DataNucleus
 * Changed default version of implementations.
     * Eclipselink: `2.6.1`
     * Hibernate: `5.0.7.Final`
@@ -31,6 +31,8 @@ Finally, I got some times, and 0.2 is here.
 On 0.2.x, plugin required
 * [Java 1.7 or above](http://www.oracle.com/technetwork/java/javase/eol-135779.html), and
 * Gradle 2.x. (developed on Gradle 2.5)
+
+DataNucleus support is very very limited, and should so many buggy.
 
 ## How-to Use
 
