@@ -203,6 +203,9 @@ class JpaSchemaGenerateTask extends DefaultTask {
         }
         // issue-5: pass "none" for avoid validation while schema generating
         map[Configuration.JAVAX_VALIDATION_MODE] = "none"
+        
+        // issue-24: remove null value before reset JTA
+        map.findAll { it.value != null }
 
         // issue-13: disable JTA and datasources
         map[Configuration.JAVAX_TRANSACTION_TYPE] = "RESOURCE_LOCAL"
@@ -212,8 +215,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
         logger.info('--- configuration begin ---')
         logger.info(map.toString())
         logger.info('--- configuration end ---')
-
-        map.findAll { it.value != null }
+        
+        map
     }
 
     private Map<String, String> LINE_SEPARAOR_MAP = ["CRLF": "\r\n", "LF": "\n", "CR": "\r"]
