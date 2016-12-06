@@ -19,8 +19,8 @@
 
 package io.github.divinespear.gradle.plugin
 
-import io.github.divinespear.gradle.plugin.config.Configuration
-
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.sql.Driver
 import java.sql.DriverManager
 
@@ -32,6 +32,8 @@ import org.gradle.api.tasks.TaskAction
 import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
 import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
+
+import io.github.divinespear.gradle.plugin.config.Configuration
 
 class JpaSchemaGenerateTask extends DefaultTask {
 
@@ -248,8 +250,8 @@ class JpaSchemaGenerateTask extends DefaultTask {
                         }
                     }
                 } finally {
-                    file.delete()
-                    tmp.renameTo(file)
+                    Files.copy(tmp.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    tmp.delete()
                 }
             }
         }
