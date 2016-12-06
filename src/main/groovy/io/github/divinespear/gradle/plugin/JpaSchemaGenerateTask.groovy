@@ -401,7 +401,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
         def info = manager.obtainDefaultPersistenceUnitInfo()
         info.persistenceProviderClassName = provider.class.name
-        info.properties.putAll(props)
+        info.properties.putAll(props.findAll { it.value != null })
 
         if (config.vendor == "datanucleus") {
             // datanucleus must need persistence.xml
