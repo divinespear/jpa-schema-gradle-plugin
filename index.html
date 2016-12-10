@@ -34,7 +34,7 @@
         <h1>
 <a id="jpa-schema-gradle-plugin" class="anchor" href="#jpa-schema-gradle-plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jpa-schema-gradle-plugin</h1>
 
-<p><strong>Version 0.2.0-1</strong></p>
+<p><strong>Version 0.2.1</strong></p>
 
 <p>Gradle plugin for generate schema or DDL scripts from JPA entities using <a href="http://jcp.org/en/jsr/detail?id=338">JPA 2.1</a> schema generator.
 for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven Plugin</a>.</p>
@@ -62,7 +62,7 @@ for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven 
 <ul>
 <li>Eclipselink: <code>2.6.1</code>
 </li>
-<li>Hibernate: <code>5.0.7.Final</code>
+<li>Hibernate: <code>5.0.11.Final</code>
 </li>
 <li>DataNucleus: <code>4.2.3</code>
 </li>
@@ -72,18 +72,20 @@ for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven 
 <li>Removed properties <code>namingStrategy</code> and <code>dialect</code> cause Hibernate 4.x to 5.x is cataclysm. please use <code>properties</code> instead.</li>
 </ul>
 
-<p>On 0.2.x, plugin required</p>
+<p>On 0.2.x, plugin minimal requires</p>
 
 <ul>
 <li>
 <a href="http://www.oracle.com/technetwork/java/javase/eol-135779.html">Java 1.7 or above</a>, and</li>
-<li>Gradle 2.x. (developed on Gradle 2.5)</li>
+<li>Gradle 2.x or above. (developed on Gradle 2.6)</li>
 </ul>
 
 <p>DataNucleus support is very very limited, and should so many buggy.</p>
 
 <h2>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How-to Use</h2>
+
+<p>for Gradle 2.x or above, see <a href="https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate">Gradle Plugins Registry</a>.</p>
 
 <p>Put this to your <code>build.gradle</code></p>
 
@@ -92,14 +94,14 @@ for Maven, see <a href="//github.com/divinespear/jpa-schema-maven-plugin">Maven 
         mavenCentral()
     }
     dependencies {
-        classpath <span class="pl-s"><span class="pl-pds">"</span>io.github.divinespear:jpa-schema-gradle-plugin:+<span class="pl-pds">"</span></span>
+        classpath <span class="pl-s"><span class="pl-pds">'</span>io.github.divinespear:jpa-schema-gradle-plugin:+<span class="pl-pds">'</span></span>
         <span class="pl-c">// jdbc drivers also here</span>
         <span class="pl-k">..</span>.
     }
 }
 
-apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">"</span>java<span class="pl-pds">"</span></span>
-apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">"</span>jpa-schema-generate<span class="pl-pds">"</span></span>
+apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>java<span class="pl-pds">'</span></span>
+apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>jpa-schema-generate<span class="pl-pds">'</span></span> <span class="pl-c">// or 'io.github.divinespear.jpa-schema-generate'</span>
 
 sourceSets {
     main {
@@ -150,7 +152,7 @@ generateSchema {
     }
 }</pre></div>
 
-<p>It should useful if you using Hibernate with Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.</p>
+<p>It should useful if you using Hibernate with Spring Boot 1.3 or below.</p>
 
 <h4>
 <a id="without-persistencexml" class="anchor" href="#without-persistencexml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>without <code>persistence.xml</code>
@@ -159,7 +161,7 @@ generateSchema {
 <p>You <strong>MUST</strong> specify two options: <code>vendor</code> and <code>packageToScan</code>.</p>
 
 <div class="highlight highlight-source-groovy"><pre>generateSchema {
-    vendor <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>hibernate<span class="pl-pds">'</span></span> <span class="pl-c">// 'eclipselink' or 'hibernate'.</span>
+    vendor <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>hibernate<span class="pl-pds">'</span></span> <span class="pl-c">// 'eclipselink', 'hibernate', or 'datanucleus'.</span>
                          <span class="pl-c">// you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')</span>
     packageToScan <span class="pl-k">=</span> [ <span class="pl-s"><span class="pl-pds">'</span>your.package.to.scan<span class="pl-pds">'</span></span>, <span class="pl-k">..</span>. ]
     <span class="pl-k">..</span>.
@@ -430,7 +432,7 @@ generateSchema {
     <span class="pl-k">..</span>.
     <span class="pl-c">// global properties</span>
     properties <span class="pl-k">=</span> [
-        <span class="pl-s"><span class="pl-pds">"</span>hibernate.dialect<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>org.hibernate.dialect.MySQL5InnoDBDialect<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>hibernate.dialect<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>org.hibernate.dialect.MySQL5InnoDBDialect<span class="pl-pds">'</span></span>,
         <span class="pl-k">..</span>.
     ]
     <span class="pl-c">// you can set target-specific too.</span>
