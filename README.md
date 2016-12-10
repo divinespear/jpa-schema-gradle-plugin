@@ -36,6 +36,8 @@ DataNucleus support is very very limited, and should so many buggy.
 
 ## How-to Use
 
+for Gradle 2.x or above, see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
+
 Put this to your `build.gradle`
 
 ```groovy
