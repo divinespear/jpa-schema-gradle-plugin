@@ -54,7 +54,7 @@ ext {
 
 // versions
 ext['eclipselink.version'] = '2.6.1'
-ext['hibernate.version'] = '5.0.7.Final'
+ext['hibernate.version'] = '5.0.11.Final'
 ext['datanucleus.version'] = '4.2.3'
 ext['spring-data-jpa.version'] = '1.9.2.RELEASE'
 

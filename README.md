@@ -23,14 +23,14 @@ Finally, I got some times, and 0.2 is here.
 * Add support DataNucleus
 * Changed default version of implementations.
     * Eclipselink: `2.6.1`
-    * Hibernate: `5.0.7.Final`
+    * Hibernate: `5.0.11.Final`
     * DataNucleus: `4.2.3`
 * Added `properties` property.
 * Removed properties `namingStrategy` and `dialect` cause Hibernate 4.x to 5.x is cataclysm. please use `properties` instead.
 
-On 0.2.x, plugin required
+On 0.2.x, plugin minimal requires
 * [Java 1.7 or above](http://www.oracle.com/technetwork/java/javase/eol-135779.html), and
-* Gradle 2.x. (developed on Gradle 2.5)
+* Gradle 2.x or above. (developed on Gradle 2.6)
 
 DataNucleus support is very very limited, and should so many buggy.
 
@@ -101,7 +101,7 @@ buildscript {
     }
 }
 ```
-It should useful if you using Hibernate with Spring Framework, because Spring Framework not officially support Hibernate 5.x yet.
+It should useful if you using Hibernate with Spring Boot 1.3 or below.
 
 #### without `persistence.xml`
 
