@@ -397,6 +397,7 @@ class JpaSchemaGenerateTask extends DefaultTask {
 
         def props = persistenceProperties(config)
         def manager = new DefaultPersistenceUnitManager()
+        manager.persistenceXmlLocations = []
         manager.defaultPersistenceUnitName = config.persistenceUnitName
         manager.packagesToScan = (manager.packagesToScan ?: []) + config.packageToScan as String[]
         manager.afterPropertiesSet()
