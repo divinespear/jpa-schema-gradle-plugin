@@ -1,7 +1,7 @@
 jpa-schema-gradle-plugin
 ========================
 
-**Version 0.2.1**
+**Version 0.2.1-1**
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
 for Maven, see [Maven Plugin](//github.com/divinespear/jpa-schema-maven-plugin).
