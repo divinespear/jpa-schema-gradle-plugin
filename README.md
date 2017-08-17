@@ -25,7 +25,7 @@ I will do
 
 Making decision...
 * **Language**: keep groovy? change to java or kotlin?
-* **Minimal gradle version**: Just go with 4.x? anyone still use 2.x/3.x?
+* **Minimal gradle version**: Just go with 4.x? anyone still using 2.x/3.x?
 * and so on...
 
 If you have discussions, please make issue. discussions are always welcome.
