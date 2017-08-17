@@ -18,11 +18,15 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 ## Plan to Rework?
 
 Well, actually, it was skill training examples by myself. so it has very harmful sources. (someone should want to say **it is just a shit!**)
+If I rework this, it maybe hard and long time work.
 
-* Language: keep groovy? change to java or kotlin?
-* Remove Spring dependencies - focusing JPA implementation itself.
+I will do
+* **Remove Spring dependencies**: focusing JPA implementation itself.
 
-It maybe hard and long time work.
+Making decision...
+* **Language**: keep groovy? change to java or kotlin?
+* **Minimal gradle version**: Just go with 4.x? anyone still use 2.x/3.x?
+* and so on...
 
 If you have discussions, please make issue. discussions are always welcome.
 
