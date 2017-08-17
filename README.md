@@ -15,6 +15,17 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
 
+## Plan to Rework?
+
+Well, actually, it was skill training examples by myself. so it has very harmful sources. (someone should want to say **it is just a shit!**)
+
+* Language: keep groovy? change to java or kotlin?
+* Remove Spring dependencies - focusing JPA implementation itself.
+
+It maybe hard and long time work.
+
+If you have discussions, please make issue. discussions are always welcome.
+
 ## Announce 0.2
 
 Finally, I got some times, and 0.2 is here.
