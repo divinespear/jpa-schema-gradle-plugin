@@ -132,6 +132,23 @@ generateSchema {
 }
 ```
 
+#### With Spring Framework
+
+If your entity has `@EntityListeners`, you must add `spring-aspects` to buildscript dependency.
+
+add it to `build.gradle` of root project.
+
+```groovy
+buildscript {
+  ...
+  dependencies {
+    ...
+    classpath 'org.springframework:spring-aspects:${your_spring_version}'
+    ...
+  }
+}
+```
+
 #### For Scala
 
 You MUST put `scala-library` to `dependencies` of `buildscript`.
