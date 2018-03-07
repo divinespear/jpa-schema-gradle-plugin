@@ -16,244 +16,173 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.gradle.api.JavaVersion;
-
-buildscript {
-    repositories {
-        maven { url 'http://repo.spring.io/plugins-release' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath 'org.springframework.build.gradle:propdeps-plugin:+'
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.3"
-    }
+plugins {
+  id 'java-gradle-plugin'
+  id 'com.gradle.plugin-publish' version '0.9.10'
+  id 'groovy'
+  id 'maven'
+  id 'signing'
 }
 
-apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'eclipse'
-apply plugin: 'propdeps'
-apply plugin: 'propdeps-maven'
-apply plugin: 'propdeps-eclipse'
-apply plugin: "com.gradle.plugin-publish"
-
 group = "io.github.divinespear"
-version = "0.2.2-SNAPSHOT"
+version = "0.3.0-SNAPSHOT"
 
-sourceCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = 1.7
 
 ext {
-    isReleaseVersion = !version.endsWith("-SNAPSHOT")
-    // deploy
-    deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
-    deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: sonatypeDeployUserName
-    deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
+  isReleaseVersion = !version.endsWith("-SNAPSHOT")
+  // deploy
+  deployRepo = isReleaseVersion ? "https://oss.sonatype.org/service/local/staging/deploy/maven2" : "https://oss.sonatype.org/content/repositories/snapshots"
+  deployUserName = System.env["CI_DEPLOY_USERNAME"] ?: sonatypeDeployUserName
+  deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
 }
 
 // versions
 ext['eclipselink.version'] = '2.6.1'
 ext['hibernate.version'] = '5.0.11.Final'
 ext['datanucleus.version'] = '4.2.3'
-ext['spring-data-jpa.version'] = '1.9.2.RELEASE'
+ext['spring.version'] = '5.0.4.RELEASE'
 
 repositories {
-    mavenCentral()
-}
-
-configurations {
-    deployerJars
-
-    eclipse {
-        project {
-            natures 'org.springsource.ide.eclipse.gradle.core.nature'
-        }
-        classpath {
-            downloadSources = true
-            downloadJavadoc = false
-            file {
-                whenMerged { classpath ->
-                    def entries = classpath.entries
-                    entries.findAll { it.kind == 'lib' }*.exported = false
-                }
-            }
-        }
-    }
+  mavenCentral()
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+  compile localGroovy()
+  compile gradleApi()
+  testCompile gradleTestKit()
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile('com.netflix.nebula:nebula-test:3.1.0') {
-        exclude module: 'junit-dep'
-        exclude module: 'groovy-all'
-    }
-    testRuntime 'com.h2database:h2:1.4.191'
-    testRuntime fileTree(dir: "lib", include: "*.jar")
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.hamcrest:hamcrest-all:1.3'
+  testCompile('com.netflix.nebula:nebula-test:6.3.0') {
+    exclude module: 'junit-dep'
+    exclude module: 'groovy-all'
+  }
+  testRuntime 'com.h2database:h2:1.4.191'
+  testRuntime fileTree(dir: "lib", include: "*.jar")
 
-    // jpa
-    compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
-    compile "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
-    compile("org.hibernate:hibernate-entitymanager:${property('hibernate.version')}") {
-        exclude group: 'org.hibernate.javax.persistence'
-    }
-    compile "org.datanucleus:datanucleus-accessplatform-jpa-rdbms:${property('datanucleus.version')}"
+  // jpa
+  compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
+  compile "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
+  compile("org.hibernate:hibernate-entitymanager:${property('hibernate.version')}") {
+    exclude group: 'org.hibernate.javax.persistence'
+  }
 
-    // for jpa generation using spring-data
-    compile "org.springframework.data:spring-data-jpa:${property('spring-data-jpa.version')}"
-
-    // deploy
-    deployerJars "org.apache.maven.wagon:wagon-http:2.2"
-}
-
-eclipse {
-    classpath {
-        defaultOutputDir = sourceSets.main.output.classesDir
-        file {
-            whenMerged { classpath ->
-                classpath.entries.findAll { it.kind == "src" && it.path.endsWith("/resources") }*.excludes = ["unit/"]
-                classpath.entries.findAll { it.kind == "src" && it.path.startsWith("src/test/") }*.output = relativePath(sourceSets.test.output.classesDir)
-                classpath.entries.findAll { it.kind == "src" && it.path.endsWith("/main/resources") }*.output = relativePath(sourceSets.main.output.resourcesDir)
-                classpath.entries.findAll { it.kind == "src" && it.path.endsWith("/test/resources") }*.output = relativePath(sourceSets.test.output.resourcesDir)
-                classpath.entries.findAll { it.kind == "lib" }*.exported = false
-            }
-            withXml { provider ->
-                provider.asNode().findAll {
-                    it.@kind == "src" && it.@path.startsWith("build/generated-sources/")
-                }.each { entry ->
-                    def attrs = entry.appendNode "attributes"
-                    attrs.appendNode "attribute", [name: "optional", value: true]
-                }
-            }
-        }
-    }
+  // for xml-less generating
+  compile "org.springframework:spring-orm:${property('spring.version')}"
+  compile "org.springframework:spring-context:${property('spring.version')}"
 }
 
 test {
-    jvmArgs += ["-XX:MaxPermSize=128m"]
-    systemProperty "pluginVersion", version
+  systemProperty "pluginVersion", version
 
-    testLogging.showStandardStreams = true
+  testLogging.showStandardStreams = true
 
-    // listen to events in the test execution lifecycle
-    beforeTest { descriptor ->
-        logger.lifecycle("Running test: " + descriptor)
-    }
+  // listen to events in the test execution lifecycle
+  beforeTest { descriptor ->
+    logger.lifecycle("Running test: " + descriptor)
+  }
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from 'build/docs/javadoc'
+  classifier = 'javadoc'
+  from 'build/docs/javadoc'
 }
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
+  from sourceSets.main.allSource
+  classifier = 'sources'
 }
 
 artifacts {
-    archives jar
-    archives javadocJar
-    archives sourcesJar
+  archives jar
+  archives javadocJar
+  archives sourcesJar
 }
 
 signing {
-    required { isReleaseVersion }
-    if (required) {
-        sign configurations.archives
-    }
+  required { isReleaseVersion }
+  if (required) {
+    sign configurations.archives
+  }
 }
 
 uploadArchives {
-    repositories {
-        mavenDeployer {
-            configuration = configurations.deployerJars
+  repositories {
+    mavenDeployer {
+      if (isReleaseVersion) {
+          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      }
 
-            if (isReleaseVersion) {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      repository(url: deployRepo) {
+          authentication(userName: deployUserName, password: deployPassword)
+      }
+
+      pom {
+        project {
+          name "jpa-schema-gradle-plugin"
+          packaging "jar"
+          description "Gradle plugin for generate database schema or DDL scripts from JPA entities"
+          url "http://divinespear.github.io/jpa-schema-gradle-plugin"
+
+          developers {
+            developer {
+              id "divinespear"
+              name "Sin-young \"Divinespear\" Kang"
+              email "divinespear@gmail.com"
+              timezone "+9"
+              url "http://divinespear.blogspot.com"
             }
+          }
 
-            repository(url: deployRepo) {
-                authentication(userName: deployUserName, password: deployPassword)
+          licenses {
+            license {
+              name "The Apache Software License, Version 2.0"
+              url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+              distribution "repo"
             }
+          }
 
-            pom {
-                project {
-                    name "jpa-schema-gradle-plugin"
-                    packaging "jar"
-                    description "Gradle plugin for generate database schema or DDL scripts from JPA entities"
-                    url "http://divinespear.github.io/jpa-schema-gradle-plugin"
+          scm {
+            url "https://github.com/divinespear/jpa-schema-gradle-plugin"
+            connection "scm:git:https://github.com/divinespear/jpa-schema-gradle-plugin.git"
+            developerConnection "scm:git:git@github.com:divinespear/jpa-schema-gradle-plugin.git"
+          }
 
-                    developers {
-                        developer {
-                            id "divinespear"
-                            name "Sin-young \"Divinespear\" Kang"
-                            email "divinespear@gmail.com"
-                            timezone "+9"
-                            url "http://divinespear.blogspot.com"
-                        }
-                    }
+          issueManagement {
+            system "GitHub"
+            url "https://github.com/divinespear/jpa-schema-gradle-plugin/issues"
+          }
 
-                    licenses {
-                        license {
-                            name "The Apache Software License, Version 2.0"
-                            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                            distribution "repo"
-                        }
-                    }
-
-                    scm {
-                        url "https://github.com/divinespear/jpa-schema-gradle-plugin"
-                        connection "scm:git:https://github.com/divinespear/jpa-schema-gradle-plugin.git"
-                        developerConnection "scm:git:git@github.com:divinespear/jpa-schema-gradle-plugin.git"
-                    }
-
-                    issueManagement {
-                        system "GitHub"
-                        url "https://github.com/divinespear/jpa-schema-gradle-plugin/issues"
-                    }
-
-                    ciManagement {
-                        system "Travis CI"
-                        url "https://travis-ci.org/divinespear/jpa-schema-gradle-plugin"
-                    }
-
-                    properties {
-                        'eclipselink.version' project.ext['eclipselink.version']
-                        'hibernate.version' project.ext['hibernate.version']
-                        'datanucleus.version' project.ext['datanucleus.version']
-                        'spring-data-jpa.version' project.ext['spring-data-jpa.version']
-                    }
-                }
-                withXml {
-                    def dependencies = asNode().dependencies.'*'
-                    ['org.eclipse.persistence': '${eclipselink.version}', 'org.hibernate': '${hibernate.version}', 'org.datanucleus': '${datanucleus.version}', 'org.springframework.data': '${spring-data-jpa.version}'].each { entry ->
-                        dependencies.findAll {
-                            it.groupId.text() == entry.key
-                        }.each {
-                            it.version[0].value = entry.value
-                        }
-                    }
-                }
-            }
+          ciManagement {
+            system "Travis CI"
+            url "https://travis-ci.org/divinespear/jpa-schema-gradle-plugin"
+          }
         }
+      }
     }
+  }
+}
+
+gradlePlugin {
+  plugins {
+    generateSchema {
+      id = 'io.github.divinespear.jpa-schema-generate'
+      implementationClass = 'io.github.divinespear.gradle.plugin.JpaSchemaGeneratePlugin'
+    }
+  }
 }
 
 pluginBundle {
-    website = 'http://divinespear.github.io/jpa-schema-gradle-plugin'
-    vcsUrl = 'https://github.com/divinespear/jpa-schema-gradle-plugin'
-    description = 'Gradle plugin for generate database schema or DDL scripts from JPA entities'
-    tags = ['jpa', 'schema', 'schemagen', 'hibernate', 'eclipselink', 'datanucleus', 'generate']
+  website = 'http://divinespear.github.io/jpa-schema-gradle-plugin'
+  vcsUrl = 'https://github.com/divinespear/jpa-schema-gradle-plugin'
+  description = 'Gradle plugin for generate database schema or DDL scripts from JPA entities'
+  tags = ['jpa', 'schema', 'schemagen', 'hibernate', 'eclipselink', 'datanucleus', 'generate']
 
-    plugins {
-        generateSchema {
-            id = 'io.github.divinespear.jpa-schema-generate'
-            displayName = 'JPA 2.1 Schema Generation Plugin for Gradle'
-        }
+  plugins {
+    generateSchema {
+      id = 'io.github.divinespear.jpa-schema-generate'
+      displayName = 'JPA 2.1 Schema Generation Plugin for Gradle'
     }
+  }
 }

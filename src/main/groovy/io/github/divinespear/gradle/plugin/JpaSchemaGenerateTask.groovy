@@ -406,26 +406,6 @@ class JpaSchemaGenerateTask extends DefaultTask {
         info.persistenceProviderClassName = provider.class.name
         info.properties.putAll(props.findAll { it.value != null })
 
-        if (config.vendor == "datanucleus") {
-            // datanucleus must need persistence.xml
-            final def persistencexml = File.createTempFile("persistence-", ".xml", project.sourceSets.main.output.classesDir)
-            persistencexml.deleteOnExit()
-            persistencexml << """<?xml version="1.0" encoding="utf-8" ?>
-<persistence version="2.1"
-    xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="${info.persistenceUnitName}" transaction-type="RESOURCE_LOCAL">
-        <provider>org.datanucleus.api.jpa.PersistenceProviderImpl</provider>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    </persistence-unit>
-</persistence>"""
-            props[Configuration.DATANUCLEUS_PERSISTENCE_XML] = persistencexml.absoluteFile.toURI().toString()
-
-            // datanucleus does not support execution order...
-            props.remove(Configuration.JAVAX_SCHEMA_GENERATION_CREATE_SOURCE)
-            props.remove(Configuration.JAVAX_SCHEMA_GENERATION_DROP_SOURCE)
-        }
-
         provider.generateSchema(info, props)
     }
 
