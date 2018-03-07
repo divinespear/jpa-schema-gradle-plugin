@@ -2,11 +2,8 @@
 
 # Workaround to using openjdk7 with Gradle due to security issue:
 # https://github.com/gradle/gradle/issues/2421
-if [ -f /usr/lib/jvm/java-7-openjdk-amd64 ]; then
-  echo "detect openjdk7 - patching jce provider..."
-  BCPROV_FILENAME=bcprov-ext-jdk15on-158.jar
-  wget "https://bouncycastle.org/download/${BCPROV_FILENAME}"
-  sudo mv $BCPROV_FILENAME /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext
-  sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
-  echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
-fi
+BCPROV_FILENAME=bcprov-ext-jdk15on-158.jar
+wget "https://bouncycastle.org/download/${BCPROV_FILENAME}"
+sudo mv ${BCPROV_FILENAME} /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext
+sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
+echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
