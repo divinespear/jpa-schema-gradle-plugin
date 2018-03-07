@@ -37,12 +37,6 @@ ext {
   deployPassword = System.env["CI_DEPLOY_PASSWORD"] ?: sonatypeDeployPassword
 }
 
-// versions
-ext['eclipselink.version'] = '2.6.1'
-ext['hibernate.version'] = '5.0.11.Final'
-ext['datanucleus.version'] = '4.2.3'
-ext['spring.version'] = '5.0.4.RELEASE'
-
 repositories {
   mavenCentral()
 }
