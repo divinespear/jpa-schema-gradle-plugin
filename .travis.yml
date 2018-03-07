@@ -1,22 +1,20 @@
 sudo: false
-
 language: groovy
 jdk:
   - openjdk7
-  - oraclejdk8
-  - oraclejdk9
-
-install: TERM=dumb ./gradlew assemble
-script: TERM=dumb ./gradlew check
-after_success: TERM=dumb ./gradlew uploadArchives
-
+  - openjdk8
+before_install:
+  - ./jdk7-jce.sh
+script:
+  - TERM=dumb ./gradlew check --stacktrace
+after_success:
+  - TERM=dumb ./gradlew uploadArchives
 branches:
   only:
     - master
     - /^stable-.*$/
     - /^issue-.*$/
     - /^pull-.*$/
-
 env:
   global:
     - secure: Jrz3fDLlQYwikFVGOhLzBSYOdcruMrFolt1HQbAr4BnCvxnfafTwRNCXUbfzPmsC1bI38zg9c1uP0jcx7UWt5rEpr52rTXvHBakvt/ErBrB3QMRgwlJNkZe7lSjqlS3uFlk0hzPd5k9n5u9XzadFjUNOTfFy8f12a1fAhnJvURk=
