@@ -2,8 +2,9 @@ sudo: false
 
 language: groovy
 jdk:
-  - oraclejdk7
+  - openjdk7
   - oraclejdk8
+  - oraclejdk9
 
 install: TERM=dumb ./gradlew assemble
 script: TERM=dumb ./gradlew check
