@@ -65,6 +65,7 @@ dependencies {
   // for xml-less generating
   compile "org.springframework:spring-orm:${property('spring.version')}"
   compile "org.springframework:spring-context:${property('spring.version')}"
+  compile "org.springframework:spring-aspects:${property('spring.version')}"
 }
 
 test {
