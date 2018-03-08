@@ -85,9 +85,11 @@ if (System.env["INTERNAL_JAVA_HOME"]) {
   }
 
   tasks.withType(AbstractCompile) {
-    options.with {
-      fork = true
-      forkOptions.javaHome = file(javaHome)
+    if (!kotlinOptions) {
+      options.with {
+        fork = true
+        forkOptions.javaHome = file(javaHome)
+      }
     }
   }
   tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
