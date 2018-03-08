@@ -21,7 +21,7 @@ package io.github.divinespear.plugin
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class JpaSchemaGenerationTask : DefaultTask() {
+open class JpaSchemaGenerationTask : DefaultTask() {
 
   @TaskAction
   fun run() {

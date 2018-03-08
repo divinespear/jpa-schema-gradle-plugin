@@ -32,5 +32,9 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
       outputDirectory = project.buildDir.resolve("generated-schema")
       targets = project.container(JpaSchemaGenerationProperties::class.java)
     }
+    // task
+    project.tasks.create(PLUGIN_NAME, JpaSchemaGenerationTask::class.java) {
+      it.dependsOn(project.tasks.getByPath("classes"))
+    }
   }
 }
