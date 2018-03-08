@@ -73,6 +73,39 @@ dependencies {
   testRuntime fileTree(dir: "lib", include: "*.jar")
 }
 
+if (System.env["INTERNAL_JAVA_HOME"]) {
+  def javaHome = System.env["INTERNAL_JAVA_HOME"]
+  println "custom INTERNAL_JAVA_HOME ${javaHome}"
+
+  def javaExecutablesPath = new File(javaHome, "bin")
+  def javaExecutables = [:].withDefault { execName ->
+    def executable = new File(javaExecutablesPath, execName)
+    assert executable.exists() : "There is no ${execName} executable in ${javaExecutablesPath}"
+    executable
+  }
+
+  tasks.withType(AbstractCompile) {
+    options.with {
+      fork = true
+      forkOptions.javaHome = file(javaHome)
+    }
+  }
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+      jdkHome = javaHome
+    }
+  }
+  tasks.withType(Javadoc) {
+    executable = javaExecutables.javadoc
+  }
+  tasks.withType(Test) {
+    executable = javaExecutables.java
+  }
+  tasks.withType(JavaExec) {
+    executable = javaExecutables.java
+  }
+}
+
 test {
   systemProperty "pluginVersion", version
 
