@@ -24,7 +24,9 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import static org.hamcrest.Matchers.hasSize
 import static org.hamcrest.Matchers.instanceOf
+import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 
 class JpaSchemaGenerationPluginSpec extends Specification {
@@ -38,8 +40,30 @@ class JpaSchemaGenerationPluginSpec extends Specification {
     project.apply plugin: 'io.github.divinespear.jpa-schema-generate'
   }
 
-  def 'should has extension'() {
+  def 'plugin should has extension'() {
     expect:
     assertThat(project.generateSchema, instanceOf(JpaSchemaGenerationExtension))
+  }
+
+  def 'plugin should has multiple targets in extension'() {
+    when:
+    project.generateSchema {
+      targets {
+        script {
+          scriptAction = "drop-and-create"
+          databaseProductName = "H2"
+          databaseMajorVersion = 1
+          databaseMinorVersion = 3
+        }
+        database {
+        }
+      }
+    }
+
+    then:
+    JpaSchemaGenerationExtension extension = project.generateSchema
+    assertThat(extension.targets, hasSize(2))
+    JpaSchemaGenerationProperties scriptTarget = extension.targets.find { it.name == "script" }
+    assertThat(scriptTarget.databaseProductName, is("H2"))
   }
 }
