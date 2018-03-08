@@ -18,19 +18,28 @@
  */
 package io.github.divinespear.plugin
 
-import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPlugin
+import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import spock.lang.Specification
 
-class JpaSchemaGenerationPlugin : Plugin<Project> {
+import static org.hamcrest.Matchers.instanceOf
+import static org.junit.Assert.assertThat
 
-  override fun apply(project: Project) {
-    // always enable java plugin
-    project.plugins.apply(JavaPlugin::class.java)
-    // extension
-    project.extensions.create(EXTENSION_NAME, JpaSchemaGenerationExtension::class.java).apply {
-      outputDirectory = project.buildDir.resolve("generated-schema")
-      targets = project.container(JpaSchemaGenerationProperties::class.java)
-    }
+class JpaSchemaGenerationPluginSpec extends Specification {
+
+  @Rule
+  TemporaryFolder testProjectDir = new TemporaryFolder()
+  Project project
+
+  def setup() {
+    project = ProjectBuilder.builder().withProjectDir(testProjectDir.root).build()
+    project.apply plugin: 'io.github.divinespear.jpa-schema-generate'
+  }
+
+  def 'should has extension'() {
+    expect:
+    assertThat(project.generateSchema, instanceOf(JpaSchemaGenerationExtension))
   }
 }

@@ -66,6 +66,9 @@ dependencies {
     exclude module: 'junit-dep'
     exclude module: 'groovy-all'
   }
+  testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+    exclude group: 'org.codehaus.groovy'
+  }
   testRuntime 'com.h2database:h2:1.4.191'
   testRuntime fileTree(dir: "lib", include: "*.jar")
 }
