@@ -5,7 +5,6 @@ jdk:
 before_install:
   - ./jdk7-jce.sh
 script:
-  - TERM=dumb ./gradlew assemble
   - TERM=dumb ./gradlew check --stacktrace
 after_success:
   - TERM=dumb ./gradlew uploadArchives
