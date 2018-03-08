@@ -84,15 +84,19 @@ if (System.env["INTERNAL_JAVA_HOME"]) {
     executable
   }
 
-  tasks.withType(AbstractCompile) {
-    if (!kotlinOptions) {
-      options.with {
-        fork = true
-        forkOptions.javaHome = file(javaHome)
-      }
+  tasks.withType(JavaCompile) {
+    options.with {
+      fork = true
+      forkOptions.javaHome = file(javaHome)
     }
   }
-  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+  tasks.withType(GroovyCompile) {
+    options.with {
+      fork = true
+      forkOptions.javaHome = file(javaHome)
+    }
+  }
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     kotlinOptions {
       jdkHome = javaHome
     }
