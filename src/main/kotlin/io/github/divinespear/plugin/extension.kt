@@ -22,15 +22,11 @@ import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
 import java.io.File
 
-open class JpaSchemaGenerationProperties(val name: String?) {
+open class JpaSchemaGenerationProperties(val name: String?,
+                                         val options: MutableMap<String, Any?>) {
 
-  constructor(name: String?, origin: JpaSchemaGenerationProperties) : this(name) {
-    options.putAll(origin.options)
-    properties = origin.properties.toMap()
-    packageToScan = origin.packageToScan.toList()
-  }
-
-  internal val options: MutableMap<String, Any?> = mutableMapOf()
+  constructor(name: String?) : this(name, mutableMapOf("properties" to mapOf<String, String>(),
+                                                       "packageToScan" to setOf<String>()))
 
   var skip: Boolean? by options
   var format: Boolean? by options
@@ -60,10 +56,10 @@ open class JpaSchemaGenerationProperties(val name: String?) {
   var databaseMajorVersion: Int? by options
   var databaseMinorVersion: Int? by options
 
-  var properties: Map<String, String> = mapOf()
+  var properties: Map<String, String> by options
 
   var vendor: String? by options
-  var packageToScan: List<String> = listOf()
+  var packageToScan: Set<String> by options
 
   var lineSeparator: String? by options
 
@@ -76,19 +72,6 @@ open class JpaSchemaGenerationProperties(val name: String?) {
 }
 
 open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
-
-  init {
-    skip = false
-    format = false
-    scanTestClasses = false
-    persistenceXml = ECLIPSELINK_PERSISTENCE_XML
-    persistenceUnitName = DEFAULT_PERSISTENCE_UNIT_NAME
-    databaseAction = JAVAX_SCHEMA_GENERATION_NONE_ACTION
-    scriptAction = JAVAX_SCHEMA_GENERATION_NONE_ACTION
-    createSourceMode = JAVAX_SCHEMA_GENERATION_METADATA_SOURCE
-    dropSourceMode = JAVAX_SCHEMA_GENERATION_METADATA_SOURCE
-  }
-
   lateinit var defaultOutputDirectory: File
   lateinit var targets: NamedDomainObjectContainer<JpaSchemaGenerationProperties>
 
@@ -96,9 +79,49 @@ open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
     action.execute(targets)
   }
 
-  fun extend(other: JpaSchemaGenerationProperties) = JpaSchemaGenerationProperties(other.name, this).apply {
-    options.putAll(other.options.filterValues { it != null })
-    properties = properties.toMutableMap() + other.properties
-    packageToScan = (packageToScan.toMutableSet() + other.packageToScan).toList()
+  fun extend(other: JpaSchemaGenerationProperties) = JpaSchemaGenerationProperties(other.name, merge(this, other))
+}
+
+private val MERGE_EXCLUDE_PROPERTIES = listOf("properties", "packageToScan")
+private val PROPERTY_DEFAULT_VALUES = mapOf("skip" to false,
+                                            "format" to false,
+                                            "scanTestClasses" to false,
+                                            "persistenceXml" to ECLIPSELINK_PERSISTENCE_XML,
+                                            "persistenceUnitName" to DEFAULT_PERSISTENCE_UNIT_NAME,
+                                            "databaseAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
+                                            "scriptAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
+                                            "createSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE,
+                                            "createSourceFile" to null,
+                                            "dropSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE,
+                                            "dropSourceFile" to null,
+                                            "jdbcDriver" to null,
+                                            "jdbcUrl" to null,
+                                            "jdbcUser" to null,
+                                            "jdbcPassword" to null,
+                                            "databaseProductName" to null,
+                                            "databaseMajorVersion" to null,
+                                            "databaseMinorVersion" to null,
+                                            "vendor" to null,
+                                            "lineSeparator" to null)
+
+private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGenerationProperties? = null): MutableMap<String, Any?> {
+  val map = mutableMapOf<String, Any?>()
+  var properties = mapOf<String, String>()
+  var packageToScan = setOf<String>()
+  // merge extensions
+  arrayOf(base, target).filterNotNull().forEach {
+    map.putAll(it.options.filterKeys { !MERGE_EXCLUDE_PROPERTIES.contains(it) })
+    properties += it.properties
+    packageToScan += it.packageToScan
   }
+  map["properties"] = properties
+  map["packageToScan"] = packageToScan
+  // default
+  PROPERTY_DEFAULT_VALUES.forEach { key, value ->
+    map.putIfAbsent(key, value)
+  }
+  map.putIfAbsent("outputDirectory", base.defaultOutputDirectory)
+  map.putIfAbsent("createOutputFileName", (target ?: base).defaultCreateOutputFileName)
+  map.putIfAbsent("defaultDropOutputFileName", (target ?: base).defaultDropOutputFileName)
+  return map
 }
