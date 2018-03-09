@@ -24,13 +24,13 @@ import java.io.File
 
 open class JpaSchemaGenerationProperties(val name: String?) {
 
-  constructor(name: String?, parent: JpaSchemaGenerationProperties) : this(name) {
-    options.putAll(parent.options)
-    properties = parent.properties.toMap()
-    packageToScan = parent.packageToScan.toList()
+  constructor(name: String?, origin: JpaSchemaGenerationProperties) : this(name) {
+    options.putAll(origin.options)
+    properties = origin.properties.toMap()
+    packageToScan = origin.packageToScan.toList()
   }
 
-  private val options: MutableMap<String, Any?> = mutableMapOf()
+  internal val options: MutableMap<String, Any?> = mutableMapOf()
 
   var skip: Boolean? by options
   var format: Boolean? by options
@@ -72,15 +72,6 @@ open class JpaSchemaGenerationProperties(val name: String?) {
   val defaultDropOutputFileName = if (name == null) "drop.sql" else "$name-drop.sql"
 
   internal fun provider() = vendor?.let { PERSISTENCE_PROVIDER_MAP[it.toLowerCase()] } ?: vendor
-
-  fun extend(parent: JpaSchemaGenerationProperties): JpaSchemaGenerationProperties {
-    val source = this
-    return JpaSchemaGenerationProperties(name, parent).apply {
-      options.putAll(source.options.filterValues { it != null })
-      properties = properties.toMutableMap() + source.properties
-      packageToScan = (packageToScan.toMutableSet() + source.packageToScan).toList()
-    }
-  }
 }
 
 open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
@@ -101,5 +92,11 @@ open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
 
   fun targets(action: Action<NamedDomainObjectContainer<JpaSchemaGenerationProperties>>) {
     action.execute(targets)
+  }
+
+  fun extend(other: JpaSchemaGenerationProperties) = JpaSchemaGenerationProperties(other.name, this).apply {
+    options.putAll(other.options.filterValues { it != null })
+    properties = properties.toMutableMap() + other.properties
+    packageToScan = (packageToScan.toMutableSet() + other.packageToScan).toList()
   }
 }

@@ -67,6 +67,34 @@ class JpaSchemaGenerationPluginSpec extends Specification {
     assertThat(scriptTarget.databaseMinorVersion, is(3))
   }
 
+  def 'extension targets should be merged'() {
+    when:
+    project.generateSchema {
+      format = true
+      targets {
+        a {
+          scriptAction = "drop-and-create"
+          databaseProductName = "H2"
+          databaseMajorVersion = 1
+          databaseMinorVersion = 3
+        }
+        b {
+          format = false
+          scriptAction = "drop-and-create"
+          databaseProductName = "H2"
+          databaseMajorVersion = 1
+          databaseMinorVersion = 3
+        }
+      }
+    }
+
+    then:
+    JpaSchemaGenerationExtension extension = project.generateSchema
+    List<JpaSchemaGenerationProperties> targets = extension.targets.collect { extension.extend(it) }
+    assertThat(targets.find { it.name == "a" }.format, is(true))
+    assertThat(targets.find { it.name == "b" }.format, is(false))
+  }
+
   def 'task should be registered'() {
     expect:
     assertThat(project.tasks, hasItem(instanceOf(JpaSchemaGenerationTask)))
