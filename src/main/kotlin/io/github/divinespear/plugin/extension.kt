@@ -71,6 +71,8 @@ open class JpaSchemaGenerationProperties(val name: String?) {
   val defaultDropOutputFileName = if (name == null) "drop.sql" else "$name-drop.sql"
 
   internal fun provider() = vendor?.let { PERSISTENCE_PROVIDER_MAP[it.toLowerCase()] } ?: vendor
+  internal fun isDatabaseTarget() = !JAVAX_SCHEMA_GENERATION_NONE_ACTION.equals(databaseAction, true)
+  internal fun isScriptTarget() = !JAVAX_SCHEMA_GENERATION_NONE_ACTION.equals(scriptAction, true)
 }
 
 open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {

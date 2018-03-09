@@ -57,6 +57,7 @@ internal const val HIBERNATE_DIALECT = "hibernate.dialect"
 
 /* values */
 internal const val DEFAULT_PERSISTENCE_UNIT_NAME = "default"
+internal const val JAVAX_TRANSACTION_TYPE_RESOURCE_LOCAL = "RESOURCE_LOCAL"
 
 /* predefined providers */
 internal val PERSISTENCE_PROVIDER_MAP = mapOf("eclipselink" to "org.eclipse.persistence.jpa.PersistenceProvider",
