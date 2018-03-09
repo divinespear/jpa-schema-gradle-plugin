@@ -29,7 +29,7 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
     project.plugins.apply(JavaPlugin::class.java)
     // extension
     project.extensions.create(EXTENSION_NAME, JpaSchemaGenerationExtension::class.java).apply {
-      outputDirectory = project.buildDir.resolve("generated-schema")
+      defaultOutputDirectory = project.buildDir.resolve("generated-schema")
       targets = project.container(JpaSchemaGenerationProperties::class.java)
     }
     // task

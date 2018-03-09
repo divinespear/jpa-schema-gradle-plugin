@@ -24,43 +24,63 @@ import java.io.File
 
 open class JpaSchemaGenerationProperties(val name: String?) {
 
-  var skip: Boolean? = null
-  var format: Boolean? = null
-  var scanTestClasses: Boolean? = null
+  constructor(name: String?, parent: JpaSchemaGenerationProperties) : this(name) {
+    options.putAll(parent.options)
+    properties = parent.properties.toMap()
+    packageToScan = parent.packageToScan.toList()
+  }
 
-  var persistenceXml: String? = null
-  var persistenceUnitName: String? = null
+  private val options: MutableMap<String, Any?> = mutableMapOf()
 
-  var databaseAction: String? = null
-  var scriptAction: String? = null
+  var skip: Boolean? by options
+  var format: Boolean? by options
+  var scanTestClasses: Boolean? by options
 
-  lateinit var outputDirectory: File
-  var createOutputFileName: String? = null
-  var dropOutputFileName: String? = null
+  var persistenceXml: String? by options
+  var persistenceUnitName: String? by options
 
-  var createSourceMode: String? = null
-  var createSourceFile: File? = null
-  var dropSourceMode: String? = null
-  var dropSourceFile: File? = null
+  var databaseAction: String? by options
+  var scriptAction: String? by options
 
-  var jdbcDriver: String? = null
-  var jdbcUrl: String? = null
-  var jdbcUser: String? = null
-  var jdbcPassword: String? = null
+  var outputDirectory: File? by options
+  var createOutputFileName: String? by options
+  var dropOutputFileName: String? by options
 
-  var databaseProductName: String? = null
-  var databaseMajorVersion: Int? = null
-  var databaseMinorVersion: Int? = null
+  var createSourceMode: String? by options
+  var createSourceFile: File? by options
+  var dropSourceMode: String? by options
+  var dropSourceFile: File? by options
+
+  var jdbcDriver: String? by options
+  var jdbcUrl: String? by options
+  var jdbcUser: String? by options
+  var jdbcPassword: String? by options
+
+  var databaseProductName: String? by options
+  var databaseMajorVersion: Int? by options
+  var databaseMinorVersion: Int? by options
 
   var properties: Map<String, String> = mapOf()
 
-  var vendor: String? = null
+  var vendor: String? by options
   var packageToScan: List<String> = listOf()
 
-  var lineSeparator: String? = null
+  var lineSeparator: String? by options
 
+  lateinit var defaultOutputDirectory: File
   val defaultCreateOutputFileName = if (name == null) "create.sql" else "$name-create.sql"
   val defaultDropOutputFileName = if (name == null) "drop.sql" else "$name-drop.sql"
+
+  internal fun provider() = vendor?.let { PERSISTENCE_PROVIDER_MAP[it.toLowerCase()] } ?: vendor
+
+  fun extend(parent: JpaSchemaGenerationProperties): JpaSchemaGenerationProperties {
+    val source = this
+    return JpaSchemaGenerationProperties(name, parent).apply {
+      options.putAll(source.options.filterValues { it != null })
+      properties = properties.toMutableMap() + source.properties
+      packageToScan = (packageToScan.toMutableSet() + source.packageToScan).toList()
+    }
+  }
 }
 
 open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
