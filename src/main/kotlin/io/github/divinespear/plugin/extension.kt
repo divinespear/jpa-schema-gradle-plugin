@@ -67,7 +67,6 @@ open class JpaSchemaGenerationProperties(val name: String?) {
 
   var lineSeparator: String? by options
 
-  lateinit var defaultOutputDirectory: File
   val defaultCreateOutputFileName = if (name == null) "create.sql" else "$name-create.sql"
   val defaultDropOutputFileName = if (name == null) "drop.sql" else "$name-drop.sql"
 
@@ -88,6 +87,7 @@ open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
     dropSourceMode = JAVAX_SCHEMA_GENERATION_METADATA_SOURCE
   }
 
+  lateinit var defaultOutputDirectory: File
   lateinit var targets: NamedDomainObjectContainer<JpaSchemaGenerationProperties>
 
   fun targets(action: Action<NamedDomainObjectContainer<JpaSchemaGenerationProperties>>) {
