@@ -120,8 +120,8 @@ private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGeneratio
   PROPERTY_DEFAULT_VALUES.forEach { key, value ->
     if (map[key] == null) map[key] = value
   }
-  map.putIfAbsent("outputDirectory", base.defaultOutputDirectory)
-  map.putIfAbsent("createOutputFileName", (target ?: base).defaultCreateOutputFileName)
-  map.putIfAbsent("defaultDropOutputFileName", (target ?: base).defaultDropOutputFileName)
+  if (map["outputDirectory"] == null) map["outputDirectory"] = base.defaultOutputDirectory
+  if (map["createOutputFileName"] == null) map["createOutputFileName"] = (target ?: base).defaultCreateOutputFileName
+  if (map["dropOutputFileName"] == null) map["dropOutputFileName"] = (target ?: base).defaultDropOutputFileName
   return map
 }
