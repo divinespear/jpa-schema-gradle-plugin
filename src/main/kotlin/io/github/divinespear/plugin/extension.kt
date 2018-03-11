@@ -117,8 +117,8 @@ private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGeneratio
   map["properties"] = properties
   map["packageToScan"] = packageToScan
   // default
-  PROPERTY_DEFAULT_VALUES.forEach { key, value ->
-    if (map[key] == null) map[key] = value
+  PROPERTY_DEFAULT_VALUES.forEach {
+    if (map[it.key] == null) map[it.key] = it.value
   }
   if (map["outputDirectory"] == null) map["outputDirectory"] = base.defaultOutputDirectory
   if (map["createOutputFileName"] == null) map["createOutputFileName"] = (target ?: base).defaultCreateOutputFileName
