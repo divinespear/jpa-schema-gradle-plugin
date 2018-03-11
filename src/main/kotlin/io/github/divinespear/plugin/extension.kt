@@ -118,7 +118,7 @@ private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGeneratio
   map["packageToScan"] = packageToScan
   // default
   PROPERTY_DEFAULT_VALUES.forEach { key, value ->
-    map.putIfAbsent(key, value)
+    if (map[key] == null) map[key] = value
   }
   map.putIfAbsent("outputDirectory", base.defaultOutputDirectory)
   map.putIfAbsent("createOutputFileName", (target ?: base).defaultCreateOutputFileName)
