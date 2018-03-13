@@ -23,13 +23,13 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.FileVisitOption
+import java.nio.file.Files
+
 abstract class IntegrationSpec extends Specification {
 
   @Rule
-  TemporaryFolder testProjectDir = new TemporaryFolder(new File("build", "tmp")) {
-    @Override
-    protected void after() {}
-  }
+  TemporaryFolder testProjectDir = new TemporaryFolder(new File("build", "tmp"))
   String projectName
   File buildFile
   File settingsFile

@@ -26,65 +26,65 @@ import java.sql.Types
 import nebula.test.IntegrationSpec
 
 class Issue20Spec extends IntegrationSpec {
-
-    def setup() {
-        buildFile << applyPlugin(JpaSchemaGeneratePlugin)
-    }
-
-    def shouldWorkHibernate() {
-        given:
-        buildFile << """
-            buildscript {
-                repositories {
-                    mavenCentral()
-                }
-                
-                dependencies {
-                    classpath 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
-                    classpath 'org.hibernate:hibernate-java8:5.1.0.Final'
-                }
-            }
-
-            repositories {
-                mavenCentral()
-            }
-            
-            dependencies {
-                compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
-                compile 'org.hibernate:hibernate-java8:5.1.0.Final'
-            }
-
-            sourceSets {
-                main {
-                    java {
-                        srcDir file("../../../../src/test/resources/unit/src")
-                    }
-                    resources {
-                        srcDir file("../../../../src/test/resources/unit/resources/issue-20")
-                    }
-                    output.resourcesDir output.classesDir
-                }
-            }
-            
-            generateSchema {
-                format = true
-                databaseAction = "none"
-                scriptAction = "drop-and-create"
-                createOutputFileName = "create.sql"
-                dropOutputFileName = "drop.sql"
-                databaseProductName = "PostgreSQL"
-                databaseMajorVersion = 9
-                databaseMinorVersion = 5
-                properties = [
-                    "hibernate.namingStrategy": "org.hibernate.cfg.ImprovedNamingStrategy"
-                ]
-            }
-        """
-        when:
-        runTasks "generateSchema"
-        runTasks "generateSchema"
-        then:
-        file("build/generated-schema/create.sql").exists()
-        file("build/generated-schema/drop.sql").exists()
-    }
+//
+//    def setup() {
+//        buildFile << applyPlugin(JpaSchemaGeneratePlugin)
+//    }
+//
+//    def shouldWorkHibernate() {
+//        given:
+//        buildFile << """
+//            buildscript {
+//                repositories {
+//                    mavenCentral()
+//                }
+//
+//                dependencies {
+//                    classpath 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
+//                    classpath 'org.hibernate:hibernate-java8:5.1.0.Final'
+//                }
+//            }
+//
+//            repositories {
+//                mavenCentral()
+//            }
+//
+//            dependencies {
+//                compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
+//                compile 'org.hibernate:hibernate-java8:5.1.0.Final'
+//            }
+//
+//            sourceSets {
+//                main {
+//                    java {
+//                        srcDir file("../../../../src/test/resources/unit/src")
+//                    }
+//                    resources {
+//                        srcDir file("../../../../src/test/resources/unit/resources/issue-20")
+//                    }
+//                    output.resourcesDir output.classesDir
+//                }
+//            }
+//
+//            generateSchema {
+//                format = true
+//                databaseAction = "none"
+//                scriptAction = "drop-and-create"
+//                createOutputFileName = "create.sql"
+//                dropOutputFileName = "drop.sql"
+//                databaseProductName = "PostgreSQL"
+//                databaseMajorVersion = 9
+//                databaseMinorVersion = 5
+//                properties = [
+//                    "hibernate.namingStrategy": "org.hibernate.cfg.ImprovedNamingStrategy"
+//                ]
+//            }
+//        """
+//        when:
+//        runTasks "generateSchema"
+//        runTasks "generateSchema"
+//        then:
+//        file("build/generated-schema/create.sql").exists()
+//        file("build/generated-schema/drop.sql").exists()
+//    }
 }

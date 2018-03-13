@@ -26,50 +26,50 @@ import java.sql.Types
 import nebula.test.IntegrationSpec
 
 class Issue24Spec extends IntegrationSpec {
-
-    def setup() {
-        buildFile << applyPlugin(JpaSchemaGeneratePlugin)
-    }
-
-    def shouldWorkHibernate() {
-        given:
-        buildFile << """
-            sourceSets {
-                main {
-                    java {
-                        srcDir file("../../../../src/test/resources/unit/src")
-                    }
-                    resources {
-                        srcDir file("../../../../src/test/resources/unit/resources/issue-24")
-                    }
-                    output.resourcesDir output.classesDir
-                }
-            }
-            
-            generateSchema {
-                skip = false
-                format = true
-                scanTestClasses = false
-                persistenceUnitName = "PostgreSqlDS"
-                databaseAction = "none"
-                scriptAction = "drop-and-create"
-                outputDirectory = new File(projectDir.absolutePath + '/build/classes/main/META-INF', 'sql')
-                createOutputFileName = "create.sql"
-                dropOutputFileName = "drop.sql"
-                createSourceMode = "metadata"
-                dropSourceMode = "metadata"
-                databaseProductName = "PostgreSQL"
-                databaseMajorVersion = 9
-                databaseMinorVersion = 5
-                properties = [
-                    "hibernate.namingStrategy": "org.hibernate.cfg.ImprovedNamingStrategy"
-                ]
-            }
-        """
-        when:
-        runTasks "generateSchema"
-        then:
-        file("build/classes/main/META-INF/sql/create.sql").exists()
-        file("build/classes/main/META-INF/sql/drop.sql").exists()
-    }
+//
+//    def setup() {
+//        buildFile << applyPlugin(JpaSchemaGeneratePlugin)
+//    }
+//
+//    def shouldWorkHibernate() {
+//        given:
+//        buildFile << """
+//            sourceSets {
+//                main {
+//                    java {
+//                        srcDir file("../../../../src/test/resources/unit/src")
+//                    }
+//                    resources {
+//                        srcDir file("../../../../src/test/resources/unit/resources/issue-24")
+//                    }
+//                    output.resourcesDir output.classesDir
+//                }
+//            }
+//
+//            generateSchema {
+//                skip = false
+//                format = true
+//                scanTestClasses = false
+//                persistenceUnitName = "PostgreSqlDS"
+//                databaseAction = "none"
+//                scriptAction = "drop-and-create"
+//                outputDirectory = new File(projectDir.absolutePath + '/build/classes/main/META-INF', 'sql')
+//                createOutputFileName = "create.sql"
+//                dropOutputFileName = "drop.sql"
+//                createSourceMode = "metadata"
+//                dropSourceMode = "metadata"
+//                databaseProductName = "PostgreSQL"
+//                databaseMajorVersion = 9
+//                databaseMinorVersion = 5
+//                properties = [
+//                    "hibernate.namingStrategy": "org.hibernate.cfg.ImprovedNamingStrategy"
+//                ]
+//            }
+//        """
+//        when:
+//        runTasks "generateSchema"
+//        then:
+//        file("build/classes/main/META-INF/sql/create.sql").exists()
+//        file("build/classes/main/META-INF/sql/drop.sql").exists()
+//    }
 }
