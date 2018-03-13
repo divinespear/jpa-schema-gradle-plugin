@@ -124,7 +124,7 @@ private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = 
   // log classloader targets
   logger.info(buildString {
     appendln("classpath:")
-    appendln(classURLs.joinToString("\n", prefix = "  * "))
+    appendln(classURLs.joinToString("\n  * ", prefix = "  * "))
   })
   return URLClassLoader(classURLs.toTypedArray(), parent)
 }
