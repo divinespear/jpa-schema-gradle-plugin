@@ -27,7 +27,7 @@ import spock.lang.Specification
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 
-class JpaSchemaGenerationPluginSpec extends Specification {
+class PluginSpec extends Specification {
 
   @Rule
   TemporaryFolder testProjectDir = new TemporaryFolder()
