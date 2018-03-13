@@ -80,6 +80,8 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     } finally {
       thread.contextClassLoader = originalClassLoader
     }
+    // post-process
+    postProcess(target)
   }
 
   private fun doGenerate(target: JpaSchemaGenerationProperties) {
@@ -209,5 +211,16 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
     this[JAVAX_TRANSACTION_TYPE] = JAVAX_TRANSACTION_TYPE_RESOURCE_LOCAL
     this[JAVAX_JTA_DATASOURCE] = null
     this[JAVAX_NON_JTA_DATASOURCE] = null
+  }
+}
+
+private fun postProcess(target: JpaSchemaGenerationProperties) {
+  // do format output
+  val outputDirectory = target.outputDirectory ?: return
+  listOfNotNull(target.createOutputFileName, target.dropOutputFileName).map {
+    outputDirectory.toPath().resolve(it)
+  }.forEach {
+    val lineSeparator = LINE_SEPARATOR_MAP[target.lineSeparator?.toUpperCase()] ?: System.getProperty("line.separator", "\n")
+    formatFile(it, target.format == true, lineSeparator)
   }
 }
