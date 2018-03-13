@@ -111,7 +111,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
 }
 
 private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = false): ClassLoader {
-  val classURLs = mutableListOf<URL>()
+  val classURLs = mutableSetOf<URL>()
   // source output dirs
   (properties["sourceSets"] as SourceSetContainer).forEach {
     if (!it.name.contains("test", ignoreCase = true) || scanTestClasses) {
