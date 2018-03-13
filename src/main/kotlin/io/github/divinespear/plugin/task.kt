@@ -98,7 +98,12 @@ open class JpaSchemaGenerationTask : DefaultTask() {
       afterPropertiesSet()
     }.obtainDefaultPersistenceUnitInfo()
 
-    val provider = Class.forName(providerClassName).newInstance() as PersistenceProvider
+    @Suppress("UNCHECKED_CAST")
+    val providerClass = Class.forName(providerClassName) as Class<PersistenceProvider>
+    val providerConstructor = providerClass.getDeclaredConstructor().apply {
+      isAccessible = true
+    }
+    val provider = providerConstructor.newInstance()
     provider.generateSchema(persistenceUnitInfo, target.persistenceProperties())
   }
 }
