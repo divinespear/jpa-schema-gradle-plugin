@@ -119,4 +119,208 @@ generateSchema {
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
   }
 
+  def 'should work on eclipselink 2.6, with xml'() {
+    given:
+    buildFile << """
+sourceSets {
+  main {
+    java {
+      srcDir file("../../../src/test/resources/unit/src")
+    }
+    resources {
+      srcDir file("../../../src/test/resources/unit/resources/eclipselink")
+    }
+    output.resourcesDir output.classesDir
+  }
+}
+
+dependencies {
+  compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:[2.6,2.7)'
+  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
+  runtime 'com.h2database:h2:1.4.191'
+  runtime fileTree(dir: "../../../lib", include: "*.jar")
+}
+
+generateSchema {
+  scriptAction = "drop-and-create"
+  targets {
+    h2script {
+      databaseProductName = "H2"
+      databaseMajorVersion = 1
+      databaseMinorVersion = 4
+      createOutputFileName = "h2-create.sql"
+      dropOutputFileName = "h2-drop.sql"
+    }
+    h2database {
+      databaseAction = "drop-and-create"
+      scriptAction = null
+      jdbcDriver = "org.h2.Driver"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
+      jdbcUser = "sa"
+    }
+  }
+}
+"""
+    when:
+    def result = runSchemaGenerationTask()
+
+    then:
+    result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.6.")
+    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+  }
+
+  def 'should work on eclipselink 2.6, without xml'() {
+    given:
+    buildFile << """
+sourceSets {
+  main {
+    java {
+      srcDir file("../../../src/test/resources/unit/src")
+    }
+    resources {
+      srcDir file("../../../src/test/resources/unit/resources/empty")
+    }
+    output.resourcesDir output.classesDir
+  }
+}
+
+dependencies {
+  compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:[2.6,2.7)'
+  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
+  runtime 'com.h2database:h2:1.4.191'
+  runtime fileTree(dir: "../../../lib", include: "*.jar")
+}
+
+generateSchema {
+  vendor = 'eclipselink'
+  packageToScan = [ 'io.github.divinespear.model' ]
+  scriptAction = "drop-and-create"
+  targets {
+    h2script {
+      databaseProductName = "H2"
+      databaseMajorVersion = 1
+      databaseMinorVersion = 4
+      createOutputFileName = "h2-create.sql"
+      dropOutputFileName = "h2-drop.sql"
+    }
+    h2database {
+      databaseAction = "drop-and-create"
+      scriptAction = null
+      jdbcDriver = "org.h2.Driver"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
+      jdbcUser = "sa"
+    }
+  }
+}
+"""
+    when:
+    def result = runSchemaGenerationTask()
+
+    then:
+    result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.6.")
+    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+  }
+
+  def 'should work on eclipselink 2.5, with xml'() {
+    given:
+    buildFile << """
+sourceSets {
+  main {
+    java {
+      srcDir file("../../../src/test/resources/unit/src")
+    }
+    resources {
+      srcDir file("../../../src/test/resources/unit/resources/eclipselink")
+    }
+    output.resourcesDir output.classesDir
+  }
+}
+
+dependencies {
+  compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:[2.5,2.6)'
+  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
+  runtime 'com.h2database:h2:1.4.191'
+  runtime fileTree(dir: "../../../lib", include: "*.jar")
+}
+
+generateSchema {
+  scriptAction = "drop-and-create"
+  targets {
+    h2script {
+      databaseProductName = "H2"
+      databaseMajorVersion = 1
+      databaseMinorVersion = 4
+      createOutputFileName = "h2-create.sql"
+      dropOutputFileName = "h2-drop.sql"
+    }
+    h2database {
+      databaseAction = "drop-and-create"
+      scriptAction = null
+      jdbcDriver = "org.h2.Driver"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
+      jdbcUser = "sa"
+    }
+  }
+}
+"""
+    when:
+    def result = runSchemaGenerationTask()
+
+    then:
+    result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.5.")
+    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+  }
+
+  def 'should work on eclipselink 2.5, without xml'() {
+    given:
+    buildFile << """
+sourceSets {
+  main {
+    java {
+      srcDir file("../../../src/test/resources/unit/src")
+    }
+    resources {
+      srcDir file("../../../src/test/resources/unit/resources/empty")
+    }
+    output.resourcesDir output.classesDir
+  }
+}
+
+dependencies {
+  compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:[2.5,2.6)'
+  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
+  runtime 'com.h2database:h2:1.4.191'
+  runtime fileTree(dir: "../../../lib", include: "*.jar")
+}
+
+generateSchema {
+  vendor = 'eclipselink'
+  packageToScan = [ 'io.github.divinespear.model' ]
+  scriptAction = "drop-and-create"
+  targets {
+    h2script {
+      databaseProductName = "H2"
+      databaseMajorVersion = 1
+      databaseMinorVersion = 4
+      createOutputFileName = "h2-create.sql"
+      dropOutputFileName = "h2-drop.sql"
+    }
+    h2database {
+      databaseAction = "drop-and-create"
+      scriptAction = null
+      jdbcDriver = "org.h2.Driver"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
+      jdbcUser = "sa"
+    }
+  }
+}
+"""
+    when:
+    def result = runSchemaGenerationTask()
+
+    then:
+    result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.5.")
+    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+  }
+
 }
