@@ -19,7 +19,6 @@
 package io.github.divinespear.plugin
 
 import io.github.divinespear.test.IntegrationSpec
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 
 class HibernateSpec extends IntegrationSpec {
@@ -76,14 +75,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/5.2.")
@@ -132,14 +131,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/5.2.")
@@ -186,14 +185,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/5.1.")
@@ -242,14 +241,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/5.1.")
@@ -296,14 +295,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/5.0.")
@@ -352,14 +351,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/5.0.")
@@ -406,14 +405,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/4.3.")
@@ -462,14 +461,14 @@ generateSchema {
       databaseAction = "drop-and-create"
       scriptAction = null
       jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test;AUTO_SERVER=TRUE"
+      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
       jdbcUser = "sa"
     }
   }
 }
 """
     when:
-    def result = GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
+    def result = runSchemaGenerationTask()
 
     then:
     result.output.contains("org.hibernate/hibernate-core/4.3.")

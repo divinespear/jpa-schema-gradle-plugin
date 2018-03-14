@@ -19,12 +19,10 @@
 
 package io.github.divinespear.test
 
+import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
-
-import java.nio.file.FileVisitOption
-import java.nio.file.Files
 
 abstract class IntegrationSpec extends Specification {
 
@@ -42,5 +40,9 @@ abstract class IntegrationSpec extends Specification {
 
     buildFile = testProjectDir.newFile("build.gradle")
     buildFile << "// Running test for ${projectName}\n"
+  }
+
+  def runSchemaGenerationTask() {
+    GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
   }
 }
