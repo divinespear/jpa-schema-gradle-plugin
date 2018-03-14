@@ -141,8 +141,8 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
     val directory = outputDirectory?.toPath() ?: error("outputDirectory is required for script target")
     val createFileName = createOutputFileName ?: defaultCreateOutputFileName
     val dropFileName = dropOutputFileName ?: defaultDropOutputFileName
-    map[JAVAX_SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET] = directory.resolve(createFileName)
-    map[JAVAX_SCHEMA_GENERATION_SCRIPTS_DROP_TARGET] = directory.resolve(dropFileName)
+    map[JAVAX_SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET] = directory.resolve(createFileName).toUri().toString()
+    map[JAVAX_SCHEMA_GENERATION_SCRIPTS_DROP_TARGET] = directory.resolve(dropFileName).toUri().toString()
   }
 
   if (isDatabaseTarget() && jdbcUrl == null) {
@@ -177,7 +177,7 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
     map[JAVAX_SCHEMA_GENERATION_DROP_SCRIPT_SOURCE] = dropSourceFile.toPath().toAbsolutePath().toUri().toString()
   }
 
-  map[ECLIPSELINK_PERSISTENCE_XML] = persistenceXml ?: ECLIPSELINK_PERSISTENCE_XML
+  map[ECLIPSELINK_PERSISTENCE_XML] = persistenceXml
   map[ECLIPSELINK_WEAVING] = "false"
 
   map[HIBERNATE_AUTODETECTION] = "class,hbm"

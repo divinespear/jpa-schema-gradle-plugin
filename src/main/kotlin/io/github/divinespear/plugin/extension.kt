@@ -86,7 +86,7 @@ private val MERGE_EXCLUDE_PROPERTIES = listOf("properties", "packageToScan")
 private val PROPERTY_DEFAULT_VALUES = mapOf("skip" to false,
                                             "format" to false,
                                             "scanTestClasses" to false,
-                                            "persistenceXml" to ECLIPSELINK_PERSISTENCE_XML,
+                                            "persistenceXml" to null,
                                             "persistenceUnitName" to DEFAULT_PERSISTENCE_UNIT_NAME,
                                             "databaseAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
                                             "scriptAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
