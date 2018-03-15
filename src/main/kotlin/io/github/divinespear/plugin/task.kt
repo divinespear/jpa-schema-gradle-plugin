@@ -44,7 +44,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
 
   private fun targets(): Iterable<JpaSchemaGenerationProperties> {
     val list = extension.targets.map { extension.extend(it) }
-    return if (list.isEmpty()) listOf(extension) else list
+    return if (list.isEmpty()) listOf(extension.extend(null)) else list
   }
 
   @TaskAction

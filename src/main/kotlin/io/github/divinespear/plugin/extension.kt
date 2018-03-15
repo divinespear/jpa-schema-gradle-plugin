@@ -79,7 +79,7 @@ open class JpaSchemaGenerationExtension : JpaSchemaGenerationProperties(null) {
     action.execute(targets)
   }
 
-  fun extend(other: JpaSchemaGenerationProperties) = JpaSchemaGenerationProperties(other.name, merge(this, other))
+  fun extend(other: JpaSchemaGenerationProperties?) = JpaSchemaGenerationProperties(other?.name, merge(this, other))
 }
 
 private val MERGE_EXCLUDE_PROPERTIES = listOf("properties", "packageToScan")
