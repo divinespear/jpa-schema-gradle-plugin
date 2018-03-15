@@ -26,9 +26,9 @@ plugins {
 }
 
 group = "io.github.divinespear"
-version = "0.3.0"
+version = "0.3.1-SNAPSHOT"
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 ext {
   isReleaseVersion = !version.endsWith("-SNAPSHOT")
@@ -48,7 +48,7 @@ dependencies {
   testCompile gradleTestKit()
 
   // kotlin
-  compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk7'
+  compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
   // jpa
   compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
   compile "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
