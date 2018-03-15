@@ -14,17 +14,19 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
-## Reworking on 0.3
+## Release 0.3
 
-It making me some headache...
+* Required Gradle 4.x or above.
+* Required JDK 8 or above.
+* No more `output.resourcesDir = output.classesDir` needed.
+* No more `buildscript` dependencies needed.
+* Dropped support DataNucleus, it was my mistake.
 
-* Minimum gradle version will be 4.0.
-* Minimum Java version will be 8.
-* Minimize spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies.
+### Reworking on 0.3
+
+* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies.
 * Will improve test with each major release version of each JPA providers.
-* Will find bypass against Gradle's deprecation about output directory merging like `output.resourcesDir = output.classesDir`
-* Will drop support DataNucleus, it was my mistake.
-* Considering to change language to java or kotlin. (I thinking kotlin cause it can be another self-training course...)
+* Re-implemented with [Kotlin](https://kotlinlang.org), on my self-training.
 
 If you have discussions, please make issue. discussions are always welcome.
 
@@ -61,23 +63,6 @@ or
 ```
 
 see also test cases `Generate*Spec.groovy`, as examples.
-
-#### change version of implementations
-
-You can change version using `configurations` on `buildscript`, like:
-```groovy
-buildscript {
-  ...
-  configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-      if (details.requested.group == 'org.hibernate') {
-        details.useVersion '4.3.11.Final'
-      }
-    }
-  }
-}
-```
-It should useful if you using Hibernate with Spring Boot 1.3 or below.
 
 #### without `persistence.xml`
 
