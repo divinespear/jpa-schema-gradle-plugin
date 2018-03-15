@@ -46,7 +46,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/hibernate")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -87,6 +86,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/5.2.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 5.2, without xml'() {
@@ -100,7 +107,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -143,6 +149,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/5.2.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 5.1, with xml'() {
@@ -156,7 +170,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/hibernate")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -197,6 +210,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/5.1.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 5.1, without xml'() {
@@ -210,7 +231,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -253,6 +273,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/5.1.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 5.0, with xml'() {
@@ -266,7 +294,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/hibernate")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -307,6 +334,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/5.0.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 5.0, without xml'() {
@@ -320,7 +355,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -363,6 +397,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/5.0.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 4.3, with xml'() {
@@ -376,7 +418,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/hibernate")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -417,6 +458,14 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/4.3.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 
   def 'should work on hibernate 4.3, without xml'() {
@@ -430,7 +479,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -473,5 +521,13 @@ generateSchema {
     then:
     result.output.contains("org.hibernate/hibernate-core/4.3.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("create table key_value_store")
+      it.contains("create table many_column_table")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("drop table key_value_store")
+      it.contains("drop table many_column_table")
+    }
   }
 }

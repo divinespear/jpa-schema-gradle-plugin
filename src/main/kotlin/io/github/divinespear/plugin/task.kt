@@ -25,6 +25,7 @@ import org.gradle.api.tasks.TaskAction
 import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
 import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
+import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Files
@@ -110,15 +111,36 @@ open class JpaSchemaGenerationTask : DefaultTask() {
   }
 }
 
+private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File {
+  fun recursiveDelete(file: File) {
+    file.listFiles()?.forEach {
+      recursiveDelete(it)
+    }
+    file.delete()
+  }
+  val target = buildDir.resolve("classes-merged")
+  val sources = mutableSetOf<File>()
+  // delete target directory if exists
+  recursiveDelete(target)
+  // create directory list
+  (properties["sourceSets"] as SourceSetContainer).forEach {
+    if (!it.name.contains("test", ignoreCase = true) || scanTestClasses) {
+      sources.addAll(it.output.classesDirs)
+      sources.add(it.output.resourcesDir)
+    }
+  }
+  // copy output directories to target directory
+  copy {
+    it.from(sources)
+    it.into(target)
+  }
+  return target
+}
+
 private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = false): ClassLoader {
   val classURLs = mutableSetOf<URL>()
   // source output dirs
-  (properties["sourceSets"] as SourceSetContainer).forEach {
-    if (!it.name.contains("test", ignoreCase = true) || scanTestClasses) {
-      classURLs.addAll(it.output.classesDirs.map { it.toURI().toURL() })
-      classURLs.add(it.output.resourcesDir.toURI().toURL())
-    }
-  }
+  classURLs.add(mergeOutputClasspath(scanTestClasses).toURI().toURL())
   // dependencies
   configurations.getByName("runtimeClasspath").forEach {
     classURLs.add(it.toURI().toURL())
@@ -220,7 +242,8 @@ private fun postProcess(target: JpaSchemaGenerationProperties) {
   listOfNotNull(target.createOutputFileName, target.dropOutputFileName).map {
     outputDirectory.toPath().resolve(it)
   }.forEach {
-    val lineSeparator = LINE_SEPARATOR_MAP[target.lineSeparator?.toUpperCase()] ?: System.getProperty("line.separator", "\n")
+    val lineSeparator = LINE_SEPARATOR_MAP[target.lineSeparator?.toUpperCase()]
+        ?: System.getProperty("line.separator", "\n")
     formatFile(it, target.format == true, lineSeparator)
   }
 }

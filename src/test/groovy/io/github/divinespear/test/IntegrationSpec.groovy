@@ -45,4 +45,8 @@ abstract class IntegrationSpec extends Specification {
   def runSchemaGenerationTask() {
     GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info").withPluginClasspath().withDebug(true).build()
   }
+
+  def getResultFile(String dir) {
+    testProjectDir.root.toPath().resolve(dir).toFile()
+  }
 }

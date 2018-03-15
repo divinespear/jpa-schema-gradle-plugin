@@ -28,7 +28,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/eclipselink")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -65,6 +64,14 @@ generateSchema {
     then:
     result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.7.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("CREATE TABLE KEY_VALUE_STORE")
+      it.contains("CREATE TABLE MANY_COLUMN_TABLE")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("DROP TABLE KEY_VALUE_STORE")
+      it.contains("DROP TABLE MANY_COLUMN_TABLE")
+    }
   }
 
   def 'should work on eclipselink 2.7, without xml'() {
@@ -78,7 +85,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -117,6 +123,14 @@ generateSchema {
     then:
     result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.7.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("CREATE TABLE KEY_VALUE_STORE")
+      it.contains("CREATE TABLE MANY_COLUMN_TABLE")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("DROP TABLE KEY_VALUE_STORE")
+      it.contains("DROP TABLE MANY_COLUMN_TABLE")
+    }
   }
 
   def 'should work on eclipselink 2.6, with xml'() {
@@ -130,7 +144,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/eclipselink")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -167,6 +180,14 @@ generateSchema {
     then:
     result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.6.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("CREATE TABLE KEY_VALUE_STORE")
+      it.contains("CREATE TABLE MANY_COLUMN_TABLE")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("DROP TABLE KEY_VALUE_STORE")
+      it.contains("DROP TABLE MANY_COLUMN_TABLE")
+    }
   }
 
   def 'should work on eclipselink 2.6, without xml'() {
@@ -180,7 +201,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -219,6 +239,14 @@ generateSchema {
     then:
     result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.6.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("CREATE TABLE KEY_VALUE_STORE")
+      it.contains("CREATE TABLE MANY_COLUMN_TABLE")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("DROP TABLE KEY_VALUE_STORE")
+      it.contains("DROP TABLE MANY_COLUMN_TABLE")
+    }
   }
 
   def 'should work on eclipselink 2.5, with xml'() {
@@ -232,7 +260,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/eclipselink")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -269,6 +296,14 @@ generateSchema {
     then:
     result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.5.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("CREATE TABLE KEY_VALUE_STORE")
+      it.contains("CREATE TABLE MANY_COLUMN_TABLE")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("DROP TABLE KEY_VALUE_STORE")
+      it.contains("DROP TABLE MANY_COLUMN_TABLE")
+    }
   }
 
   def 'should work on eclipselink 2.5, without xml'() {
@@ -282,7 +317,6 @@ sourceSets {
     resources {
       srcDir file("../../../src/test/resources/unit/resources/empty")
     }
-    output.resourcesDir output.classesDir
   }
 }
 
@@ -321,6 +355,14 @@ generateSchema {
     then:
     result.output.contains("org.eclipse.persistence/org.eclipse.persistence.jpa/2.5.")
     result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
+    getResultFile("build/generated-schema/h2-create.sql").text.with {
+      it.contains("CREATE TABLE KEY_VALUE_STORE")
+      it.contains("CREATE TABLE MANY_COLUMN_TABLE")
+    }
+    getResultFile("build/generated-schema/h2-drop.sql").text.with {
+      it.contains("DROP TABLE KEY_VALUE_STORE")
+      it.contains("DROP TABLE MANY_COLUMN_TABLE")
+    }
   }
 
 }
