@@ -2,8 +2,6 @@ sudo: required
 language: groovy
 jdk:
   - openjdk8
-before_install:
-  - ./jdk7-jce.sh
 script:
   - TERM=dumb ./gradlew check --stacktrace
 after_success:
@@ -15,9 +13,6 @@ branches:
     - /^issue-.*$/
     - /^pull-.*$/
 env:
-  matrix:
-    - INTERNAL_JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-    - INTERNAL_JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   global:
     - secure: Jrz3fDLlQYwikFVGOhLzBSYOdcruMrFolt1HQbAr4BnCvxnfafTwRNCXUbfzPmsC1bI38zg9c1uP0jcx7UWt5rEpr52rTXvHBakvt/ErBrB3QMRgwlJNkZe7lSjqlS3uFlk0hzPd5k9n5u9XzadFjUNOTfFy8f12a1fAhnJvURk=
     - secure: LiFvhrq7cDJzinwvLCLHLFvLc+RjQcWWT9q1WO1eGsegkOpT9+GRNLNg4qoaqUdlWYhFJF83lX/+GuZPi0Uz7QBxsdVHY+xYSBv9QxPtj1Rt3oEDBw2dy1SDtaqAcpKvHzCPl10KFcNbOauGD7bCHG1mjwvJzR6oGGFrXUAeV6g=

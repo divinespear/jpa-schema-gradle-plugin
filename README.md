@@ -18,8 +18,9 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 
 It making me some headache...
 
-* Minimum gradle version will be 4.0
-* Minimalize spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies.
+* Minimum gradle version will be 4.0.
+* Minimum Java version will be 8.
+* Minimize spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies.
 * Will improve test with each major release version of each JPA providers.
 * Will find bypass against Gradle's deprecation about output directory merging like `output.resourcesDir = output.classesDir`
 * Will drop support DataNucleus, it was my mistake.
@@ -33,16 +34,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.2.1-1'
-}
-
-sourceSets {
-  main {
-    // set output to same directories
-    // jpa implementations always scan classes using classpath that found persistence.xml
-    // XXX: will find bypass without this...
-    output.resourcesDir = output.classesDir
-  }
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.0'
 }
 
 generateSchema {
