@@ -20,6 +20,7 @@ package io.github.divinespear.plugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskAction
 import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
@@ -36,6 +37,7 @@ import javax.persistence.spi.PersistenceProvider
 
 open class JpaSchemaGenerationTask : DefaultTask() {
 
+  @get:Input
   private val extension: JpaSchemaGenerationExtension by lazy {
     project.extensions.getByName(EXTENSION_NAME) as JpaSchemaGenerationExtension
   }
