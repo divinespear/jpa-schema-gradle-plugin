@@ -1,7 +1,7 @@
 jpa-schema-gradle-plugin
 ========================
 
-**Version 0.2.1-1**
+**Version 0.3.0**
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
 for Maven, see [Maven Plugin](//github.com/divinespear/jpa-schema-maven-plugin).
@@ -14,66 +14,42 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
+## Release 0.3
 
-## Announce 0.2
+* Required Gradle 4.x or above.
+* Required JDK 8 or above.
+* No more `output.resourcesDir = output.classesDir` needed.
+* No more `buildscript` dependencies needed.
+* Dropped support DataNucleus, it was my mistake.
 
-Finally, I got some times, and 0.2 is here.
+### Reworking on 0.3
 
-* Support generate without `persistence.xml` (like spring-data, spring-boot, ...) related [#14](//github.com/divinespear/jpa-schema-gradle-plugin/issues/14)
-* Add support DataNucleus
-* Changed default version of implementations.
-    * Eclipselink: `2.6.1`
-    * Hibernate: `5.0.11.Final`
-    * DataNucleus: `4.2.3`
-* Added `properties` property.
-* Removed properties `namingStrategy` and `dialect` cause Hibernate 4.x to 5.x is cataclysm. please use `properties` instead.
+* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies.
+* Will improve test with each major release version of each JPA providers.
+* Re-implemented with [Kotlin](https://kotlinlang.org), on my self-training.
 
-On 0.2.x, plugin minimal requires
-* [Java 1.7 or above](http://www.oracle.com/technetwork/java/javase/eol-135779.html), and
-* Gradle 2.x or above. (developed on Gradle 2.6)
-
-DataNucleus support is very very limited, and should so many buggy.
+If you have discussions, please make issue. discussions are always welcome.
 
 ## How-to Use
 
-for Gradle 2.x or above, see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
-
-Put this to your `build.gradle`
+see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
 
 ```groovy
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'io.github.divinespear:jpa-schema-gradle-plugin:+'
-        // jdbc drivers also here
-        ...
-    }
-}
-
-apply plugin: 'java'
-apply plugin: 'jpa-schema-generate' // or 'io.github.divinespear.jpa-schema-generate'
-
-sourceSets {
-    main {
-    	// set output to same directories
-    	// jpa implementations always scan classes using classpath that found persistence.xml
-        output.resourcesDir = output.classesDir
-    }
+plugins {
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.0'
 }
 
 generateSchema {
-	// default options
-	// see SchemaGenerationConfig to all options
-	...
-	// if you want multiple output
-	targets {
-		targetName {
-			// same as default options
-			...
-		}
-	}
+  // default options
+  // see SchemaGenerationConfig to all options
+  ...
+  // if you want multiple output
+  targets {
+    targetName {
+      // same as default options
+      ...
+    }
+  }
 }
 ```
 
@@ -88,47 +64,15 @@ or
 
 see also test cases `Generate*Spec.groovy`, as examples.
 
-#### change version of implementations
-
-You can change version using `configurations` on `buildscript`, like:
-```groovy
-buildscript {
-    ...
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group == 'org.hibernate') {
-                details.useVersion '4.3.11.Final'
-            }
-        }
-    }
-}
-```
-It should useful if you using Hibernate with Spring Boot 1.3 or below.
-
 #### without `persistence.xml`
 
 You **MUST** specify two options: `vendor` and `packageToScan`.
 ```groovy
 generateSchema {
-    vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'datanucleus'.
-                         // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
-    packageToScan = [ 'your.package.to.scan', ... ]
-    ...
-}
-```
-
-#### For Scala
-
-You MUST put `scala-library` to `dependencies` of `buildscript`.
-
-```groovy
-buildscript {
-    ...
-    dependencies {
-        ...
-        classpath "org.scala-lang:scala-library:${your_scala_version}"
-        ...
-    }
+  vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'datanucleus'.
+                       // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
+  packageToScan = [ 'your.package.to.scan', ... ]
+  ...
 }
 ```
 
@@ -139,10 +83,6 @@ Hibernate **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUEN
 #### For EclipseLink with Oracle
 
 EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
-
-#### For DataNucleus
-
-DataNucleus **DOES NOT SUPPORT** generate DDL without database connection.
 
 ### SchemaGenerationConfig
 
@@ -181,14 +121,14 @@ Here is full list of parameters of `generateSchema`.
 It's just groovy map, so you can config like this:
 ```groovy
 generateSchema {
+  ...
+  // global properties
+  properties = [
+    'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
     ...
-    // global properties
-    properties = [
-        'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
-        ...
-    ]
-    // you can set target-specific too.
-    ...
+  ]
+  // you can set target-specific too.
+  ...
 }
 ```
 
@@ -281,4 +221,4 @@ You can override using `hibernate.dialect` property.
 
 ## License
 
-Source Copyright © 2013 Sin-young "Divinespear" Kang. Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses).
+Source Copyright © 2013-2018 Sin Young "Divinespear" Kang (divinespear at gmail dot com). Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses).
