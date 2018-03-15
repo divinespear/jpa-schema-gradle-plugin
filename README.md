@@ -36,7 +36,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.0'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.1'
 }
 
 generateSchema {
