@@ -49,7 +49,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
 
   @TaskAction
   fun run() {
-    targets().map { doRun(it) }
+    targets().map { if (it.skip != true) doRun(it) }
   }
 
   private fun doRun(target: JpaSchemaGenerationProperties) {
