@@ -91,23 +91,6 @@ generateSchema {
 }
 ```
 
-#### With Spring Framework
-
-If your entity has `@EntityListeners`, you must add `spring-aspects` to buildscript dependency.
-
-add it to `build.gradle` of root project.
-
-```groovy
-buildscript {
-  ...
-  dependencies {
-    ...
-    classpath 'org.springframework:spring-aspects:${your_spring_version}'
-    ...
-  }
-}
-```
-
 #### For Hibernate
 
 Hibernate **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` for DBMS dosen't support `CREATE/DROP SEQUENCE`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
