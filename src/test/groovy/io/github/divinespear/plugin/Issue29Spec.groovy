@@ -6,20 +6,20 @@ import org.gradle.testkit.runner.TaskOutcome
 class Issue29Spec extends IntegrationSpec {
 
   def setup() {
-    buildFile << """
-plugins {
-  id 'io.github.divinespear.jpa-schema-generate'
-}
-
-repositories {
-  mavenCentral()
-}
-"""
   }
 
   def 'should have spring dependencies - spring-boot 1.5.10'() {
     given:
     buildFile << """
+plugins {
+  id 'io.github.divinespear.jpa-schema-generate'
+  id 'org.springframework.boot' version '1.5.10.RELEASE'
+}
+
+repositories {
+  mavenCentral()
+}
+
 sourceSets {
   main {
     java {
@@ -32,7 +32,7 @@ sourceSets {
 }
 
 dependencies {
-  compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.5.10.RELEASE'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
   runtime 'com.h2database:h2:1.4.191'
   runtime fileTree(dir: "../../../lib", include: "*.jar")
 }
@@ -78,6 +78,16 @@ generateSchema {
   def 'should have spring dependencies - spring-boot 2.0.0'() {
     given:
     buildFile << """
+plugins {
+  id 'io.github.divinespear.jpa-schema-generate'
+  id 'io.spring.dependency-management' version '1.0.4.RELEASE'
+  id 'org.springframework.boot' version '2.0.0.RELEASE'
+}
+
+repositories {
+  mavenCentral()
+}
+
 sourceSets {
   main {
     java {
@@ -90,7 +100,7 @@ sourceSets {
 }
 
 dependencies {
-  compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.0.RELEASE'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
   runtime 'com.h2database:h2:1.4.191'
   runtime fileTree(dir: "../../../lib", include: "*.jar")
 }
