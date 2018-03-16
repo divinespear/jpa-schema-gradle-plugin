@@ -164,6 +164,16 @@ uploadArchives {
   }
 }
 
+[install.repositories.mavenInstaller, uploadArchives.repositories.mavenDeployer]*.pom*.whenConfigured { pom ->
+  ['org.jetbrains.kotlin': '1.2.30'].each { entry ->
+    pom.dependencies.findAll {
+      it.groupId == entry.key
+    }.each {
+      it.version = entry.value
+    }
+  }
+}
+
 gradlePlugin {
   plugins {
     generateSchema {
