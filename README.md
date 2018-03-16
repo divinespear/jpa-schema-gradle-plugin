@@ -24,7 +24,7 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 
 ### Reworking on 0.3
 
-* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies.
+* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.0)
 * Will improve test with each major release version of each JPA providers.
 * Re-implemented with [Kotlin](https://kotlinlang.org), on my self-training.
 
@@ -36,7 +36,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.1'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.2'
 }
 
 generateSchema {
