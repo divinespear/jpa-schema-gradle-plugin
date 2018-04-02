@@ -21,7 +21,7 @@ package io.github.divinespear.plugin
 import io.github.divinespear.test.IntegrationSpec
 import org.gradle.testkit.runner.TaskOutcome
 
-class HibernateSpec extends IntegrationSpec {
+class HibernateWithSpringSpec extends IntegrationSpec {
 
   def setup() {
     buildFile << """
@@ -44,7 +44,7 @@ sourceSets {
       srcDir file("../../../src/test/resources/unit/src")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/hibernate")
+      srcDir file("../../../src/test/resources/unit/resources/hibernate+spring")
     }
   }
 }
@@ -242,7 +242,7 @@ dependencies {
 }
 
 generateSchema {
-  vendor = 'hibernate'
+  vendor = 'hibernate+spring'
   packageToScan = [ 'io.github.divinespear.model' ]
   scriptAction = "drop-and-create"
   properties = [
@@ -431,7 +431,8 @@ dependencies {
 generateSchema {
   scriptAction = "drop-and-create"
   properties = [
-    'hibernate.ejb.naming_strategy': 'org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy'
+    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
+    'hibernate.id.new_generator_mappings': 'false'
   ]
   targets {
     h2script {
@@ -493,7 +494,8 @@ generateSchema {
   packageToScan = [ 'io.github.divinespear.model' ]
   scriptAction = "drop-and-create"
   properties = [
-    'hibernate.ejb.naming_strategy': 'org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy'
+    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
+    'hibernate.id.new_generator_mappings': 'false'
   ]
   targets {
     h2script {

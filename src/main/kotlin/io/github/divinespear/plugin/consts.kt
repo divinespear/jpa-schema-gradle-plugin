@@ -61,7 +61,8 @@ internal const val JAVAX_TRANSACTION_TYPE_RESOURCE_LOCAL = "RESOURCE_LOCAL"
 
 /* predefined providers */
 internal val PERSISTENCE_PROVIDER_MAP = mapOf("eclipselink" to "org.eclipse.persistence.jpa.PersistenceProvider",
-                                              "hibernate" to "org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider")
+                                              "hibernate" to "org.hibernate.jpa.HibernatePersistenceProvider",
+                                              "hibernate+spring" to "org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider")
 
 /* line separator */
 internal val LINE_SEPARATOR_MAP = mapOf("CRLF" to "\r\n", "LF" to "\n", "CR" to "\r")
