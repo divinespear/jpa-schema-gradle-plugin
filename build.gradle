@@ -47,6 +47,8 @@ dependencies {
   compile gradleApi()
   testCompile gradleTestKit()
 
+  // java 9 missing module
+  compile 'javax.xml.bind:jaxb-api:2.3.0'
   // kotlin
   compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
   // jpa
