@@ -52,11 +52,7 @@ dependencies {
   // kotlin
   compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
   // jpa
-  compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${property('eclipselink.version')}"
-  compile "org.eclipse.persistence:org.eclipse.persistence.oracle:${property('eclipselink.version')}"
-  compile("org.hibernate:hibernate-entitymanager:${property('hibernate.version')}") {
-    exclude group: 'org.hibernate.javax.persistence'
-  }
+  compile "org.hibernate:hibernate-entitymanager:${property('hibernate.version')}"
   // spring-framework for without xml
   compile "org.springframework:spring-orm:${property('spring.version')}"
   compile "org.springframework:spring-context:${property('spring.version')}"
