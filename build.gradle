@@ -187,7 +187,7 @@ pluginBundle {
   website = 'http://divinespear.github.io/jpa-schema-gradle-plugin'
   vcsUrl = 'https://github.com/divinespear/jpa-schema-gradle-plugin'
   description = 'Gradle plugin for generate database schema or DDL scripts from JPA entities'
-  tags = ['jpa', 'schema', 'schemagen', 'hibernate', 'eclipselink', 'datanucleus', 'generate']
+  tags = ['jpa', 'schema', 'schemagen', 'hibernate', 'eclipselink', 'generate']
 
   plugins {
     generateSchema {

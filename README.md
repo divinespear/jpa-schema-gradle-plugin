@@ -16,7 +16,7 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 
 ## Release 0.3
 
-* Required Gradle 4.x or above.
+* Required Gradle 4.2.1 or above. (for support Java 9)
 * Required JDK 8 or above.
 * No more `output.resourcesDir = output.classesDir` needed.
 * No more `buildscript` dependencies needed.
@@ -69,7 +69,7 @@ see also test cases `Generate*Spec.groovy`, as examples.
 You **MUST** specify two options: `vendor` and `packageToScan`.
 ```groovy
 generateSchema {
-  vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'datanucleus'.
+  vendor = 'hibernate' // 'eclipselink' or 'hibernate'.
                        // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
   packageToScan = [ 'your.package.to.scan', ... ]
   ...
@@ -113,7 +113,7 @@ Here is full list of parameters of `generateSchema`.
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 | `properties` | `java.util.Map` | JPA vendor specific properties. |
-| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`datanucleus` (or `org.datanucleus.api.jpa.PersistenceProviderImpl`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
+| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
 | `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
 
 #### How-to config `properties`
