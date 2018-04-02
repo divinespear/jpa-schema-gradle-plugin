@@ -23,8 +23,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskAction
-import org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver
-import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo
 import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
 import java.io.File
 import java.net.URL
@@ -121,6 +119,7 @@ private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File
     }
     file.delete()
   }
+
   val target = buildDir.resolve("classes-merged")
   val sources = mutableSetOf<File>()
   // delete target directory if exists
@@ -207,16 +206,9 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
 
   map[HIBERNATE_AUTODETECTION] = "class,hbm"
   if ((jdbcUrl ?: "").isEmpty() && (properties[HIBERNATE_DIALECT] ?: "").isEmpty()) {
-    val info = object : DialectResolutionInfo {
-      override fun getDriverName(): String? = null
-      override fun getDriverMajorVersion() = 0
-      override fun getDriverMinorVersion() = 0
-      override fun getDatabaseName() = databaseProductName
-      override fun getDatabaseMajorVersion() = this@persistenceProperties.databaseMajorVersion ?: 0
-      override fun getDatabaseMinorVersion() = this@persistenceProperties.databaseMinorVersion ?: 0
-    }
-    val dialect = StandardDialectResolver.INSTANCE.resolveDialect(info)
-    map[HIBERNATE_DIALECT] = dialect.javaClass.name
+    map[HIBERNATE_DIALECT] = resolveHibernateDialect(databaseProductName ?: "",
+                                                     databaseMajorVersion ?: 0,
+                                                     databaseMinorVersion ?: 0)
   }
 
   map.putAll(properties)

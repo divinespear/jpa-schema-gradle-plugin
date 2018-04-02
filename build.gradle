@@ -52,7 +52,7 @@ dependencies {
   // kotlin
   compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
   // jpa
-  compile "org.hibernate:hibernate-entitymanager:${property('hibernate.version')}"
+  compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
   // spring-framework for without xml
   compile "org.springframework:spring-orm:${property('spring.version')}"
   compile "org.springframework:spring-context:${property('spring.version')}"
