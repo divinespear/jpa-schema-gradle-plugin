@@ -64,7 +64,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     // register jdbc driver if not registered
     val driverClassName = target.jdbcDriver ?: ""
     if (driverClassName.isNotEmpty() && DriverManager.getDrivers().toList().none { it.javaClass.name == driverClassName }) {
-      val driver = taskClassLoader.loadClass(driverClassName).newInstance() as Driver
+      val driver = taskClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance() as Driver
       DriverManager.registerDriver(driver)
     }
     // generate
@@ -98,13 +98,14 @@ open class JpaSchemaGenerationTask : DefaultTask() {
 
     val persistenceUnitInfo = DefaultPersistenceUnitManager().apply {
       setPersistenceXmlLocations()
-      setDefaultPersistenceUnitName(target.persistenceUnitName)
+      setDefaultPersistenceUnitName(target.persistenceUnitName!!)
       setPackagesToScan(*target.packageToScan.toTypedArray())
       afterPropertiesSet()
     }.obtainDefaultPersistenceUnitInfo()
 
+    val classLoader = Thread.currentThread().contextClassLoader
     @Suppress("UNCHECKED_CAST")
-    val providerClass = Class.forName(providerClassName) as Class<PersistenceProvider>
+    val providerClass = classLoader.loadClass(providerClassName) as Class<PersistenceProvider>
     val providerConstructor = providerClass.getDeclaredConstructor().apply {
       isAccessible = true
     }
