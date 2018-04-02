@@ -20,7 +20,7 @@ plugins {
   id 'java-gradle-plugin'
   id 'com.gradle.plugin-publish' version '0.9.10'
   id 'groovy'
-  id 'org.jetbrains.kotlin.jvm' version '1.2.30'
+  id 'org.jetbrains.kotlin.jvm' version '1.2.31'
   id 'maven'
   id 'signing'
 }
@@ -165,7 +165,7 @@ uploadArchives {
 }
 
 [install.repositories.mavenInstaller, uploadArchives.repositories.mavenDeployer]*.pom*.whenConfigured { pom ->
-  ['org.jetbrains.kotlin': '1.2.30'].each { entry ->
+  ['org.jetbrains.kotlin': '1.2.31'].each { entry ->
     pom.dependencies.findAll {
       it.groupId == entry.key
     }.each {
