@@ -1,10 +1,11 @@
 jpa-schema-gradle-plugin
 ========================
 
-**Version 0.3.2**
+**Version 0.3.3**
+[![Build Status](https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png)](https://travis-ci.org/divinespear/jpa-schema-gradle-plugin)
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
-for Maven, see [Maven Plugin](//github.com/divinespear/jpa-schema-maven-plugin).
+for Maven, see [Maven Plugin](https://github.com/divinespear/jpa-schema-maven-plugin).
 
 Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference Implementation) and [Hibernate](http://hibernate.org).
 
@@ -14,9 +15,14 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
+## Release 0.3.3
+
+* Java 9 support.
+* Required Gradle 4.2.1 or above. (for support Java 9)
+
 ## Release 0.3
 
-* Required Gradle 4.x or above.
+* Required Gradle 4.0 or above.
 * Required JDK 8 or above.
 * No more `output.resourcesDir = output.classesDir` needed.
 * No more `buildscript` dependencies needed.
@@ -25,6 +31,7 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 ### Reworking on 0.3
 
 * Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.0)
+* Direct including any JPA implementation is removed, remains [JUST API](http://doki-doki-literature-club.wikia.com/wiki/Monika).
 * Will improve test with each major release version of each JPA providers.
 * Re-implemented with [Kotlin](https://kotlinlang.org), on my self-training.
 
@@ -36,7 +43,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.2'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.3'
 }
 
 generateSchema {
@@ -64,27 +71,39 @@ or
 
 see also test cases `Generate*Spec.groovy`, as examples.
 
-#### without `persistence.xml`
+### without `persistence.xml`
 
 You **MUST** specify two options: `vendor` and `packageToScan`.
 ```groovy
 generateSchema {
-  vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'datanucleus'.
+  vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'hibernate+spring'.
                        // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
   packageToScan = [ 'your.package.to.scan', ... ]
   ...
 }
 ```
 
-#### For Hibernate
+## Provider specific
 
-Hibernate **DOES NOT SUPPORT** `@GeneratedValue(strategy = GenerationType.SEQUENCE)` for DBMS dosen't support `CREATE/DROP SEQUENCE`. ~~WTF?!~~ You should use `@GeneratedValue` instead.
+### EclipseLink
 
-#### For EclipseLink with Oracle
+ * EclipseLink 2.5 on Java 9 without `persistence.xml` **will not work**. 
+ * EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
 
-EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
+### Hibernate
 
-### SchemaGenerationConfig
+ * After 5.2, just use `hibernate-core` instead `hibernate-entitymanager`, it is [merged](https://github.com/hibernate/hibernate-orm/wiki/Migration-Guide---5.2).
+ * Naming strategy property is
+   * 4.x: `hibernate.ejb.naming_strategy`
+   * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
+
+### Hibernate with Spring ORM
+
+ * `vendor` should be `hibernate+spring`. (without `persistence.xml`)
+ * use `io.spring.dependency-management` for version management.
+   * You can change hibernate version with `hibernate.version` property.
+
+## SchemaGenerationConfig
 
 Here is full list of parameters of `generateSchema`.
 
@@ -113,10 +132,10 @@ Here is full list of parameters of `generateSchema`.
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 | `properties` | `java.util.Map` | JPA vendor specific properties. |
-| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`datanucleus` (or `org.datanucleus.api.jpa.PersistenceProviderImpl`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
+| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`hibernate+spring` (or `org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
 | `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
 
-#### How-to config `properties`
+### How-to config `properties`
 
 It's just groovy map, so you can config like this:
 ```groovy
@@ -160,7 +179,8 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 * `HSQL Database Engine`
 
 ### for Hibernate
-Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`.
+Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`. (striked dialects are not resolved by default.)
+
 You can override using `hibernate.dialect` property.
 
 * `CUBRID`
@@ -172,10 +192,10 @@ You can override using `hibernate.dialect` property.
 * `MySQL`
     * `org.hibernate.dialect.MySQL5Dialect` = 5.x
     * `org.hibernate.dialect.MySQLDialect` = 4.x or below
-    * `org.hibernate.dialect.MySQLMyISAMDialect`
-    * `org.hibernate.dialect.MySQLInnoDBDialect`
-    * `org.hibernate.dialect.MySQL5InnoDBDialect`
-    * `org.hibernate.dialect.MySQL57InnoDBDialect`
+    * ~~`org.hibernate.dialect.MySQLMyISAMDialect`~~
+    * ~~`org.hibernate.dialect.MySQLInnoDBDialect`~~
+    * ~~`org.hibernate.dialect.MySQL5InnoDBDialect`~~
+    * ~~`org.hibernate.dialect.MySQL57InnoDBDialect`~~
 * `PostgreSQL`
     * `org.hibernate.dialect.PostgreSQL94Dialect` = 9.4 or above
     * `org.hibernate.dialect.PostgreSQL92Dialect` = 9.2 or above
@@ -198,14 +218,14 @@ You can override using `hibernate.dialect` property.
     * `org.hibernate.dialect.SQLServerDialect` = 8.x or below
 * `Sybase SQL Server`
     * `org.hibernate.dialect.SybaseASE15Dialect` = all version
-    * `org.hibernate.dialect.SybaseASE17Dialect`
+    * ~~`org.hibernate.dialect.SybaseASE17Dialect`~~
 * `Adaptive Server Enterprise` = Sybase
 * `Adaptive Server Anywhere`
     * `org.hibernate.dialect.SybaseAnywhereDialect` = all version
 * `Informix Dynamic Server`
     * `org.hibernate.dialect.InformixDialect` = all version
-* ~~`DB2 UDB for AS/390`~~
-    * `org.hibernate.dialect.DB2390Dialect`
+* `DB2 UDB for AS/390`
+    * ~~`org.hibernate.dialect.DB2390Dialect`~~
 * `DB2 UDB for AS/400`
     * `org.hibernate.dialect.DB2400Dialect` = all version
 *  start with `DB2/`
@@ -217,7 +237,6 @@ You can override using `hibernate.dialect` property.
     * `org.hibernate.dialect.Oracle8iDialect` = 8.x or below
 * `Firebird`
     * `org.hibernate.dialect.FirebirdDialect` = all version
-
 
 ## License
 
