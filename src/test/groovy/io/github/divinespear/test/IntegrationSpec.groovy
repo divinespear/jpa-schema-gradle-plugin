@@ -31,9 +31,12 @@ abstract class IntegrationSpec extends Specification {
   String projectName
   File buildFile
   File settingsFile
+  File propertiesFile
 
   def setup() {
     projectName = testProjectDir.root.name
+
+    propertiesFile = testProjectDir.newFile("gradle.properties")
 
     settingsFile = testProjectDir.newFile("settings.gradle")
     settingsFile << "rootProject.name = '${projectName}'"
