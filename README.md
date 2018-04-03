@@ -16,7 +16,12 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 
 ## Release 0.3.3
 
+* Java 9 support.
 * Required Gradle 4.2.1 or above. (for support Java 9)
+
+## Release 0.3
+
+* Required Gradle 4.0 or above.
 * Required JDK 8 or above.
 * No more `output.resourcesDir = output.classesDir` needed.
 * No more `buildscript` dependencies needed.
@@ -37,7 +42,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.2'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.3'
 }
 
 generateSchema {
@@ -129,7 +134,7 @@ Here is full list of parameters of `generateSchema`.
 | `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`hibernate+spring` (or `org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
 | `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
 
-#### How-to config `properties`
+### How-to config `properties`
 
 It's just groovy map, so you can config like this:
 ```groovy
@@ -173,7 +178,8 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 * `HSQL Database Engine`
 
 ### for Hibernate
-Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`.
+Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`. (striked dialects are not resolved by default.)
+
 You can override using `hibernate.dialect` property.
 
 * `CUBRID`
@@ -185,10 +191,10 @@ You can override using `hibernate.dialect` property.
 * `MySQL`
     * `org.hibernate.dialect.MySQL5Dialect` = 5.x
     * `org.hibernate.dialect.MySQLDialect` = 4.x or below
-    * `org.hibernate.dialect.MySQLMyISAMDialect`
-    * `org.hibernate.dialect.MySQLInnoDBDialect`
-    * `org.hibernate.dialect.MySQL5InnoDBDialect`
-    * `org.hibernate.dialect.MySQL57InnoDBDialect`
+    * ~~`org.hibernate.dialect.MySQLMyISAMDialect`~~
+    * ~~`org.hibernate.dialect.MySQLInnoDBDialect`~~
+    * ~~`org.hibernate.dialect.MySQL5InnoDBDialect`~~
+    * ~~`org.hibernate.dialect.MySQL57InnoDBDialect`~~
 * `PostgreSQL`
     * `org.hibernate.dialect.PostgreSQL94Dialect` = 9.4 or above
     * `org.hibernate.dialect.PostgreSQL92Dialect` = 9.2 or above
@@ -211,14 +217,14 @@ You can override using `hibernate.dialect` property.
     * `org.hibernate.dialect.SQLServerDialect` = 8.x or below
 * `Sybase SQL Server`
     * `org.hibernate.dialect.SybaseASE15Dialect` = all version
-    * `org.hibernate.dialect.SybaseASE17Dialect`
+    * ~~`org.hibernate.dialect.SybaseASE17Dialect`~~
 * `Adaptive Server Enterprise` = Sybase
 * `Adaptive Server Anywhere`
     * `org.hibernate.dialect.SybaseAnywhereDialect` = all version
 * `Informix Dynamic Server`
     * `org.hibernate.dialect.InformixDialect` = all version
-* ~~`DB2 UDB for AS/390`~~
-    * `org.hibernate.dialect.DB2390Dialect`
+* `DB2 UDB for AS/390`
+    * ~~`org.hibernate.dialect.DB2390Dialect`~~
 * `DB2 UDB for AS/400`
     * `org.hibernate.dialect.DB2400Dialect` = all version
 *  start with `DB2/`
@@ -230,7 +236,6 @@ You can override using `hibernate.dialect` property.
     * `org.hibernate.dialect.Oracle8iDialect` = 8.x or below
 * `Firebird`
     * `org.hibernate.dialect.FirebirdDialect` = all version
-
 
 ## License
 
