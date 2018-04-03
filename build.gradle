@@ -53,10 +53,6 @@ dependencies {
   compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
   // jpa
   compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
-  // spring-framework for without xml
-  compile "org.springframework:spring-orm:${property('spring.version')}"
-  compile "org.springframework:spring-context:${property('spring.version')}"
-  compile "org.springframework:spring-aspects:${property('spring.version')}"
   // test
   testCompile 'junit:junit:4.12'
   testCompile 'org.hamcrest:hamcrest-all:1.3'

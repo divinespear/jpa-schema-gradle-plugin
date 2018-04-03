@@ -36,5 +36,11 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
     project.tasks.create(PLUGIN_NAME, JpaSchemaGenerationTask::class.java) {
       it.dependsOn(project.tasks.getByPath("classes"))
     }
+    // dependencies
+    val springVersion = "[5.0,5.1)"
+    project.configurations.create("springDependencyClasspath")
+    project.dependencies.add("springDependencyClasspath", "org.springframework:spring-orm:$springVersion")
+    project.dependencies.add("springDependencyClasspath", "org.springframework:spring-context:$springVersion")
+    project.dependencies.add("springDependencyClasspath", "org.springframework:spring-aspects:$springVersion")
   }
 }
