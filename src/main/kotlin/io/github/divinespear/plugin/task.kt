@@ -23,7 +23,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskAction
-import org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
@@ -32,6 +31,7 @@ import java.sql.Driver
 import java.sql.DriverManager
 import javax.persistence.Persistence
 import javax.persistence.spi.PersistenceProvider
+import javax.persistence.spi.PersistenceUnitInfo
 
 open class JpaSchemaGenerationTask : DefaultTask() {
 
@@ -94,14 +94,21 @@ open class JpaSchemaGenerationTask : DefaultTask() {
       error("packageToScan is required on non-xml mode.")
     }
 
-    val persistenceUnitInfo = DefaultPersistenceUnitManager().apply {
-      setPersistenceXmlLocations()
-      setDefaultPersistenceUnitName(target.persistenceUnitName!!)
-      setPackagesToScan(*target.packageToScan.toTypedArray())
-      afterPropertiesSet()
-    }.obtainDefaultPersistenceUnitInfo()
+    fun buildPersistenceUnitInfo(classLoader: ClassLoader): PersistenceUnitInfo {
+      val managerClass = classLoader.loadClass("org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager")
+      return managerClass.getDeclaredConstructor().newInstance().apply {
+        managerClass.getDeclaredMethod("setPersistenceXmlLocations", Array<String>::class.java).invoke(this, emptyArray<String>())
+        managerClass.getDeclaredMethod("setDefaultPersistenceUnitName", String::class.java).invoke(this, target.persistenceUnitName!!)
+        managerClass.getDeclaredMethod("setPackagesToScan", Array<String>::class.java).invoke(this, target.packageToScan.toTypedArray())
+        managerClass.getDeclaredMethod("afterPropertiesSet").invoke(this)
+      }.let {
+        managerClass.getDeclaredMethod("obtainDefaultPersistenceUnitInfo").invoke(it) as PersistenceUnitInfo
+      }
+    }
 
     val classLoader = Thread.currentThread().contextClassLoader
+
+    val persistenceUnitInfo = buildPersistenceUnitInfo(classLoader)
     @Suppress("UNCHECKED_CAST")
     val providerClass = classLoader.loadClass(providerClassName) as Class<PersistenceProvider>
     val providerConstructor = providerClass.getDeclaredConstructor().apply {
@@ -144,8 +151,16 @@ private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = 
   // source output dirs
   classURLs.add(mergeOutputClasspath(scanTestClasses).toURI().toURL())
   // dependencies
+  // -- copy all dependencies
   configurations.getByName("runtimeClasspath").forEach {
     classURLs.add(it.toURI().toURL())
+  }
+  // -- spring dependencies
+  if (classURLs.find { it.file.startsWith("spring-orm") } == null) {
+    logger.info("resolving spring dependencies: spring-orm, spring-context, spring-aspects")
+    configurations.getByName("springDependencyClasspath").forEach {
+      classURLs.add(it.toURI().toURL())
+    }
   }
   // log classloader targets
   logger.info(buildString {
