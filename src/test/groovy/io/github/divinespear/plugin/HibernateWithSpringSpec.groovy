@@ -27,6 +27,8 @@ class HibernateWithSpringSpec extends IntegrationSpec {
     buildFile << """
 plugins {
   id 'io.github.divinespear.jpa-schema-generate'
+  id 'io.spring.dependency-management' version '1.0.4.RELEASE'
+  id 'org.springframework.boot' version '1.5.10.RELEASE'
 }
 
 repositories {
@@ -35,69 +37,11 @@ repositories {
 """
   }
 
-  def 'should work on hibernate 5.2, with xml'() {
+  def 'should work on hibernate 5.2, with spring, without xml'() {
     given:
-    buildFile << """
-sourceSets {
-  main {
-    java {
-      srcDir file("../../../src/test/resources/unit/src")
-    }
-    resources {
-      srcDir file("../../../src/test/resources/unit/resources/hibernate+spring")
-    }
-  }
-}
-
-dependencies {
-  compile 'org.hibernate:hibernate-core:[5.2,5.3)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
-  runtime fileTree(dir: "../../../lib", include: "*.jar")
-}
-
-generateSchema {
-  scriptAction = "drop-and-create"
-  properties = [
-    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
-    'hibernate.id.new_generator_mappings': 'false'
-  ]
-  targets {
-    h2script {
-      databaseProductName = "H2"
-      databaseMajorVersion = 1
-      databaseMinorVersion = 4
-      createOutputFileName = "h2-create.sql"
-      dropOutputFileName = "h2-drop.sql"
-    }
-    h2database {
-      databaseAction = "drop-and-create"
-      scriptAction = null
-      jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
-      jdbcUser = "sa"
-    }
-  }
-}
+    propertiesFile << """
+hibernate.version=5.2.16.Final
 """
-    when:
-    def result = runSchemaGenerationTask()
-
-    then:
-    result.output.contains("org.hibernate/hibernate-core/5.2.")
-    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
-    getResultFile("build/generated-schema/h2-create.sql").text.with {
-      it.contains("create table key_value_store")
-      it.contains("create table many_column_table")
-    }
-    getResultFile("build/generated-schema/h2-drop.sql").text.with {
-      it.contains("drop table key_value_store")
-      it.contains("drop table many_column_table")
-    }
-  }
-
-  def 'should work on hibernate 5.2, without xml'() {
-    given:
     buildFile << """
 sourceSets {
   main {
@@ -111,14 +55,13 @@ sourceSets {
 }
 
 dependencies {
-  compile 'org.hibernate:hibernate-core:[5.2,5.3)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  runtime 'com.h2database:h2'
   runtime fileTree(dir: "../../../lib", include: "*.jar")
 }
 
 generateSchema {
-  vendor = 'hibernate'
+  vendor = 'hibernate+spring'
   packageToScan = [ 'io.github.divinespear.model' ]
   scriptAction = "drop-and-create"
   properties = [
@@ -159,69 +102,11 @@ generateSchema {
     }
   }
 
-  def 'should work on hibernate 5.1, with xml'() {
+  def 'should work on hibernate 5.1, with spring, without xml'() {
     given:
-    buildFile << """
-sourceSets {
-  main {
-    java {
-      srcDir file("../../../src/test/resources/unit/src")
-    }
-    resources {
-      srcDir file("../../../src/test/resources/unit/resources/hibernate")
-    }
-  }
-}
-
-dependencies {
-  compile 'org.hibernate:hibernate-entitymanager:[5.1,5.2)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
-  runtime fileTree(dir: "../../../lib", include: "*.jar")
-}
-
-generateSchema {
-  scriptAction = "drop-and-create"
-  properties = [
-    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
-    'hibernate.id.new_generator_mappings': 'false'
-  ]
-  targets {
-    h2script {
-      databaseProductName = "H2"
-      databaseMajorVersion = 1
-      databaseMinorVersion = 4
-      createOutputFileName = "h2-create.sql"
-      dropOutputFileName = "h2-drop.sql"
-    }
-    h2database {
-      databaseAction = "drop-and-create"
-      scriptAction = null
-      jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
-      jdbcUser = "sa"
-    }
-  }
-}
+    propertiesFile << """
+hibernate.version=5.1.13.Final
 """
-    when:
-    def result = runSchemaGenerationTask()
-
-    then:
-    result.output.contains("org.hibernate/hibernate-core/5.1.")
-    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
-    getResultFile("build/generated-schema/h2-create.sql").text.with {
-      it.contains("create table key_value_store")
-      it.contains("create table many_column_table")
-    }
-    getResultFile("build/generated-schema/h2-drop.sql").text.with {
-      it.contains("drop table key_value_store")
-      it.contains("drop table many_column_table")
-    }
-  }
-
-  def 'should work on hibernate 5.1, without xml'() {
-    given:
     buildFile << """
 sourceSets {
   main {
@@ -235,9 +120,8 @@ sourceSets {
 }
 
 dependencies {
-  compile 'org.hibernate:hibernate-entitymanager:[5.1,5.2)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  runtime 'com.h2database:h2'
   runtime fileTree(dir: "../../../lib", include: "*.jar")
 }
 
@@ -283,69 +167,11 @@ generateSchema {
     }
   }
 
-  def 'should work on hibernate 5.0, with xml'() {
+  def 'should work on hibernate 5.0, with spring, without xml'() {
     given:
-    buildFile << """
-sourceSets {
-  main {
-    java {
-      srcDir file("../../../src/test/resources/unit/src")
-    }
-    resources {
-      srcDir file("../../../src/test/resources/unit/resources/hibernate")
-    }
-  }
-}
-
-dependencies {
-  compile 'org.hibernate:hibernate-entitymanager:[5.0,5.1)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
-  runtime fileTree(dir: "../../../lib", include: "*.jar")
-}
-
-generateSchema {
-  scriptAction = "drop-and-create"
-  properties = [
-    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
-    'hibernate.id.new_generator_mappings': 'false'
-  ]
-  targets {
-    h2script {
-      databaseProductName = "H2"
-      databaseMajorVersion = 1
-      databaseMinorVersion = 4
-      createOutputFileName = "h2-create.sql"
-      dropOutputFileName = "h2-drop.sql"
-    }
-    h2database {
-      databaseAction = "drop-and-create"
-      scriptAction = null
-      jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
-      jdbcUser = "sa"
-    }
-  }
-}
+    propertiesFile << """
+hibernate.version=5.0.12.Final
 """
-    when:
-    def result = runSchemaGenerationTask()
-
-    then:
-    result.output.contains("org.hibernate/hibernate-core/5.0.")
-    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
-    getResultFile("build/generated-schema/h2-create.sql").text.with {
-      it.contains("create table key_value_store")
-      it.contains("create table many_column_table")
-    }
-    getResultFile("build/generated-schema/h2-drop.sql").text.with {
-      it.contains("drop table key_value_store")
-      it.contains("drop table many_column_table")
-    }
-  }
-
-  def 'should work on hibernate 5.0, without xml'() {
-    given:
     buildFile << """
 sourceSets {
   main {
@@ -359,9 +185,8 @@ sourceSets {
 }
 
 dependencies {
-  compile 'org.hibernate:hibernate-entitymanager:[5.0,5.1)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  runtime 'com.h2database:h2'
   runtime fileTree(dir: "../../../lib", include: "*.jar")
 }
 
@@ -407,69 +232,11 @@ generateSchema {
     }
   }
 
-  def 'should work on hibernate 4.3, with xml'() {
+  def 'should work on hibernate 4.3, with spring, without xml'() {
     given:
-    buildFile << """
-sourceSets {
-  main {
-    java {
-      srcDir file("../../../src/test/resources/unit/src")
-    }
-    resources {
-      srcDir file("../../../src/test/resources/unit/resources/hibernate")
-    }
-  }
-}
-
-dependencies {
-  compile 'org.hibernate:hibernate-entitymanager:[4.3,4.4)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
-  runtime fileTree(dir: "../../../lib", include: "*.jar")
-}
-
-generateSchema {
-  scriptAction = "drop-and-create"
-  properties = [
-    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
-    'hibernate.id.new_generator_mappings': 'false'
-  ]
-  targets {
-    h2script {
-      databaseProductName = "H2"
-      databaseMajorVersion = 1
-      databaseMinorVersion = 4
-      createOutputFileName = "h2-create.sql"
-      dropOutputFileName = "h2-drop.sql"
-    }
-    h2database {
-      databaseAction = "drop-and-create"
-      scriptAction = null
-      jdbcDriver = "org.h2.Driver"
-      jdbcUrl = "jdbc:h2:\${buildDir}/generated-schema/test"
-      jdbcUser = "sa"
-    }
-  }
-}
+    propertiesFile << """
+hibernate.version=4.3.11.Final
 """
-    when:
-    def result = runSchemaGenerationTask()
-
-    then:
-    result.output.contains("org.hibernate/hibernate-core/4.3.")
-    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
-    getResultFile("build/generated-schema/h2-create.sql").text.with {
-      it.contains("create table key_value_store")
-      it.contains("create table many_column_table")
-    }
-    getResultFile("build/generated-schema/h2-drop.sql").text.with {
-      it.contains("drop table key_value_store")
-      it.contains("drop table many_column_table")
-    }
-  }
-
-  def 'should work on hibernate 4.3, without xml'() {
-    given:
     buildFile << """
 sourceSets {
   main {
@@ -483,9 +250,8 @@ sourceSets {
 }
 
 dependencies {
-  compile 'org.hibernate:hibernate-entitymanager:[4.3,4.4)'
-  compile 'org.springframework.boot:spring-boot:1.5.10.RELEASE'
-  runtime 'com.h2database:h2:1.4.191'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  runtime 'com.h2database:h2'
   runtime fileTree(dir: "../../../lib", include: "*.jar")
 }
 
@@ -494,8 +260,7 @@ generateSchema {
   packageToScan = [ 'io.github.divinespear.model' ]
   scriptAction = "drop-and-create"
   properties = [
-    'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
-    'hibernate.id.new_generator_mappings': 'false'
+    'hibernate.ejb.naming_strategy': 'org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy'
   ]
   targets {
     h2script {
