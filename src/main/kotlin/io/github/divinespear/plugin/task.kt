@@ -55,7 +55,12 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     if (target.isScriptTarget()) {
       val outputDirectory = target.outputDirectory ?: extension.defaultOutputDirectory
       target.outputDirectory = outputDirectory
-      Files.createDirectories(outputDirectory.toPath())
+      val outputPath = outputDirectory.toPath()
+      Files.createDirectories(outputPath)
+      listOf(target.createOutputFileName ?: target.defaultCreateOutputFileName,
+             target.dropOutputFileName ?: target.defaultDropOutputFileName).forEach {
+        Files.deleteIfExists(outputPath.resolve(it))
+      }
     }
     // classloader
     val taskClassLoader = project.classLoader(javaClass.classLoader, target.scanTestClasses == true)
