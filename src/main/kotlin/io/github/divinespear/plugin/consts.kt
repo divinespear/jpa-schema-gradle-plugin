@@ -22,6 +22,7 @@ package io.github.divinespear.plugin
 
 internal const val PLUGIN_NAME = "generateSchema"
 internal const val EXTENSION_NAME = PLUGIN_NAME
+internal const val CONFIGURATION_NAME = PLUGIN_NAME
 
 /* jpa common */
 internal const val JAVAX_SCHEMA_GENERATION_NONE_ACTION = "none"

@@ -158,7 +158,7 @@ private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = 
   // -- spring dependencies
   if (classURLs.find { it.file.startsWith("spring-orm") } == null) {
     logger.info("resolving spring dependencies: spring-orm, spring-context, spring-aspects")
-    configurations.getByName("springDependencyClasspath").forEach {
+    configurations.getByName(CONFIGURATION_NAME).forEach {
       classURLs.add(it.toURI().toURL())
     }
   }

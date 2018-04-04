@@ -82,6 +82,26 @@ generateSchema {
 }
 ```
 
+## Plugin only dependencies
+
+now you can add dependencies for plugin with configuration `generateSchema`.
+
+```groovy
+dependencies {
+  ...
+  // to load java.time converter from spring-data-jpa
+  // (2.0 still contains backward-compatability codes)
+  generateSchema 'org:threeten:threetenbp:1.3.6'
+}
+
+generateSchema {
+  ...
+  // load java.time converter from spring-data-jpa
+  packageToScan = [ 'org.springframework.data.jpa.convert.threeten', 'your.package.to.scan', ... ]
+  ...
+}
+```
+
 ## Provider specific
 
 ### EclipseLink
