@@ -90,7 +90,7 @@ private val PROPERTY_DEFAULT_VALUES = mapOf("skip" to false,
                                             "databaseAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
                                             "scriptAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
                                             "createSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE,
-                                            "dropSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE).withDefault { _ -> null }
+                                            "dropSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE)
 
 private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGenerationProperties? = null): MutableMap<String, Any?> {
   val map = mutableMapOf<String, Any?>()
@@ -111,5 +111,5 @@ private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGeneratio
   if (map["outputDirectory"] == null) map["outputDirectory"] = base.defaultOutputDirectory
   if (map["createOutputFileName"] == null) map["createOutputFileName"] = (target ?: base).defaultCreateOutputFileName
   if (map["dropOutputFileName"] == null) map["dropOutputFileName"] = (target ?: base).defaultDropOutputFileName
-  return map
+  return map.withDefault { _ -> null }
 }
