@@ -86,23 +86,11 @@ private val MERGE_EXCLUDE_PROPERTIES = listOf("properties", "packageToScan")
 private val PROPERTY_DEFAULT_VALUES = mapOf("skip" to false,
                                             "format" to false,
                                             "scanTestClasses" to false,
-                                            "persistenceXml" to null,
                                             "persistenceUnitName" to DEFAULT_PERSISTENCE_UNIT_NAME,
                                             "databaseAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
                                             "scriptAction" to JAVAX_SCHEMA_GENERATION_NONE_ACTION,
                                             "createSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE,
-                                            "createSourceFile" to null,
-                                            "dropSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE,
-                                            "dropSourceFile" to null,
-                                            "jdbcDriver" to null,
-                                            "jdbcUrl" to null,
-                                            "jdbcUser" to null,
-                                            "jdbcPassword" to null,
-                                            "databaseProductName" to null,
-                                            "databaseMajorVersion" to null,
-                                            "databaseMinorVersion" to null,
-                                            "vendor" to null,
-                                            "lineSeparator" to null)
+                                            "dropSourceMode" to JAVAX_SCHEMA_GENERATION_METADATA_SOURCE).withDefault { _ -> null }
 
 private fun merge(base: JpaSchemaGenerationExtension, target: JpaSchemaGenerationProperties? = null): MutableMap<String, Any?> {
   val map = mutableMapOf<String, Any?>()
