@@ -1,7 +1,7 @@
 jpa-schema-gradle-plugin
 ========================
 
-**Version 0.3.4**
+**Version 0.3.5.1**
 [![Build Status](https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png)](https://travis-ci.org/divinespear/jpa-schema-gradle-plugin)
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
@@ -43,7 +43,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.4'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.5.1'
 }
 
 generateSchema {
