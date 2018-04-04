@@ -14,12 +14,12 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
-## Release 0.3.3
+## Since Release 0.3.3
 
 * Java 9 support.
 * Required Gradle 4.2.1 or above. (for support Java 9)
 
-## Release 0.3
+## Since Release 0.3
 
 * Required Gradle 4.0 or above.
 * Required JDK 8 or above.
@@ -84,20 +84,26 @@ generateSchema {
 
 ## Plugin only dependencies
 
-now you can add dependencies for plugin with configuration `generateSchema`.
+Since 0.3.4, you can add dependencies for plugin with configuration `generateSchema`.
 
 ```groovy
+// no need to add 'generateSchema' into configurations block.
+
 dependencies {
   ...
-  // to load java.time converter from spring-data-jpa
-  // (2.0 still contains backward-compatability codes)
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  // only need to load java.time converter from spring-data-jpa on schema generation
   generateSchema 'org:threeten:threetenbp:1.3.6'
 }
 
 generateSchema {
-  ...
-  // load java.time converter from spring-data-jpa
-  packageToScan = [ 'org.springframework.data.jpa.convert.threeten', 'your.package.to.scan', ... ]
+  ...  
+  packageToScan = [
+    // load java.time converter from spring-data-jpa
+    'org.springframework.data.jpa.convert.threeten',
+    'your.package.to.scan',
+    ...
+  ]
   ...
 }
 ```
