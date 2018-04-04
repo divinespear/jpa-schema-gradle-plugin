@@ -1,7 +1,7 @@
 jpa-schema-gradle-plugin
 ========================
 
-**Version 0.3.3**
+**Version 0.3.4**
 [![Build Status](https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png)](https://travis-ci.org/divinespear/jpa-schema-gradle-plugin)
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
@@ -15,12 +15,12 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
-## Release 0.3.3
+## Since Release 0.3.3
 
 * Java 9 support.
 * Required Gradle 4.2.1 or above. (for support Java 9)
 
-## Release 0.3
+## Since Release 0.3
 
 * Required Gradle 4.0 or above.
 * Required JDK 8 or above.
@@ -43,7 +43,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.3'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.4'
 }
 
 generateSchema {
@@ -79,6 +79,32 @@ generateSchema {
   vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'hibernate+spring'.
                        // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
   packageToScan = [ 'your.package.to.scan', ... ]
+  ...
+}
+```
+
+## Plugin only dependencies
+
+Since 0.3.4, you can add dependencies for plugin with configuration `generateSchema`.
+
+```groovy
+// no need to add 'generateSchema' into configurations block.
+
+dependencies {
+  ...
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  // only need to load java.time converter from spring-data-jpa on schema generation
+  generateSchema 'org:threeten:threetenbp:1.3.6'
+}
+
+generateSchema {
+  ...  
+  packageToScan = [
+    // load java.time converter from spring-data-jpa
+    'org.springframework.data.jpa.convert.threeten',
+    'your.package.to.scan',
+    ...
+  ]
   ...
 }
 ```
