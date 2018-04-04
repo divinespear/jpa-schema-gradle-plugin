@@ -50,7 +50,7 @@ dependencies {
   // java 9 missing module
   compile 'javax.xml.bind:jaxb-api:2.3.0'
   // kotlin
-  compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+  compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.31'
   // jpa
   compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
   // test
@@ -178,7 +178,7 @@ gradlePlugin {
 }
 
 pluginBundle {
-  website = 'http://divinespear.github.io/jpa-schema-gradle-plugin'
+  website = 'https://divinespear.github.io/jpa-schema-gradle-plugin'
   vcsUrl = 'https://github.com/divinespear/jpa-schema-gradle-plugin'
   description = 'Gradle plugin for generate database schema or DDL scripts from JPA entities'
   tags = ['jpa', 'schema', 'schemagen', 'hibernate', 'eclipselink', 'generate']
