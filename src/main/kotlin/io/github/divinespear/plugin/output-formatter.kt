@@ -22,6 +22,7 @@ package io.github.divinespear.plugin
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 
 internal fun formatFile(file: Path, format: Boolean, lineSeparator: String) {
   // check readable
@@ -38,7 +39,7 @@ internal fun formatFile(file: Path, format: Boolean, lineSeparator: String) {
     }
   }
   // write result
-  Files.newBufferedWriter(file, Charsets.UTF_8).use {
+  Files.newBufferedWriter(file, Charsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING).use {
     it.write(result)
   }
 }
