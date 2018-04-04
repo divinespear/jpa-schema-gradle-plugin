@@ -26,7 +26,7 @@ plugins {
 }
 
 group = "io.github.divinespear"
-version = "0.3.6-SNAPSHOT"
+version = "0.3.5.1"
 
 sourceCompatibility = 1.8
 
