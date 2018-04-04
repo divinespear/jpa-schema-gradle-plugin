@@ -32,9 +32,9 @@ internal fun formatFile(file: Path, format: Boolean, lineSeparator: String) {
   // do format
   val result = Files.newBufferedReader(file, Charsets.UTF_8).readLines().joinToString(lineSeparator) {
     buildString {
-      val result = if (format) formatLine(it, lineSeparator) else it
-      append(result)
-      if (!result.endsWith(";")) append(";")
+      val s = if (format) formatLine(it, lineSeparator) else it
+      append(s)
+      if (!s.endsWith(";")) append(";")
       if (format) append(lineSeparator)
     }
   }
