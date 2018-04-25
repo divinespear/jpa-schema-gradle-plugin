@@ -93,7 +93,7 @@ dependencies {
   ...
   compile 'org.springframework.boot:spring-boot-starter-data-jpa'
   // only need to load java.time converter from spring-data-jpa on schema generation
-  generateSchema 'org:threeten:threetenbp:1.3.6'
+  generateSchema 'org.threeten:threetenbp:1.3.6'
 }
 
 generateSchema {
