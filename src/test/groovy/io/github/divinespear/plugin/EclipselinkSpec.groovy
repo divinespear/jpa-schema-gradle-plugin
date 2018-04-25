@@ -24,10 +24,10 @@ repositories {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/eclipselink")
+      srcDir file("../../../src/test/resources/src/resources/eclipselink")
     }
   }
 }
@@ -81,10 +81,10 @@ generateSchema {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -140,10 +140,10 @@ generateSchema {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/eclipselink")
+      srcDir file("../../../src/test/resources/src/resources/eclipselink")
     }
   }
 }
@@ -197,10 +197,10 @@ generateSchema {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -256,10 +256,10 @@ generateSchema {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/eclipselink")
+      srcDir file("../../../src/test/resources/src/resources/eclipselink")
     }
   }
 }
@@ -314,10 +314,10 @@ generateSchema {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }

@@ -23,10 +23,10 @@ repositories {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src-spring")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -60,11 +60,11 @@ generateSchema {
     def result = runSchemaGenerationTask()
 
     then:
+    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
     result.output.with {
       it.contains("org.springframework/spring-aspects/")
       it.contains("org.springframework/spring-context/")
     }
-    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
     getResultFile("build/generated-schema/h2-create.sql").text.with {
       it.contains("create table key_value_store")
       it.contains("create table many_column_table")
@@ -91,10 +91,10 @@ repositories {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src-spring")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -128,11 +128,11 @@ generateSchema {
     def result = runSchemaGenerationTask()
 
     then:
+    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
     result.output.with {
       it.contains("org.springframework/spring-aspects/")
       it.contains("org.springframework/spring-context/")
     }
-    result.task(":generateSchema").outcome == TaskOutcome.SUCCESS
     getResultFile("build/generated-schema/h2-create.sql").text.with {
       it.contains("create table key_value_store")
       it.contains("create table many_column_table")

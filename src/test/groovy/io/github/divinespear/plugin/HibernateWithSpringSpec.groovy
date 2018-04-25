@@ -46,10 +46,10 @@ hibernate.version=5.2.16.Final
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -111,10 +111,10 @@ hibernate.version=5.1.13.Final
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -176,10 +176,10 @@ hibernate.version=5.0.12.Final
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
@@ -241,10 +241,10 @@ hibernate.version=4.3.11.Final
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }

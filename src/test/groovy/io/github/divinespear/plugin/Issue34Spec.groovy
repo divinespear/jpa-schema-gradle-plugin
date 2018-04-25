@@ -23,10 +23,10 @@ repositories {
 sourceSets {
   main {
     java {
-      srcDir file("../../../src/test/resources/unit/src-spring")
+      srcDir file("../../../src/test/resources/src/java")
     }
     resources {
-      srcDir file("../../../src/test/resources/unit/resources/empty")
+      srcDir file("../../../src/test/resources/src/resources/empty")
     }
   }
 }
