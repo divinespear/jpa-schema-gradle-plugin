@@ -59,6 +59,7 @@ open class JpaSchemaGenerationProperties(val name: String?,
   var properties: Map<String, String> by options
 
   var vendor: String? by options
+  var addNullDataSource: Boolean? by options
   var packageToScan: Set<String> by options
 
   var lineSeparator: String? by options
