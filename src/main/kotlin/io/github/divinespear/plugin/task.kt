@@ -246,8 +246,9 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
   }.toMutableMap().apply {
     // issue-13: disable JTA and datasources
     this[JAVAX_TRANSACTION_TYPE] = JAVAX_TRANSACTION_TYPE_RESOURCE_LOCAL
-    this[JAVAX_JTA_DATASOURCE] = null
-    this[JAVAX_NON_JTA_DATASOURCE] = null
+    // issue-41: should be removed instead set null
+    this.remove(JAVAX_JTA_DATASOURCE)
+    this.remove(JAVAX_NON_JTA_DATASOURCE)
   }
 }
 

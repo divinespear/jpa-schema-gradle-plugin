@@ -37,7 +37,7 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
       it.dependsOn(project.tasks.getByPath("classes"))
     }
     // dependencies
-    val springVersion = "[5.0,5.1)"
+    val springVersion = "[5.0,6.0)"
     project.configurations.create(CONFIGURATION_NAME)
     project.dependencies.add(CONFIGURATION_NAME, "org.springframework:spring-orm:$springVersion")
     project.dependencies.add(CONFIGURATION_NAME, "org.springframework:spring-context:$springVersion")
