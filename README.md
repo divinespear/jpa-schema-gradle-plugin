@@ -132,6 +132,7 @@ generateSchema {
  * Naming strategy property is
    * 4.x: `hibernate.ejb.naming_strategy`
    * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
+ * If you don't set `hibernate.dialect` on `properties`, you must set `databaseProductName` for determine dialect.
 
 ### Hibernate with Spring ORM
 
