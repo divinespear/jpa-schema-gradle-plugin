@@ -14,22 +14,33 @@ READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
 Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
 
-## Since Release 0.3.3
+## Version History
 
-* Java 9 support.
-* Required Gradle 4.2.1 or above. (for support Java 9)
+See Releases for more informations...
 
-## Since Release 0.3
+### 0.4 (in progress...)
+
+* Java 10, 11, 12, and 13 support.
+* Required JDK 8 or above.
+* Required Gradle 6.0 or above. (for support Java 13)
+
+### 0.3.6
+
+* Required Gradle 4.10 or above. (for support spring-boot plugin version 2.0+)
+
+### 0.3
 
 * Required Gradle 4.0 or above.
+* Java 9 support.
 * Required JDK 8 or above.
 * No more `output.resourcesDir = output.classesDir` needed.
 * No more `buildscript` dependencies needed.
 * Dropped support DataNucleus, it was my mistake.
+* Required Gradle 6.0 or above. (for support Java 13)
 
 ### Reworking on 0.3
 
-* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.0)
+* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.x)
 * Direct including any JPA implementation is removed, remains [JUST API](http://doki-doki-literature-club.wikia.com/wiki/Monika).
 * Will improve test with each major release version of each JPA providers.
 * Re-implemented with [Kotlin](https://kotlinlang.org), on my self-training.
@@ -42,7 +53,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.5.1'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.3.6'
 }
 
 generateSchema {

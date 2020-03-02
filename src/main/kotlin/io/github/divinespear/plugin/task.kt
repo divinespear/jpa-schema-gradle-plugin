@@ -140,7 +140,7 @@ private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File
   (properties["sourceSets"] as SourceSetContainer).forEach {
     if (!it.name.contains("test", ignoreCase = true) || scanTestClasses) {
       sources.addAll(it.output.classesDirs)
-      sources.add(it.output.resourcesDir)
+      it.output.resourcesDir?.let(sources::add)
     }
   }
   // copy output directories to target directory
