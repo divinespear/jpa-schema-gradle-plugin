@@ -36,7 +36,7 @@ import javax.persistence.spi.PersistenceUnitInfo
 open class JpaSchemaGenerationTask : DefaultTask() {
 
   @get:Input
-  private val extension: JpaSchemaGenerationExtension by lazy {
+  val extension: JpaSchemaGenerationExtension by lazy {
     project.extensions.getByName(EXTENSION_NAME) as JpaSchemaGenerationExtension
   }
 
