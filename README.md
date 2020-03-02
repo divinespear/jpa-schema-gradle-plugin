@@ -123,7 +123,8 @@ generateSchema {
 
 ### EclipseLink
 
- * EclipseLink 2.5 on Java 9 without `persistence.xml` **will not work**. 
+ * EclipseLink 2.5 on Java 9 without `persistence.xml` will not work.
+ * EclipseLink 2.6 on Java 12 or higher will not work. embedded ASM library cannot read class files.
  * EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
 
 ### Hibernate
@@ -132,7 +133,7 @@ generateSchema {
  * Naming strategy property is
    * 4.x: `hibernate.ejb.naming_strategy`
    * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
- * If you don't set `hibernate.dialect` on `properties`, you must set `databaseProductName` for determine dialect.
+ * If you don't use `hibernate.dialect` on `properties`, you must set `databaseProductName` for determine dialect.
 
 ### Hibernate with Spring ORM
 
