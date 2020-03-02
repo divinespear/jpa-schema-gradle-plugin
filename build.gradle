@@ -26,7 +26,7 @@ plugins {
 }
 
 group = "io.github.divinespear"
-version = "0.3.6-SNAPSHOT"
+version = "0.3.6"
 
 sourceCompatibility = 1.8
 
@@ -125,7 +125,7 @@ uploadArchives {
               name "Sin-young \"Divinespear\" Kang"
               email "divinespear@gmail.com"
               timezone "+9"
-              url "http://divinespear.blogspot.com"
+              url "https://divinespear.github.io"
             }
           }
 
