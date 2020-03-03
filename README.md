@@ -134,7 +134,7 @@ generateSchema {
   * 4.x: `hibernate.ejb.naming_strategy`
   * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
 
-* For select dialect:
+* For select dialect, do one of
   * set `hibernate.dialect` on `properties`
   * set `databaseProductName`, `databaseMajorVersion`, and/or `databaseMinorVersion` for determine dialect.
 
