@@ -3,6 +3,7 @@ package io.github.divinespear.plugin
 import io.github.divinespear.test.IntegrationSpec
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Ignore
+import spock.lang.IgnoreIf
 
 class EclipselinkSpec extends IntegrationSpec {
 
@@ -134,6 +135,7 @@ generateSchema {
     }
   }
 
+  @IgnoreIf({ javaVersion >= 12 })
   def 'should work on eclipselink 2.6, with xml'() {
     given:
     buildFile << """
@@ -191,6 +193,7 @@ generateSchema {
     }
   }
 
+  @IgnoreIf({ javaVersion >= 12 })
   def 'should work on eclipselink 2.6, without xml'() {
     given:
     buildFile << """
