@@ -226,9 +226,9 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
 
   map[HIBERNATE_AUTODETECTION] = "class,hbm"
   if ((jdbcUrl ?: "").isEmpty() && (properties[HIBERNATE_DIALECT] ?: "").isEmpty()) {
-    map[HIBERNATE_DIALECT] = resolveHibernateDialect(databaseProductName ?: "",
-                                                     databaseMajorVersion ?: 0,
-                                                     databaseMinorVersion ?: 0)
+    resolveHibernateDialect(databaseProductName ?: "", databaseMajorVersion ?: 0, databaseMinorVersion ?: 0)?.let {
+      map[HIBERNATE_DIALECT] = it
+    }
   }
 
   map.putAll(properties)
