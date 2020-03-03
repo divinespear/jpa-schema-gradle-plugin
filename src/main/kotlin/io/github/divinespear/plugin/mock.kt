@@ -221,6 +221,7 @@ class ConnectionMock(val productName: String,
 class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMetaData {
 
   override fun getConnection() = connection
+  override fun getDriverName() = connection.productName
   override fun getDatabaseProductName() = connection.productName
   override fun getDatabaseMajorVersion(): Int = connection.majorVersion ?: 0
   override fun getDatabaseMinorVersion(): Int = connection.minorVersion ?: 0
@@ -746,10 +747,6 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
   }
 
   override fun getRowIdLifetime(): RowIdLifetime {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun getDriverName(): String {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
