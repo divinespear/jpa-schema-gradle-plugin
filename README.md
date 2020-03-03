@@ -129,11 +129,14 @@ generateSchema {
 
 ### Hibernate
 
- * After 5.2, just use `hibernate-core` instead `hibernate-entitymanager`, it is [merged](https://github.com/hibernate/hibernate-orm/wiki/Migration-Guide---5.2).
- * Naming strategy property is
-   * 4.x: `hibernate.ejb.naming_strategy`
-   * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
- * If you don't use `hibernate.dialect` on `properties`, you must set `databaseProductName` for determine dialect.
+* After 5.2, just use `hibernate-core` instead `hibernate-entitymanager`, it is [merged](https://github.com/hibernate/hibernate-orm/wiki/Migration-Guide---5.2).
+* Naming strategy property is
+  * 4.x: `hibernate.ejb.naming_strategy`
+  * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
+
+* For select dialect:
+  * set `hibernate.dialect` on `properties`
+  * set `databaseProductName`, `databaseMajorVersion`, and/or `databaseMinorVersion` for determine dialect.
 
 ### Hibernate with Spring ORM
 
@@ -194,6 +197,7 @@ generateSchema {
 It's about `databaseProductName` property. If not listed below, will work as basic standard SQL.
 
 ### for EclipseLink
+
 `databaseMajorVersion` and `databaseMinorVersion` is not required.
 
 * `Oracle12` = Oracle 12c
@@ -217,64 +221,11 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 * `HSQL Database Engine`
 
 ### for Hibernate
-Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`. (striked dialects are not resolved by default.)
 
-You can override using `hibernate.dialect` property.
+* [All dialect list of 5.4.12](https://github.com/hibernate/hibernate-orm/tree/5.4.12/hibernate-core/src/main/java/org/hibernate/dialect)
+* [Preregistered dialects of 5.4.12](https://github.com/hibernate/hibernate-orm/blob/5.4.12/hibernate-core/src/test/java/org/hibernate/dialect/resolver/DialectFactoryTest.java#L107)
 
-* `CUBRID`
-    * `org.hibernate.dialect.CUBRIDDialect` = all version
-* `HSQL Database Engine`
-    * `org.hibernate.dialect.HSQLDialect` = all version
-* `H2`
-    * `org.hibernate.dialect.H2Dialect` = all version
-* `MySQL`
-    * `org.hibernate.dialect.MySQL5Dialect` = 5.x
-    * `org.hibernate.dialect.MySQLDialect` = 4.x or below
-    * ~~`org.hibernate.dialect.MySQLMyISAMDialect`~~
-    * ~~`org.hibernate.dialect.MySQLInnoDBDialect`~~
-    * ~~`org.hibernate.dialect.MySQL5InnoDBDialect`~~
-    * ~~`org.hibernate.dialect.MySQL57InnoDBDialect`~~
-* `PostgreSQL`
-    * `org.hibernate.dialect.PostgreSQL94Dialect` = 9.4 or above
-    * `org.hibernate.dialect.PostgreSQL92Dialect` = 9.2 or above
-    * `org.hibernate.dialect.PostgreSQL9Dialect` = 9.x
-    * `org.hibernate.dialect.PostgreSQL82Dialect` = 8.2 or above
-    * `org.hibernate.dialect.PostgreSQL81Dialect` = 8.1 or below
-* `Apache Derby`
-    * `org.hibernate.dialect.DerbyTenSevenDialect` = 10.7 or above
-    * `org.hibernate.dialect.DerbyTenSixDialect` = 10.6
-    * `org.hibernate.dialect.DerbyTenFiveDialect` = 10.5
-    * `org.hibernate.dialect.DerbyDialect` = 10.4 or below
-* `ingres`
-    * `org.hibernate.dialect.Ingres10Dialect` = 10.x
-    * `org.hibernate.dialect.Ingres9Dialect` = 9.2 or above
-    * `org.hibernate.dialect.IngresDialect` = 9.1 or below
-* `Microsoft SQL Server`
-    * `org.hibernate.dialect.SQLServer2012Dialect` = 11.x
-    * `org.hibernate.dialect.SQLServer2008Dialect` = 10.x
-    * `org.hibernate.dialect.SQLServer2005Dialect` = 9.x
-    * `org.hibernate.dialect.SQLServerDialect` = 8.x or below
-* `Sybase SQL Server`
-    * `org.hibernate.dialect.SybaseASE15Dialect` = all version
-    * ~~`org.hibernate.dialect.SybaseASE17Dialect`~~
-* `Adaptive Server Enterprise` = Sybase
-* `Adaptive Server Anywhere`
-    * `org.hibernate.dialect.SybaseAnywhereDialect` = all version
-* `Informix Dynamic Server`
-    * `org.hibernate.dialect.InformixDialect` = all version
-* `DB2 UDB for AS/390`
-    * ~~`org.hibernate.dialect.DB2390Dialect`~~
-* `DB2 UDB for AS/400`
-    * `org.hibernate.dialect.DB2400Dialect` = all version
-*  start with `DB2/`
-    * `org.hibernate.dialect.DB2Dialect` = all version
-* `Oracle`
-    * `org.hibernate.dialect.Oracle12cDialect` = 12.x
-    * `org.hibernate.dialect.Oracle10gDialect` = 11.x, 10.x
-    * `org.hibernate.dialect.Oracle9iDialect` = 9.x
-    * `org.hibernate.dialect.Oracle8iDialect` = 8.x or below
-* `Firebird`
-    * `org.hibernate.dialect.FirebirdDialect` = all version
+For other versions, select tag to your version.
 
 ## License
 
