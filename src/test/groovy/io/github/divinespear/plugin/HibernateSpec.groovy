@@ -18,10 +18,10 @@
  */
 package io.github.divinespear.plugin
 
-import io.github.divinespear.test.IntegrationSpec
+import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
 
-class HibernateSpec extends IntegrationSpec {
+class HibernateSpec extends IntegrationGroovySpec {
 
   def setup() {
     buildFile << """

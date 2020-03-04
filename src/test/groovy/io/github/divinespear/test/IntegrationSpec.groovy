@@ -35,15 +35,13 @@ abstract class IntegrationSpec extends Specification {
 
   def setup() {
     projectName = testProjectDir.root.name
-
     propertiesFile = testProjectDir.newFile("gradle.properties")
-
-    settingsFile = testProjectDir.newFile("settings.gradle")
-    settingsFile << "rootProject.name = '${projectName}'"
-
-    buildFile = testProjectDir.newFile("build.gradle")
-    buildFile << "// Running test for ${projectName}\n"
+    settingsFile = setupSettingsFile()
+    buildFile = setupBuildFile()
   }
+
+  abstract File setupSettingsFile()
+  abstract File setupBuildFile()
 
   def runSchemaGenerationTask() {
     GradleRunner.create().withProjectDir(testProjectDir.root).withArguments("generateSchema", "--info", "--stacktrace").withPluginClasspath().withDebug(true).build()

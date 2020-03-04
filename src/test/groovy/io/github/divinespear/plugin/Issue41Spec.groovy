@@ -1,9 +1,9 @@
 package io.github.divinespear.plugin
 
-import io.github.divinespear.test.IntegrationSpec
+import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
 
-class Issue41Spec extends IntegrationSpec {
+class Issue41Spec extends IntegrationGroovySpec {
 
   def setup() {
   }

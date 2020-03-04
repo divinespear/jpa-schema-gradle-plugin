@@ -1,11 +1,11 @@
 package io.github.divinespear.plugin
 
-import io.github.divinespear.test.IntegrationSpec
+import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
 
-class EclipselinkSpec extends IntegrationSpec {
+class EclipselinkSpec extends IntegrationGroovySpec {
 
   def setup() {
     buildFile << """

@@ -1,6 +1,6 @@
 package io.github.divinespear.plugin
 
-import io.github.divinespear.test.IntegrationSpec
+import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Specification
 
@@ -74,7 +74,7 @@ class FormatSpec extends Specification {
   }
 }
 
-class FormatIntegrationSpec extends IntegrationSpec {
+class FormatIntegrationSpec extends IntegrationGroovySpec {
 
   static final String LINE_SEPARATOR = System.properties["line.separator"] ?: "\n"
 
