@@ -43,6 +43,7 @@ dependencies {
   // test
   testImplementation("junit:junit:4.12")
   testImplementation("org.hamcrest:hamcrest-all:1.3")
+  functionalTestImplementation("org.hamcrest:hamcrest-all:1.3")
   // extra dependencies for test
   functionalTestRuntimeOnly("com.h2database:h2:1.4.200")
   functionalTestRuntimeOnly(fileTree("dir" to "lib", "include" to listOf("*.jar")))
