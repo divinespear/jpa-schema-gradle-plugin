@@ -21,7 +21,7 @@ plugins {
   id("java-library")
   id("com.gradle.plugin-publish") version "0.10.1"
   id("dev.gradleplugins.kotlin-gradle-plugin") version "0.0.21"
-  kotlin("jvm") version "1.3.70"
+  kotlin("jvm") version embeddedKotlinVersion
 }
 
 repositories {
@@ -39,12 +39,15 @@ dependencies {
   api("javax.xml.bind:jaxb-api:2.3.0")
   // jpa
   api("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
+  functionalTestApi("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   // test
   testImplementation("junit:junit:4.12")
   testImplementation("org.hamcrest:hamcrest-all:1.3")
   // extra dependencies for test
-  testRuntimeOnly("com.h2database:h2:1.4.200")
-  testRuntimeOnly(fileTree("dir" to "lib", "include" to listOf("*.jar")))
+  functionalTestRuntimeOnly("com.h2database:h2:1.4.200")
+  functionalTestRuntimeOnly(fileTree("dir" to "lib", "include" to listOf("*.jar")))
+  // lombok
+  functionalTestCompileOnly("org.projectlombok:lombok:1.18.12")
 }
 
 tasks.test {
