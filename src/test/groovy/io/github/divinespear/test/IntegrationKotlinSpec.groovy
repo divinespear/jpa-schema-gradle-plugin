@@ -23,7 +23,7 @@ abstract class IntegrationKotlinSpec extends IntegrationSpec {
 
   File setupSettingsFile() {
     File file = testProjectDir.newFile("settings.gradle.kts")
-    file << "rootProject.name = '${projectName}'"
+    file << "rootProject.name = \"${projectName}\""
     file
   }
 
