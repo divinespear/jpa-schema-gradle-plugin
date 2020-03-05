@@ -22,7 +22,7 @@ package io.github.divinespear.plugin
 
 import java.sql.DatabaseMetaData
 
-internal fun resolveHibernateDialect(databaseName: String, majorVersion: Int, minorVersion: Int) = try {
+internal fun resolveHibernateDialect(databaseName: String, majorVersion: Int?, minorVersion: Int?) = try {
   val classLoader = Thread.currentThread().contextClassLoader
   // create connection mock
   val mock = ConnectionMock(databaseName, majorVersion, minorVersion)
