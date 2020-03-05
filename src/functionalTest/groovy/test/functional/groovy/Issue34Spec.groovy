@@ -1,7 +1,7 @@
-package io.github.divinespear.plugin
+package test.functional.groovy
 
-import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
+import test.spec.IntegrationGroovySpec
 
 class Issue34Spec extends IntegrationGroovySpec {
 

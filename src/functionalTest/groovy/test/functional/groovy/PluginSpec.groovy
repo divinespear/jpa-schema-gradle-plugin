@@ -16,16 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.github.divinespear.plugin
+package test.functional.groovy
 
+import io.github.divinespear.plugin.JpaSchemaGenerationExtension
+import io.github.divinespear.plugin.JpaSchemaGenerationProperties
+import io.github.divinespear.plugin.JpaSchemaGenerationTask
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
+import static org.hamcrest.Matchers.*
 
 class PluginSpec extends Specification {
 

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package io.github.divinespear.test
+package test.spec
 
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule

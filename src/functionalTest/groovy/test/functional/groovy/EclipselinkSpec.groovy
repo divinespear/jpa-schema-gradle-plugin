@@ -1,9 +1,9 @@
-package io.github.divinespear.plugin
+package test.functional.groovy
 
-import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
+import test.spec.IntegrationGroovySpec
 
 class EclipselinkSpec extends IntegrationGroovySpec {
 

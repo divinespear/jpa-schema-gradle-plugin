@@ -1,8 +1,8 @@
-package io.github.divinespear.plugin
+package test.functional.groovy
 
-import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Specification
+import test.spec.IntegrationGroovySpec
 
 import static io.github.divinespear.plugin.JpaSchemaGenerationOutputFormatter.formatLine
 

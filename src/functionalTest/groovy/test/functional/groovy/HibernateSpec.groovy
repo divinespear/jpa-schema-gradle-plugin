@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.github.divinespear.plugin
+package test.functional.groovy
 
-import io.github.divinespear.test.IntegrationGroovySpec
 import org.gradle.testkit.runner.TaskOutcome
+import test.spec.IntegrationGroovySpec
 
 class HibernateSpec extends IntegrationGroovySpec {
 

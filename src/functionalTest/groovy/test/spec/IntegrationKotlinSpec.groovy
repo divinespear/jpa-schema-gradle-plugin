@@ -17,18 +17,18 @@
  * under the License.
  */
 
-package io.github.divinespear.test
+package test.spec
 
-abstract class IntegrationGroovySpec extends IntegrationSpec {
+abstract class IntegrationKotlinSpec extends IntegrationSpec {
 
   File setupSettingsFile() {
-    File settingsFile = testProjectDir.newFile("settings.gradle")
-    settingsFile << "rootProject.name = '${projectName}'"
-    settingsFile
+    File file = testProjectDir.newFile("settings.gradle.kts")
+    file << "rootProject.name = \"${projectName}\""
+    file
   }
 
   File setupBuildFile() {
-    File file = testProjectDir.newFile("build.gradle")
+    File file = testProjectDir.newFile("build.gradle.kts")
     file << "// Running test for ${projectName}\n"
     file
   }
