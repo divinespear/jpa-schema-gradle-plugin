@@ -18,37 +18,41 @@
  */
 
 plugins {
-  id("java-library")
-  id("com.gradle.plugin-publish") version "0.10.1"
-  id("dev.gradleplugins.kotlin-gradle-plugin") version "0.0.21"
-  kotlin("jvm") version embeddedKotlinVersion
+  `java-gradle-plugin`
+  `kotlin-dsl`
+  `maven-publish`
+  id("com.gradle.plugin-publish") version("0.12.0")
 }
 
 repositories {
-  mavenCentral()
+  jcenter()
 }
 
 dependencies {
-  // gradle
-  api(gradleApi())
-  implementation(localGroovy())
-  testImplementation(gradleTestKit())
-  // kotlin
-  implementation(kotlin("stdlib-jdk8"))
   // jaxb (removed from java 9+)
   api("javax.xml.bind:jaxb-api:2.3.0")
   // jpa
   api("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
-  functionalTestApi("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
+  "integrationTestImplementation"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
+  "functionalTestApi"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   // test
-  testImplementation("junit:junit:4.12")
+  testImplementation("junit:junit:4.13.2")
   testImplementation("org.hamcrest:hamcrest-all:1.3")
-  functionalTestImplementation("org.hamcrest:hamcrest-all:1.3")
+  "functionalTestImplementation"("org.hamcrest:hamcrest-all:1.3")
+  testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
+  "integrationTestImplementation"("org.spockframework:spock-core:1.3-groovy-2.5")
+  "functionalTestImplementation"("org.spockframework:spock-core:1.3-groovy-2.5")
   // extra dependencies for test
-  functionalTestRuntimeOnly("com.h2database:h2:1.4.200")
-  functionalTestRuntimeOnly(fileTree("dir" to "lib", "include" to listOf("*.jar")))
+  "functionalTestRuntimeOnly"("com.h2database:h2:1.4.200")
+  "functionalTestRuntimeOnly"(fileTree("dir" to "lib", "include" to listOf("*.jar")))
   // lombok
-  functionalTestCompileOnly("org.projectlombok:lombok:1.18.12")
+  "functionalTestCompileOnly"("org.projectlombok:lombok:1.18.12")
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
 }
 
 tasks.test {
