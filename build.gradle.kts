@@ -18,6 +18,7 @@
  */
 
 plugins {
+  groovy
   `java-gradle-plugin`
   `kotlin-dsl`
   `maven-publish`
@@ -28,19 +29,23 @@ repositories {
   jcenter()
 }
 
+val functionalTest: SourceSet by sourceSets.creating
+
 dependencies {
   // jaxb (removed from java 9+)
   api("javax.xml.bind:jaxb-api:2.3.0")
   // jpa
   api("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
-  "integrationTestImplementation"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   "functionalTestApi"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   // test
+  testImplementation(gradleTestKit())
   testImplementation("junit:junit:4.13.2")
   testImplementation("org.hamcrest:hamcrest-all:1.3")
-  "functionalTestImplementation"("org.hamcrest:hamcrest-all:1.3")
   testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
-  "integrationTestImplementation"("org.spockframework:spock-core:1.3-groovy-2.5")
+  // functional test
+  "functionalTestImplementation"(project)
+  "functionalTestImplementation"(gradleTestKit())
+  "functionalTestImplementation"("org.hamcrest:hamcrest-all:1.3")
   "functionalTestImplementation"("org.spockframework:spock-core:1.3-groovy-2.5")
   // extra dependencies for test
   "functionalTestRuntimeOnly"("com.h2database:h2:1.4.200")
