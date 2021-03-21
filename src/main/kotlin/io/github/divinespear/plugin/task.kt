@@ -145,8 +145,8 @@ private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File
   }
   // copy output directories to target directory
   copy {
-    it.from(sources)
-    it.into(target)
+    this.from(sources)
+    this.into(target)
   }
   return target
 }
