@@ -22,14 +22,17 @@ plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
   `maven-publish`
-  id("com.gradle.plugin-publish") version("0.12.0")
+  id("com.gradle.plugin-publish") version ("0.12.0")
 }
 
 repositories {
   jcenter()
 }
 
-val functionalTest: SourceSet by sourceSets.creating
+val functionalTest: SourceSet by sourceSets.creating {
+  compileClasspath += configurations.testRuntimeClasspath.get() + sourceSets.main.get().output
+  runtimeClasspath += output + compileClasspath
+}
 
 dependencies {
   // jaxb (removed from java 9+)
@@ -59,11 +62,19 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
   }
 }
 
+tasks.register<Test>("functionalTest") {
+  testClassesDirs = functionalTest.output.classesDirs
+  classpath = functionalTest.runtimeClasspath
+}
+
 tasks.test {
+  dependsOn(tasks["functionalTest"])
   testLogging.showStandardStreams = true
 }
 
 gradlePlugin {
+  testSourceSets(functionalTest)
+
   plugins {
     create("generateSchema") {
       id = "io.github.divinespear.jpa-schema-generate"
