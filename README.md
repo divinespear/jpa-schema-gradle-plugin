@@ -18,17 +18,18 @@ Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHO
 
 See Releases for more informations...
 
-### 0.4 (in progress...)
+### 6.x (in progress...)
 
-* Java 10, 11, 12, and 13 support.
 * Required JDK 8 or above.
-* Required Gradle 6.0 or above. (for support Java 13)
+* Required Gradle 6.0 or above. (for support Java 13 or above)
 
-### 0.3.6
+### 4.x
+
+#### 0.3.6
 
 * Required Gradle 4.10 or above. (for support spring-boot plugin version 2.0+)
 
-### 0.3
+#### 0.3
 
 * Required Gradle 4.0 or above.
 * Java 9 support.
@@ -38,7 +39,7 @@ See Releases for more informations...
 * Dropped support DataNucleus, it was my mistake.
 * Required Gradle 6.0 or above. (for support Java 13)
 
-### Reworking on 0.3
+#### Reworking on 0.3
 
 * Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.x)
 * Direct including any JPA implementation is removed, remains [JUST API](http://doki-doki-literature-club.wikia.com/wiki/Monika).
@@ -102,7 +103,7 @@ Since 0.3.4, you can add dependencies for plugin with configuration `generateSch
 
 dependencies {
   ...
-  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   // only need to load java.time converter from spring-data-jpa on schema generation
   generateSchema 'org.threeten:threetenbp:1.3.6'
 }
@@ -176,7 +177,7 @@ Here is full list of parameters of `generateSchema`.
 | `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`hibernate+spring` (or `org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
 | `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
 
-### How-to config `properties`
+### How-to config library specific `properties`
 
 It's just groovy map, so you can config like this:
 ```groovy
@@ -202,9 +203,9 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 
 * `Oracle12` = Oracle 12c
 * `Oracle11` = Oracle 11g
-* `Oracle10`: Oracle 10g
-* `Oracle9`: Oracle 9i
-* `Oracle`: Oracle with default compatibility
+* `Oracle10` = Oracle 10g
+* `Oracle9` = Oracle 9i
+* `Oracle` = Oracle with default compatibility
 * `Microsoft SQL Server`
 * `DB2`
 * `MySQL`
