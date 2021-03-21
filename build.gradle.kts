@@ -39,7 +39,6 @@ dependencies {
   "functionalTestApi"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   // test
   testImplementation(gradleTestKit())
-  testImplementation("junit:junit:4.13.2")
   testImplementation("org.hamcrest:hamcrest-all:1.3")
   testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
   // functional test
