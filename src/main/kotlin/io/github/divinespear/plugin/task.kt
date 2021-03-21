@@ -145,8 +145,8 @@ private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File
   }
   // copy output directories to target directory
   copy {
-    this.from(sources)
-    this.into(target)
+    from(sources)
+    into(target)
   }
   return target
 }
@@ -245,10 +245,10 @@ private fun JpaSchemaGenerationProperties.persistenceProperties(): Map<String, A
     it != null
   }.toMutableMap().apply {
     // issue-13: disable JTA and datasources
-    this[JAVAX_TRANSACTION_TYPE] = JAVAX_TRANSACTION_TYPE_RESOURCE_LOCAL
+    set(JAVAX_TRANSACTION_TYPE, JAVAX_TRANSACTION_TYPE_RESOURCE_LOCAL)
     // issue-41: should be removed instead set null
-    this.remove(JAVAX_JTA_DATASOURCE)
-    this.remove(JAVAX_NON_JTA_DATASOURCE)
+    remove(JAVAX_JTA_DATASOURCE)
+    remove(JAVAX_NON_JTA_DATASOURCE)
   }
 }
 

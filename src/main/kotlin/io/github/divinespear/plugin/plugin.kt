@@ -24,6 +24,15 @@ import org.gradle.api.plugins.JavaPlugin
 
 class JpaSchemaGenerationPlugin : Plugin<Project> {
 
+  companion object {
+    private const val SPRING_VERSION = "[5.0,6.0)"
+    private val SPRING_DEPENDENCIES = listOf(
+      "org.springframework:spring-orm:${SPRING_VERSION}",
+      "org.springframework:spring-context:${SPRING_VERSION}",
+      "org.springframework:spring-aspects:${SPRING_VERSION}"
+    )
+  }
+
   override fun apply(project: Project) {
     // always enable java plugin
     project.plugins.apply(JavaPlugin::class.java)
@@ -34,13 +43,12 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
     }
     // task
     project.tasks.create(PLUGIN_NAME, JpaSchemaGenerationTask::class.java) {
-      this.dependsOn(project.tasks.getByPath("classes"))
+      dependsOn(project.tasks.getByPath("classes"))
     }
     // dependencies
-    val springVersion = "[5.0,6.0)"
     project.configurations.create(CONFIGURATION_NAME)
-    project.dependencies.add(CONFIGURATION_NAME, "org.springframework:spring-orm:$springVersion")
-    project.dependencies.add(CONFIGURATION_NAME, "org.springframework:spring-context:$springVersion")
-    project.dependencies.add(CONFIGURATION_NAME, "org.springframework:spring-aspects:$springVersion")
+    SPRING_DEPENDENCIES.forEach {
+      project.dependencies.add(CONFIGURATION_NAME, it)
+    }
   }
 }

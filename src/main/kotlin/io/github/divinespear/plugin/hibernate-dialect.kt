@@ -22,19 +22,25 @@ package io.github.divinespear.plugin
 
 import java.sql.DatabaseMetaData
 
+private const val DIALECT_PACKAGE = "org.hibernate.engine.jdbc.dialect"
+private const val DRI_TYPE_CLASS = "${DIALECT_PACKAGE}.spi.DialectResolutionInfo"
+private const val DRI_ADAPTER_CLASS = "${DIALECT_PACKAGE}.spi.DatabaseMetaDataDialectResolutionInfoAdapter"
+private const val DRI_RESOLVER_CLASS = "${DIALECT_PACKAGE}.internal.StandardDialectResolver"
+private const val DRI_RESOLVER_METHOD = "resolveDialect"
+
 internal fun resolveHibernateDialect(databaseName: String, majorVersion: Int?, minorVersion: Int?) = try {
   val classLoader = Thread.currentThread().contextClassLoader
   // create connection mock
   val mock = ConnectionMock(databaseName, majorVersion, minorVersion)
   // create DialectResolutionInfo
-  val driTypeClass = classLoader.loadClass("org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo")
-  val driClass = classLoader.loadClass("org.hibernate.engine.jdbc.dialect.spi.DatabaseMetaDataDialectResolutionInfoAdapter")
+  val driTypeClass = classLoader.loadClass(DRI_TYPE_CLASS)
+  val driClass = classLoader.loadClass(DRI_ADAPTER_CLASS)
   val dri = driClass.getDeclaredConstructor(DatabaseMetaData::class.java).newInstance(mock.metaData)
   // get resolver
-  val resolverClass = classLoader.loadClass("org.hibernate.engine.jdbc.dialect.internal.StandardDialectResolver")
+  val resolverClass = classLoader.loadClass(DRI_RESOLVER_CLASS)
   val resolver = resolverClass.getDeclaredConstructor().newInstance()
   // resolve dialect
-  val resolveMethod = resolverClass.getDeclaredMethod("resolveDialect", driTypeClass)
+  val resolveMethod = resolverClass.getDeclaredMethod(DRI_RESOLVER_METHOD, driTypeClass)
   val found = resolveMethod.invoke(resolver, dri)
   found.javaClass.typeName
 } catch (e: ReflectiveOperationException) {
