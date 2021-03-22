@@ -23,6 +23,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.get
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
@@ -37,7 +38,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
 
   @get:Input
   val extension: JpaSchemaGenerationExtension by lazy {
-    project.extensions.getByName(EXTENSION_NAME) as JpaSchemaGenerationExtension
+    project.extensions[EXTENSION_NAME] as JpaSchemaGenerationExtension
   }
 
   private fun targets(): Iterable<JpaSchemaGenerationProperties> {
