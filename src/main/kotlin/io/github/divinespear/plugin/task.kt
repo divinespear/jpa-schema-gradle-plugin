@@ -41,14 +41,11 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     project.extensions[EXTENSION_NAME] as JpaSchemaGenerationExtension
   }
 
-  private fun targets(): Iterable<JpaSchemaGenerationProperties> {
-    val list = extension.targets.map { extension.extend(it) }
-    return if (list.isEmpty()) listOf(extension.extend(null)) else list
-  }
+  fun targets() = extension.targets.ifEmpty { listOf(null) }.map { extension.extend(it) }
 
   @TaskAction
   fun run() {
-    targets().map { if (it.skip != true) doRun(it) }
+    targets().forEach { if (it.skip != true) doRun(it) }
   }
 
   private fun doRun(target: JpaSchemaGenerationProperties) {
@@ -58,8 +55,10 @@ open class JpaSchemaGenerationTask : DefaultTask() {
       target.outputDirectory = outputDirectory
       val outputPath = outputDirectory.toPath()
       Files.createDirectories(outputPath)
-      listOf(target.createOutputFileName ?: target.defaultCreateOutputFileName,
-             target.dropOutputFileName ?: target.defaultDropOutputFileName).forEach {
+      listOf(
+        target.createOutputFileName ?: target.defaultCreateOutputFileName,
+        target.dropOutputFileName ?: target.defaultDropOutputFileName
+      ).forEach {
         Files.deleteIfExists(outputPath.resolve(it))
       }
     }
@@ -67,7 +66,9 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     val taskClassLoader = project.classLoader(javaClass.classLoader, target.scanTestClasses == true)
     // register jdbc driver if not registered
     val driverClassName = target.jdbcDriver ?: ""
-    if (driverClassName.isNotEmpty() && DriverManager.getDrivers().toList().none { it.javaClass.name == driverClassName }) {
+    if (driverClassName.isNotEmpty() && DriverManager.getDrivers().toList()
+        .none { it.javaClass.name == driverClassName }
+    ) {
       val driver = taskClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance() as Driver
       DriverManager.registerDriver(driver)
     }
@@ -101,11 +102,15 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     }
 
     fun buildPersistenceUnitInfo(classLoader: ClassLoader): PersistenceUnitInfo {
-      val managerClass = classLoader.loadClass("org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager")
+      val managerClass =
+        classLoader.loadClass("org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager")
       return managerClass.getDeclaredConstructor().newInstance().apply {
-        managerClass.getDeclaredMethod("setPersistenceXmlLocations", Array<String>::class.java).invoke(this, emptyArray<String>())
-        managerClass.getDeclaredMethod("setDefaultPersistenceUnitName", String::class.java).invoke(this, target.persistenceUnitName!!)
-        managerClass.getDeclaredMethod("setPackagesToScan", Array<String>::class.java).invoke(this, target.packageToScan.toTypedArray())
+        managerClass.getDeclaredMethod("setPersistenceXmlLocations", Array<String>::class.java)
+          .invoke(this, emptyArray<String>())
+        managerClass.getDeclaredMethod("setDefaultPersistenceUnitName", String::class.java)
+          .invoke(this, target.persistenceUnitName!!)
+        managerClass.getDeclaredMethod("setPackagesToScan", Array<String>::class.java)
+          .invoke(this, target.packageToScan.toTypedArray())
         managerClass.getDeclaredMethod("afterPropertiesSet").invoke(this)
       }.let {
         managerClass.getDeclaredMethod("obtainDefaultPersistenceUnitInfo").invoke(it) as PersistenceUnitInfo
@@ -115,6 +120,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
     val classLoader = Thread.currentThread().contextClassLoader
 
     val persistenceUnitInfo = buildPersistenceUnitInfo(classLoader)
+
     @Suppress("UNCHECKED_CAST")
     val providerClass = classLoader.loadClass(providerClassName) as Class<PersistenceProvider>
     val providerConstructor = providerClass.getDeclaredConstructor().apply {
@@ -260,7 +266,7 @@ private fun postProcess(target: JpaSchemaGenerationProperties) {
     outputDirectory.toPath().resolve(it)
   }.forEach {
     val lineSeparator = LINE_SEPARATOR_MAP[target.lineSeparator?.toUpperCase()]
-        ?: System.getProperty("line.separator", "\n")
+      ?: System.getProperty("line.separator", "\n")
     formatFile(it, target.format == true, lineSeparator)
   }
 }

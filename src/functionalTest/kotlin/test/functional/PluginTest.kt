@@ -22,6 +22,7 @@ import io.github.divinespear.plugin.JpaSchemaGenerationExtension
 import io.github.divinespear.plugin.JpaSchemaGenerationProperties
 import io.github.divinespear.plugin.JpaSchemaGenerationTask
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.testfixtures.ProjectBuilder
 import org.hamcrest.Matchers
@@ -63,9 +64,7 @@ class PluginTest {
 
   @Test
   fun `extension should has multiple targets`() {
-    val extension = project.extensions["generateSchema"] as JpaSchemaGenerationExtension
-
-    extension.apply {
+    project.configure<JpaSchemaGenerationExtension> {
       targets {
         create("script") {
           scriptAction = "drop-and-create"
@@ -77,10 +76,12 @@ class PluginTest {
       }
     }
 
+    val task = project.tasks["generateSchema"] as JpaSchemaGenerationTask
+    val targets = task.targets()
     // expect 2 targets
-    Assert.assertThat(extension.targets, Matchers.hasSize(2))
+    Assert.assertThat(targets, Matchers.hasSize(2))
     // expect script target
-    val scriptTarget = extension.targets.find { it.name === "script" }
+    val scriptTarget = targets.find { it.name === "script" }
     Assert.assertThat(scriptTarget, Matchers.notNullValue(JpaSchemaGenerationProperties::class.java))
     Assert.assertThat(scriptTarget?.scriptAction, Matchers.`is`("drop-and-create"))
     Assert.assertThat(scriptTarget?.databaseProductName, Matchers.`is`("H2"))
@@ -90,9 +91,7 @@ class PluginTest {
 
   @Test
   fun `extension targets should be merged`() {
-    val extension = project.extensions["generateSchema"] as JpaSchemaGenerationExtension
-
-    extension.apply {
+    project.configure<JpaSchemaGenerationExtension> {
       format = true
       targets {
         create("a") {
@@ -111,7 +110,8 @@ class PluginTest {
       }
     }
 
-    val targets = extension.targets.map { extension.extend(it) }
+    val task = project.tasks["generateSchema"] as JpaSchemaGenerationTask
+    val targets = task.targets()
     Assert.assertThat(targets.find { it.name === "a" }?.format, Matchers.`is`(true))
     Assert.assertThat(targets.find { it.name === "b" }?.format, Matchers.`is`(false))
   }
