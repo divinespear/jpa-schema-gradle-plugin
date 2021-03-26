@@ -20,7 +20,11 @@ package io.github.divinespear.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaLibraryPlugin
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.register
 
 class JpaSchemaGenerationPlugin : Plugin<Project> {
 
@@ -34,21 +38,29 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
   }
 
   override fun apply(project: Project) {
-    // always enable java plugin
-    project.plugins.apply(JavaPlugin::class.java)
-    // extension
-    project.extensions.create(EXTENSION_NAME, JpaSchemaGenerationExtension::class.java).apply {
-      defaultOutputDirectory = project.buildDir.resolve("generated-schema")
-      targets = project.container(JpaSchemaGenerationProperties::class.java)
-    }
-    // task
-    project.tasks.create(PLUGIN_NAME, JpaSchemaGenerationTask::class.java) {
-      dependsOn(project.tasks.getByPath("classes"))
-    }
-    // dependencies
-    project.configurations.create(CONFIGURATION_NAME)
-    SPRING_DEPENDENCIES.forEach {
-      project.dependencies.add(CONFIGURATION_NAME, it)
+    project.run {
+      plugins.apply(JavaLibraryPlugin::class.java)
+
+      configurations {
+        register(CONFIGURATION_NAME)
+      }
+
+      dependencies {
+        SPRING_DEPENDENCIES.forEach {
+          CONFIGURATION_NAME(it)
+        }
+      }
+
+      extensions.create<JpaSchemaGenerationExtension>(EXTENSION_NAME).apply {
+        defaultOutputDirectory = project.buildDir.resolve("generated-schema")
+        targets = project.container(JpaSchemaGenerationProperties::class.java)
+      }
+
+      tasks {
+        register(PLUGIN_NAME, JpaSchemaGenerationTask::class) {
+          dependsOn(project.tasks.getByPath("classes"))
+        }
+      }
     }
   }
 }
