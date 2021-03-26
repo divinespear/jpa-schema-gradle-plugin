@@ -6,7 +6,6 @@ jdk:
 before_script:
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
 script:
-  - env | sort
   - TERM=dumb ./gradlew check --stacktrace
   - fossa analyze
 after_success:
@@ -17,9 +16,5 @@ branches:
     - /^stable-.*$/
     - /^issue-.*$/
     - /^pull-.*$/
-env:
-  global:
-    - secure: Jrz3fDLlQYwikFVGOhLzBSYOdcruMrFolt1HQbAr4BnCvxnfafTwRNCXUbfzPmsC1bI38zg9c1uP0jcx7UWt5rEpr52rTXvHBakvt/ErBrB3QMRgwlJNkZe7lSjqlS3uFlk0hzPd5k9n5u9XzadFjUNOTfFy8f12a1fAhnJvURk=
-    - secure: LiFvhrq7cDJzinwvLCLHLFvLc+RjQcWWT9q1WO1eGsegkOpT9+GRNLNg4qoaqUdlWYhFJF83lX/+GuZPi0Uz7QBxsdVHY+xYSBv9QxPtj1Rt3oEDBw2dy1SDtaqAcpKvHzCPl10KFcNbOauGD7bCHG1mjwvJzR6oGGFrXUAeV6g=
 notifications:
   webhooks: https://app.fossa.io/hooks/travisci
