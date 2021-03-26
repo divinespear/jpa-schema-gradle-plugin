@@ -23,10 +23,7 @@ import io.github.divinespear.plugin.JpaSchemaGenerationProperties
 import io.github.divinespear.plugin.JpaSchemaGenerationTask
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.inspectors.forAtLeastOne
-import io.kotest.matchers.booleans.shouldBeFalse
-import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.sequences.contain
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.instanceOf
@@ -41,22 +38,22 @@ class PluginTest : FunSpec() {
     lateinit var testProjectDir: File
     lateinit var project: Project
 
-    beforeTest {
-      testProjectDir = createTempDir("test-", null, File("build", "tmp"))
+    beforeSpec {
+      testProjectDir = createTempDir("test-", "", File("build", "tmp"))
       project = ProjectBuilder.builder().withProjectDir(testProjectDir).build()
       project.apply {
         plugin("io.github.divinespear.jpa-schema-generate")
       }
     }
 
-    afterTest {
-      testProjectDir.delete()
+    afterSpec {
+      testProjectDir.deleteRecursively()
     }
 
     context("task") {
       test("should be registered") {
-        project.tasks.should {
-          contain(instanceOf(JpaSchemaGenerationTask::class))
+        project.tasks.forAtLeastOne {
+          it shouldBe instanceOf(JpaSchemaGenerationTask::class)
         }
       }
     }
@@ -64,9 +61,7 @@ class PluginTest : FunSpec() {
     context("extension") {
       test("should be registered") {
         val extension = project.extensions["generateSchema"]
-        extension.should {
-          instanceOf(JpaSchemaGenerationExtension::class)
-        }
+        extension shouldBe instanceOf(JpaSchemaGenerationExtension::class)
       }
 
       test("should has multiple targets") {
@@ -85,16 +80,16 @@ class PluginTest : FunSpec() {
         val task = project.tasks["generateSchema"] as JpaSchemaGenerationTask
         val targets = task.targets()
         // expect 2 targets
-        targets.should {
+        targets should {
           haveSize<JpaSchemaGenerationProperties>(2)
         }
         // expect script target
         targets.forAtLeastOne {
-          it.name.shouldBe("script")
-          it.scriptAction.shouldBe("drop-and-create")
-          it.databaseProductName.shouldBe("H2")
-          it.databaseMajorVersion.shouldBe(1)
-          it.databaseMinorVersion.shouldBe(3)
+          it.name shouldBe "script"
+          it.scriptAction shouldBe "drop-and-create"
+          it.databaseProductName shouldBe "H2"
+          it.databaseMajorVersion shouldBe 1
+          it.databaseMinorVersion shouldBe 3
         }
       }
 
@@ -118,16 +113,15 @@ class PluginTest : FunSpec() {
           }
         }
 
-
         val task = project.tasks["generateSchema"] as JpaSchemaGenerationTask
         val targets = task.targets()
         targets.forAtLeastOne {
-          it.name.shouldBe("a")
-          it.format?.shouldBeTrue()
+          it.name shouldBe "a"
+          it.format shouldBe true
         }
         targets.forAtLeastOne {
-          it.name.shouldBe("b")
-          it.format?.shouldBeFalse()
+          it.name shouldBe "b"
+          it.format shouldBe false
         }
       }
     }
