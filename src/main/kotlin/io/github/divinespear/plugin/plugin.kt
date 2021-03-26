@@ -58,6 +58,7 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
 
       tasks {
         register(PLUGIN_NAME, JpaSchemaGenerationTask::class) {
+          group = "help"
           dependsOn(project.tasks.getByPath("classes"))
         }
       }
