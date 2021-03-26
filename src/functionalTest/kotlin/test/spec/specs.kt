@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package test.spec
 
 import io.kotest.core.spec.style.FunSpec
 import org.gradle.testkit.runner.BuildResult

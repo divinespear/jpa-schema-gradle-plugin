@@ -1,9 +1,9 @@
 package test.plugin
 
-import KotlinFunctionalSpec
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
+import test.spec.KotlinFunctionalSpec
 
 class KotlinFunctionalPluginTest : KotlinFunctionalSpec() {
   init {
