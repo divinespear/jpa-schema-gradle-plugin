@@ -18,11 +18,11 @@
  */
 
 plugins {
-  groovy
   `java-gradle-plugin`
   `kotlin-dsl`
   `maven-publish`
   id("com.gradle.plugin-publish") version ("0.12.0")
+  id("io.kotest") version ("0.2.6")
 }
 
 repositories {
@@ -42,13 +42,16 @@ dependencies {
   "functionalTestApi"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   // test
   testImplementation(gradleTestKit())
-  testImplementation("junit:junit:4.13.2")
-  testImplementation("org.hamcrest:hamcrest-all:1.3")
-  testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
+  listOf(
+    "io.kotest:kotest-assertions-core-jvm",
+    "io.kotest:kotest-framework-engine-jvm",
+    "io.kotest:kotest-runner-junit5"
+  ).forEach {
+    testImplementation("${it}:4.2.6")
+  }
   // functional test
   "functionalTestImplementation"(gradleTestKit())
   "functionalTestImplementation"("org.hamcrest:hamcrest-all:1.3")
-  "functionalTestImplementation"("org.spockframework:spock-core:1.3-groovy-2.5")
   // extra dependencies for test
   "functionalTestRuntimeOnly"("com.h2database:h2:1.4.200")
   "functionalTestRuntimeOnly"(fileTree("dir" to "lib", "include" to listOf("*.jar")))
@@ -65,6 +68,10 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
 tasks.register<Test>("functionalTest") {
   testClassesDirs = functionalTest.output.classesDirs
   classpath = functionalTest.runtimeClasspath
+}
+
+tasks.withType<Test> {
+  useJUnitPlatform()
 }
 
 tasks.test {
