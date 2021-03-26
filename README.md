@@ -2,6 +2,7 @@ jpa-schema-gradle-plugin
 ========================
 
 [![Build Status](https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png)](http://travis-ci.org/divinespear/jpa-schema-gradle-plugin)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin?ref=badge_shield)
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
 for Maven, see [Maven Plugin](https://github.com/divinespear/jpa-schema-maven-plugin).
@@ -231,3 +232,6 @@ For other versions, select tag to your version.
 ## License
 
 Source Copyright © 2013-2018 Sin Young "Divinespear" Kang (divinespear at gmail dot com). Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses).
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin?ref=badge_large)
