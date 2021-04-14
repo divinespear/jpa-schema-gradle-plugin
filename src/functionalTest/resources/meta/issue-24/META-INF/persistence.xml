@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="PostgreSqlDS" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:jboss/datasources/PostgreSqlDS</jta-data-source>
+
+        <properties>
+            <property name="javax.persistence.schema-generation.database.action" value="none"/>
+            <property name="javax.persistence.schema-generation.create-source" value="script"/>
+            <property name="javax.persistence.schema-generation.drop-source" value="script"/>
+            <property name="javax.persistence.schema-generation.create-script-source" value="META-INF/sql/create.sql"/>
+            <property name="javax.persistence.schema-generation.drop-script-source" value="META-INF/sql/drop.sql"/>
+
+            <!-- HIBERNATE SETTINGS -->
+            <property name="hibernate.hbm2ddl.import_files_sql_extractor" value="org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor"/>
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.DefaultComponentSafeNamingStrategy"/>
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="100" />
+            <property name="hibernate.jdbc.order_updates" value="true" />
+        </properties>
+    </persistence-unit>
+
+</persistence>
