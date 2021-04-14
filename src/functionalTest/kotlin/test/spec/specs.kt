@@ -18,12 +18,13 @@
  */
 package test.spec
 
-import io.kotest.core.spec.style.FunSpec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.test.TestStatus
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 
-abstract class FunctionalSpec(private val suffix: String = "gradle") : FunSpec() {
+abstract class FunctionalSpec(private val suffix: String = "gradle") : WordSpec() {
   lateinit var testProjectDir: File
   lateinit var testkitDir: File
   lateinit var propertiesFile: File
@@ -54,7 +55,9 @@ abstract class FunctionalSpec(private val suffix: String = "gradle") : FunSpec()
     }
 
     afterTest {
-      testProjectDir.deleteRecursively()
+      if (it.b.status === TestStatus.Success || it.b.status === TestStatus.Ignored) {
+        testProjectDir.deleteRecursively()
+      }
     }
   }
 
@@ -62,8 +65,7 @@ abstract class FunctionalSpec(private val suffix: String = "gradle") : FunSpec()
     GradleRunner.create()
       .withPluginClasspath()
       .withProjectDir(testProjectDir)
-      .withDebug(true)
-      .withArguments(args.toList()).build()
+      .withArguments(*args).build()
 
   fun runGenerateSchemaTask() = runTask("generateSchema", "--info", "--stacktrace")
 

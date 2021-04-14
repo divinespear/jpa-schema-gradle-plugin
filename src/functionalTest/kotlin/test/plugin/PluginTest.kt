@@ -15,12 +15,13 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */package test.plugin
+ */
+package test.plugin
 
 import io.github.divinespear.plugin.JpaSchemaGenerationExtension
 import io.github.divinespear.plugin.JpaSchemaGenerationProperties
 import io.github.divinespear.plugin.JpaSchemaGenerationTask
-import io.kotest.core.spec.style.FunSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
@@ -32,12 +33,12 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.testfixtures.ProjectBuilder
 import java.io.File
 
-class PluginTest : FunSpec() {
+class PluginTest : WordSpec() {
   init {
     lateinit var testProjectDir: File
     lateinit var project: Project
 
-    beforeSpec {
+    beforeTest {
       testProjectDir = createTempDir("test-", "", File("build", "tmp"))
       project = ProjectBuilder.builder().withProjectDir(testProjectDir).build()
       project.apply {
@@ -45,25 +46,25 @@ class PluginTest : FunSpec() {
       }
     }
 
-    afterSpec {
+    afterTest {
       testProjectDir.deleteRecursively()
     }
 
-    context("task") {
-      test("should be registered") {
+    "task" should {
+      "be registered" {
         project.tasks.forAtLeastOne {
-          it shouldBe instanceOf(JpaSchemaGenerationTask::class)
+          it should instanceOf(JpaSchemaGenerationTask::class)
         }
       }
     }
 
-    context("extension") {
-      test("should be registered") {
+    "extension" should {
+      "be registered" {
         val extension = project.extensions["generateSchema"]
-        extension shouldBe instanceOf(JpaSchemaGenerationExtension::class)
+        extension should instanceOf(JpaSchemaGenerationExtension::class)
       }
 
-      test("should has multiple targets") {
+      "has multiple targets" {
         project.configure<JpaSchemaGenerationExtension> {
           targets {
             create("script") {
@@ -92,7 +93,7 @@ class PluginTest : FunSpec() {
         }
       }
 
-      test("targets should be merged") {
+      "be merged" {
         project.configure<JpaSchemaGenerationExtension> {
           format = true
           targets {
