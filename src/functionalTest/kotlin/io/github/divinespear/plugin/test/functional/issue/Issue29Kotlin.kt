@@ -19,6 +19,7 @@
 package io.github.divinespear.plugin.test.functional.issue
 
 import io.github.divinespear.plugin.test.KotlinFunctionalSpec
+import io.kotest.core.test.TestType
 import io.kotest.matchers.and
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
@@ -69,11 +70,13 @@ class Issue29Kotlin : KotlinFunctionalSpec() {
 
   init {
     beforeTest {
-      val mainJavaDir = testProjectDir.resolve("src/main/java").apply {
-        mkdirs()
+      if (it.type === TestType.Test) {
+        val mainJavaDir = testProjectDir.resolve("src/main/java").apply {
+          mkdirs()
+        }
+        val resourceJavaDir = File("src/functionalTest/resources/java")
+        resourceJavaDir.copyRecursively(mainJavaDir, true)
       }
-      val resourceJavaDir = File("src/functionalTest/resources/java")
-      resourceJavaDir.copyRecursively(mainJavaDir, true)
     }
 
     "spring-boot 1.5.10" should {

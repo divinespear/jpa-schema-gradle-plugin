@@ -20,6 +20,7 @@ package io.github.divinespear.plugin.test
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestStatus
+import io.kotest.core.test.TestType
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
@@ -33,30 +34,26 @@ abstract class FunctionalSpec(private val suffix: String = "gradle") : WordSpec(
 
   init {
     beforeTest {
-      testProjectDir = createTempDir("test-", "", File("build", "tmp"))
-      testkitDir = createTempDir("testkit-", "", testProjectDir)
-      propertiesFile = testProjectDir.resolve("gradle.properties").apply {
-        writeText("")
-      }
-      settingsFile = testProjectDir.resolve("settings.${suffix}").apply {
-        writeText(
-          """
-          rootProject.name = "${testProjectDir.name}"
-        """.trimIndent()
-        )
-      }
-      buildFile = testProjectDir.resolve("build.${suffix}").apply {
-        writeText(
-          """
-          // Running test for ${testProjectDir.name}
-        """.trimIndent()
-        )
+      if (it.type === TestType.Test) {
+        testProjectDir = createTempDir("test-", "", File("build", "tmp"))
+        testkitDir = createTempDir("testkit-", "", testProjectDir)
+        propertiesFile = testProjectDir.resolve("gradle.properties").apply {
+          writeText("")
+        }
+        settingsFile = testProjectDir.resolve("settings.${suffix}").apply {
+          writeText("rootProject.name = \"${testProjectDir.name}\"\n")
+        }
+        buildFile = testProjectDir.resolve("build.${suffix}").apply {
+          writeText("// Running test for ${testProjectDir.name}\n\n")
+        }
       }
     }
 
     afterTest {
-      if (it.b.status === TestStatus.Success || it.b.status === TestStatus.Ignored) {
-        testProjectDir.deleteRecursively()
+      if (it.a.type === TestType.Test) {
+        if (it.b.status === TestStatus.Success || it.b.status === TestStatus.Ignored) {
+          testProjectDir.deleteRecursively()
+        }
       }
     }
   }
