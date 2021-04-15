@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package test.spec
+package io.github.divinespear.plugin.test
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestStatus

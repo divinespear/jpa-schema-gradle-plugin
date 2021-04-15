@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package test.plugin
+package io.github.divinespear.plugin.test.plugin
 
 import io.github.divinespear.plugin.JpaSchemaGenerationExtension
 import io.github.divinespear.plugin.JpaSchemaGenerationProperties
