@@ -30,12 +30,6 @@ class Issue34Groovy : GroovyFunctionalSpec() {
   init {
     beforeTest {
       if (it.type === TestType.Test) {
-        val mainJavaDir = testProjectDir.resolve("src/main/java").apply {
-          mkdirs()
-        }
-        val resourceJavaDir = File("src/functionalTest/resources/java")
-        resourceJavaDir.copyRecursively(mainJavaDir, true)
-
         buildFile.appendText(
           """
             

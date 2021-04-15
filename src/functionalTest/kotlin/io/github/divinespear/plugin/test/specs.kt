@@ -34,19 +34,28 @@ abstract class FunctionalSpec(private val suffix: String = "gradle") : WordSpec(
 
   init {
     beforeTest {
-      if (it.type === TestType.Test) {
-        testProjectDir = createTempDir("test-", "", File("build", "tmp"))
-        testkitDir = createTempDir("testkit-", "", testProjectDir)
-        propertiesFile = testProjectDir.resolve("gradle.properties").apply {
-          writeText("")
-        }
-        settingsFile = testProjectDir.resolve("settings.${suffix}").apply {
-          writeText("rootProject.name = \"${testProjectDir.name}\"\n")
-        }
-        buildFile = testProjectDir.resolve("build.${suffix}").apply {
-          writeText("// Running test for ${testProjectDir.name}\n\n")
-        }
+      if (it.type !== TestType.Test) {
+        return@beforeTest
       }
+      // create temporary project root and gradle files
+      testProjectDir = createTempDir("test-", "", File("build", "tmp"))
+      testkitDir = createTempDir("testkit-", "", testProjectDir)
+      propertiesFile = testProjectDir.resolve("gradle.properties").apply {
+        writeText("")
+      }
+      settingsFile = testProjectDir.resolve("settings.${suffix}").apply {
+        writeText("rootProject.name = \"${testProjectDir.name}\"\n")
+      }
+      buildFile = testProjectDir.resolve("build.${suffix}").apply {
+        writeText("// Running test for ${testProjectDir.name}\n\n")
+      }
+
+      // copy example entities for test
+      val mainJavaDir = testProjectDir.resolve("src/main/java").apply {
+        mkdirs()
+      }
+      val resourceJavaDir = File("src/functionalTest/resources/java")
+      resourceJavaDir.copyRecursively(mainJavaDir, true)
     }
 
     afterTest {
