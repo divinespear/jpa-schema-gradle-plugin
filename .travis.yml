@@ -3,18 +3,11 @@ dist: xenial
 language: java
 jdk:
   - openjdk8
-before_script:
-  - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
 script:
   - TERM=dumb ./gradlew check --stacktrace
-  - fossa analyze
-after_success:
-  - fossa test
 branches:
   only:
     - master
     - /^stable-.*$/
     - /^issue-.*$/
     - /^pull-.*$/
-notifications:
-  webhooks: https://app.fossa.io/hooks/travisci
