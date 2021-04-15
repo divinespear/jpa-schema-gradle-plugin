@@ -23,7 +23,7 @@ import io.kotest.matchers.and
 import io.kotest.matchers.should
 import io.kotest.matchers.string.contain
 
-class KotlinFunctionalPluginTest : KotlinFunctionalSpec() {
+class KotlinFunctionalPluginSpec : KotlinFunctionalSpec() {
   init {
     "task" should {
       "be registered" {

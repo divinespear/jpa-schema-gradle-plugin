@@ -18,7 +18,7 @@
  */
 package io.github.divinespear.plugin.test.functional.issue
 
-import io.github.divinespear.plugin.test.GroovyFunctionalSpec
+import io.github.divinespear.plugin.test.KotlinFunctionalSpec
 import io.kotest.core.test.TestType
 import io.kotest.matchers.and
 import io.kotest.matchers.file.exist
@@ -28,14 +28,15 @@ import io.kotest.matchers.string.contain
 import org.gradle.testkit.runner.TaskOutcome
 import java.io.File
 
-class Issue29Groovy : GroovyFunctionalSpec() {
+class Issue29KotlinSpec : KotlinFunctionalSpec() {
 
   private fun script(version: String) = """
     plugins {
-      id 'java-library'
-      id 'io.github.divinespear.jpa-schema-generate'
-      id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-      id 'org.springframework.boot' version '$version'
+      `java-library`
+      `kotlin-dsl`
+      id("io.github.divinespear.jpa-schema-generate")
+      id("io.spring.dependency-management") version ("1.0.10.RELEASE")
+      id("org.springframework.boot") version ("$version")
     }
     
     repositories {
@@ -43,20 +44,20 @@ class Issue29Groovy : GroovyFunctionalSpec() {
     }
     
     dependencies {
-      compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-      runtime fileTree(dir: "../../../lib", include: "*.jar")
+      implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+      runtimeOnly(fileTree(projectDir.relativeTo(file("lib"))) { include("*.jar") })
     }
     
     generateSchema {
-      vendor = 'hibernate'
-      packageToScan = [ 'io.github.divinespear.model' ]
+      vendor = "hibernate"
+      packageToScan = setOf("io.github.divinespear.model")
       scriptAction = "drop-and-create"
-      properties = [
-        'hibernate.physical_naming_strategy' : 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy',
-        'hibernate.id.new_generator_mappings': 'false'
-      ]
+      properties = mapOf(
+        "hibernate.physical_naming_strategy" to "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy",
+        "hibernate.id.new_generator_mappings" to "false"
+      )
       targets {
-        h2script {
+        create("h2script") {
           databaseProductName = "H2"
           databaseMajorVersion = 1
           databaseMinorVersion = 4

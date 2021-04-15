@@ -33,7 +33,7 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.testfixtures.ProjectBuilder
 import java.io.File
 
-class PluginTest : WordSpec() {
+class PluginSpec : WordSpec() {
   init {
     lateinit var testProjectDir: File
     lateinit var project: Project

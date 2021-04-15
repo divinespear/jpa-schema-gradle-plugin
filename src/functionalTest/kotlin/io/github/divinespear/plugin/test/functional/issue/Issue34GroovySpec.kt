@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 import org.gradle.testkit.runner.TaskOutcome
 import java.io.File
 
-class Issue34Groovy : GroovyFunctionalSpec() {
+class Issue34GroovySpec : GroovyFunctionalSpec() {
 
   init {
     beforeTest {

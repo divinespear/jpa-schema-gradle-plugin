@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 import org.gradle.testkit.runner.TaskOutcome
 import java.io.File
 
-class Issue34Kotlin : KotlinFunctionalSpec() {
+class Issue34KotlinSpec : KotlinFunctionalSpec() {
 
   init {
     beforeTest {
