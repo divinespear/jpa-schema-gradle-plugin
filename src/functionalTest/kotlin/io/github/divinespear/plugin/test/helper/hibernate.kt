@@ -49,7 +49,7 @@ internal const val HIBERNATE_4_KOTLIN_PROPERTIES =
   )"""
 
 internal fun FunctionalSpec.runHibernateTask(script: String, resultCallback: (BuildResult) -> Unit) {
-  buildFile.appendText(script);
+  buildFile.appendText(script)
 
   val result = runGenerateSchemaTask()
 
@@ -62,4 +62,13 @@ internal fun FunctionalSpec.runHibernateTask(script: String, resultCallback: (Bu
       (contain("drop table key_value_store") and contain("drop table many_column_table"))
 
   resultCallback(result)
+}
+
+internal fun FunctionalSpec.runHibernateSpringTask(
+  hibernateVersion: String,
+  script: String,
+  resultCallback: (BuildResult) -> Unit
+) {
+  propertiesFile.appendText("hibernate.version=$hibernateVersion\n")
+  runHibernateTask(script, resultCallback)
 }
