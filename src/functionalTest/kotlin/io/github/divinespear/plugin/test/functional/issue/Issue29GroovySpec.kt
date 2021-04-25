@@ -19,14 +19,10 @@
 package io.github.divinespear.plugin.test.functional.issue
 
 import io.github.divinespear.plugin.test.GroovyFunctionalSpec
-import io.kotest.core.test.TestType
+import io.github.divinespear.plugin.test.helper.runHibernateTask
 import io.kotest.matchers.and
-import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
-import org.gradle.testkit.runner.TaskOutcome
-import java.io.File
 
 class Issue29GroovySpec : GroovyFunctionalSpec() {
 
@@ -70,40 +66,16 @@ class Issue29GroovySpec : GroovyFunctionalSpec() {
   init {
     "spring-boot 1.5.10" should {
       "have spring dependencies" {
-        buildFile.writeText(script("1.5.10.RELEASE"))
-
-        val result = runGenerateSchemaTask()
-        result.task(":generateSchema") should {
-          it?.outcome shouldBe TaskOutcome.SUCCESS
-        }
-        result.output should (contain("org.springframework/spring-aspects/") and contain("org.springframework/spring-context/"))
-        resultFile("build/generated-schema/h2-create.sql") should {
-          exist()
-          it.readText() should (contain("create table key_value_store") and contain("create table many_column_table"))
-        }
-        resultFile("build/generated-schema/h2-drop.sql") should {
-          exist()
-          it.readText() should (contain("drop table key_value_store") and contain("drop table many_column_table"))
+        runHibernateTask(script("1.5.10.RELEASE")) {
+          it.output should (contain("org.springframework/spring-aspects/") and contain("org.springframework/spring-context/"))
         }
       }
     }
 
     "spring-boot 2.0.0" should {
       "have spring dependencies" {
-        buildFile.writeText(script("2.0.0.RELEASE"))
-
-        val result = runGenerateSchemaTask()
-        result.task(":generateSchema").should {
-          it?.outcome shouldBe TaskOutcome.SUCCESS
-        }
-        result.output should (contain("org.springframework/spring-aspects/") and contain("org.springframework/spring-context/"))
-        resultFile("build/generated-schema/h2-create.sql") should {
-          exist()
-          it.readText() should (contain("create table key_value_store") and contain("create table many_column_table"))
-        }
-        resultFile("build/generated-schema/h2-drop.sql") should {
-          exist()
-          it.readText() should (contain("drop table key_value_store") and contain("drop table many_column_table"))
+        runHibernateTask(script("2.0.0.RELEASE")) {
+          it.output should (contain("org.springframework/spring-aspects/") and contain("org.springframework/spring-context/"))
         }
       }
     }
