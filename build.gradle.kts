@@ -72,6 +72,7 @@ tasks.register<Test>("functionalTest") {
 
 tasks.withType<Test> {
   useJUnitPlatform()
+  jvmArgs = listOf("-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m")
 }
 
 tasks.test {
