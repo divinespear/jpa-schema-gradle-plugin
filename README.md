@@ -53,6 +53,9 @@ If you have discussions, please make issue. discussions are always welcome.
 
 see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
 
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 plugins {
   id 'io.github.divinespear.jpa-schema-generate' version '0.3.6'
@@ -71,6 +74,30 @@ generateSchema {
   }
 }
 ```
+</details>
+
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+plugins {
+  id("io.github.divinespear.jpa-schema-generate") version("0.3.6")
+}
+
+generateSchema {
+  // default options
+  // see SchemaGenerationConfig to all options
+  ...
+  // if you want multiple output
+  targets {
+    create("targetName") {
+      // same as default options
+      ...
+    }
+  }
+}
+```
+</details>
 
 To generate schema, run
 ```
@@ -81,47 +108,93 @@ or
 ./gradlew generateSchema
 ```
 
-see also test cases `Generate*Spec.groovy`, as examples.
+see also functional test cases as examples.
 
 ### without `persistence.xml`
 
 You **MUST** specify two options: `vendor` and `packageToScan`.
+
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 generateSchema {
   vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'hibernate+spring'.
                        // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
-  packageToScan = [ 'your.package.to.scan', ... ]
-  ...
+  packageToScan = [ 'your.package.to.scan', /* more */ ]
+  // ...omitted...
 }
 ```
+</details>
+
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+generateSchema {
+  vendor = "hibernate" // 'eclipselink', 'hibernate', or 'hibernate+spring'.
+                       // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
+  packageToScan = setOf("your.package.to.scan", /* more */)
+  // ...omitted...
+}
+```
+</details>
 
 ## Plugin only dependencies
 
 Since 0.3.4, you can add dependencies for plugin with configuration `generateSchema`.
 
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 // no need to add 'generateSchema' into configurations block.
 
 dependencies {
-  ...
+  // ...omitted...
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   // only need to load java.time converter from spring-data-jpa on schema generation
   generateSchema 'org.threeten:threetenbp:1.3.6'
 }
 
 generateSchema {
-  ...  
+  // ...omitted...
   packageToScan = [
     // load java.time converter from spring-data-jpa
     'org.springframework.data.jpa.convert.threeten',
     'your.package.to.scan',
-    ...
+    // more
   ]
-  ...
 }
 ```
+</details>
 
-## Provider specific
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+// no need to add 'generateSchema' into configurations block.
+
+dependencies {
+  // ...omitted...
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  // only need to load java.time converter from spring-data-jpa on schema generation
+  generateSchema("org.threeten:threetenbp:1.3.6")
+}
+
+generateSchema {
+  // ...omitted...
+  packageToScan = setOf(
+    // load java.time converter from spring-data-jpa
+    "org.springframework.data.jpa.convert.threeten",
+    "your.package.to.scan",
+    // more
+  )
+}
+```
+</details>
+
+## Provider-specific issues
 
 ### EclipseLink
 
@@ -155,7 +228,7 @@ Here is full list of parameters of `generateSchema`.
 | `skip` | `boolean` | skip schema generation<p>default value is `false`.</p> |
 | `format` | `boolean` | generate as formatted<p>default value is `false`.</p> |
 | `scanTestClasses` | `boolean`| scan test classes<p>default value is `false`.</p> |
-| `persistenceXml` | `string` | location of `persistence.xml` file<p>Note: **Hibernate DOES NOT SUPPORT custom location.** (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
+| `persistenceXml` | `string` | location of `persistence.xml` file<p>Note: Hibernate DOES NOT SUPPORT custom location. (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
 | `persistenceUnitName` | `string` | unit name of `persistence.xml`<p>default value is `default`.</p> |
 | `databaseAction` | `string` | schema generation action for database<p>support value is one of <ul><li>`none`</li><li>`create`</li><li>`drop`</li><li>`drop-and-create`</li><li>`create-or-extend-tables` (only for EclipseLink with database target)</li></ul></p><p>default value is `none`.</p> |
 | `scriptAction` | `string` | schema generation action for script<p>support value is one of <ul><li>`none`</li><li>`create`</li><li>`drop`</li><li>`drop-and-create`</li></ul></p><p>default value is `none`.</p> |
@@ -166,7 +239,7 @@ Here is full list of parameters of `generateSchema`.
 | `createSourceFile` | `string` | create source file path.<p>REQUIRED for `createSourceMode` is one of `script`, `metadata-then-script`, or`script-then-metadata`.</p> |
 | `dropSourceMode` | `string` | specifies whether the dropping of database artifacts is to occur on the basis of the object/relational mappingmetadata, DDL script, or a combination of the two.<p>support value is one of <ul><li>`metadata`</li><li>`script`</li><li>`metadata-then-script`</li><li>`script-then-metadata`</li></ul></p><p>default value is `metadata`.</p> |
 | `dropSourceFile` | `file` | drop source file path.<p>REQUIRED for `dropSourceMode` is one of `script`, `metadata-then-script`, or`script-then-metadata`.</p> |
-| `jdbcDriver` | `string` | jdbc driver class name<p>default is declared class name in persistence xml.</p><p>and Remember, ~~[No Russian](http://callofduty.wikia.com/wiki/No_Russian)~~ you MUST configure jdbc driver to dependencies.</p> |
+| `jdbcDriver` | `string` | jdbc driver class name<p>default is declared class name in persistence xml.</p><p>and Remember, ~~[No Russian](http://callofduty.wikia.com/wiki/No_Russian)~~ you MUST add jdbc driver to dependencies.</p> |
 | `jdbcUrl` | `string` | jdbc connection url<p>default is declared connection url in persistence xml.</p> |
 | `jdbcUser` | `string` | jdbc connection username<p>default is declared username in persistence xml.</p> |
 | `jdbcPassword` | `string` | jdbc connection password<p>default is declared password in persistence xml.</p><p>If your account has no password (especially local file-base, like Apache Derby, H2, etc...), it can be omitted.</p> |
@@ -176,23 +249,41 @@ Here is full list of parameters of `generateSchema`.
 | `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 | `properties` | `java.util.Map` | JPA vendor specific properties. |
 | `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`hibernate+spring` (or `org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
-| `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
+| `packageToScan` | `java.util.Set` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
 
 ### How-to config library specific `properties`
 
-It's just groovy map, so you can config like this:
+It's just map, so you can config like this
+
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 generateSchema {
-  ...
   // global properties
   properties = [
-    'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
-    ...
+      'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
+      // more...
   ]
   // you can set target-specific too.
-  ...
 }
 ```
+</details>
+
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+generateSchema {
+  // global properties
+  properties = mapOf(
+    "hibernate.dialect" to "org.hibernate.dialect.MySQL5InnoDBDialect",
+    // more...
+  )
+  // you can set target-specific too.
+}
+```
+</details>
 
 ## Database Product Names
 
