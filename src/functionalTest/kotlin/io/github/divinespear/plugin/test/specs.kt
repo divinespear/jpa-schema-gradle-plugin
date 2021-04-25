@@ -21,9 +21,15 @@ package io.github.divinespear.plugin.test
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestStatus
 import io.kotest.core.test.TestType
+import io.kotest.matchers.and
+import io.kotest.matchers.paths.aFile
+import io.kotest.matchers.paths.beReadable
+import io.kotest.matchers.paths.exist
+import io.kotest.matchers.should
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
+import java.nio.charset.Charset
 
 abstract class FunctionalSpec(private val suffix: String = "gradle") : WordSpec() {
   lateinit var testProjectDir: File
@@ -75,7 +81,11 @@ abstract class FunctionalSpec(private val suffix: String = "gradle") : WordSpec(
 
   fun runGenerateSchemaTask() = runTask("generateSchema", "--info", "--stacktrace")
 
-  fun resultFile(path: String): File = testProjectDir.toPath().resolve(path).toFile()
+  fun resultFile(path: String): File = testProjectDir.toPath().resolve(path).apply {
+    this should (exist() and aFile() and beReadable())
+  }.toFile()
+
+  fun resultFileText(path: String, charset: Charset = Charsets.UTF_8) = resultFile(path).readText(charset)
 }
 
 abstract class GroovyFunctionalSpec : FunctionalSpec()
