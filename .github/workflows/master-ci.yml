@@ -24,4 +24,4 @@ jobs:
     - name: Run Gradle Test
       run: ./gradlew check --stacktrace
     - name: Run detekt
-      uses: natiginfo/action-detekt-all@1.16.0
+      uses: natiginfo/action-detekt-all@1.15.0
