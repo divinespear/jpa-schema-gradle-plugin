@@ -23,6 +23,7 @@ plugins {
   `maven-publish`
   id("com.gradle.plugin-publish") version ("0.12.0")
   id("io.kotest") version ("0.2.6")
+  jacoco
 }
 
 repositories {
@@ -77,7 +78,17 @@ tasks.withType<Test> {
 
 tasks.test {
   dependsOn(tasks["functionalTest"])
+  finalizedBy(tasks.jacocoTestReport)
   testLogging.showStandardStreams = true
+}
+
+tasks.jacocoTestReport {
+  dependsOn(tasks.test, tasks["functionalTest"])
+  reports {
+    html.isEnabled = true
+    xml.isEnabled = true
+    csv.isEnabled = false
+  }
 }
 
 gradlePlugin {
