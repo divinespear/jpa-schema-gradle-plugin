@@ -22,33 +22,17 @@ See Releases for more information...
 
 ### 6.x (in progress...)
 
+Counterpart for Gradle 6.x
+
 * Required JDK 8 or above.
 * Required Gradle 6.0 or above. (for support Java 13 or above)
 
 ### 4.x
 
-#### 0.3.6
+Counterpart Gradle 4.x, Re-versioning from 0.3.x
 
-* Required Gradle 4.10 or above. (for support spring-boot plugin version 2.0+)
-
-#### 0.3
-
-* Required Gradle 4.0 or above.
-* Java 9 support.
 * Required JDK 8 or above.
-* No more `output.resourcesDir = output.classesDir` needed.
-* No more `buildscript` dependencies needed.
-* Dropped support DataNucleus, it was my mistake.
-* Required Gradle 6.0 or above. (for support Java 13)
-
-#### Reworking on 0.3
-
-* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.x)
-* Direct including any JPA implementation is removed, remains [JUST API](http://doki-doki-literature-club.wikia.com/wiki/Monika).
-* Will improve test with each major release version of each JPA providers.
-* Re-implemented with [Kotlin](https://kotlinlang.org), for my self-training.
-
-If you have discussions, please make issue. discussions are always welcome.
+* Required Gradle 4.10 or above. (for support spring-boot plugin version 2.0+)
 
 ## How-to Use
 
