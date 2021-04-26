@@ -87,6 +87,7 @@ open class JpaSchemaGenerationTask : DefaultTask() {
       }
     } finally {
       thread.contextClassLoader = originalClassLoader
+      taskClassLoader.close()
     }
     // post-process
     postProcess(target)
@@ -142,7 +143,7 @@ private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File
   return target
 }
 
-private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = false): ClassLoader {
+private fun Project.classLoader(parent: ClassLoader, scanTestClasses: Boolean = false): URLClassLoader {
   val classURLs = mutableSetOf<URL>()
   // source output dirs
   classURLs.add(mergeOutputClasspath(scanTestClasses).toURI().toURL())
