@@ -83,7 +83,7 @@ class EclipselinkKotlinSpec : KotlinFunctionalSpec() {
         }
       }
 
-      "work on eclipselink 2.5".config(enabled = false) {
+      "work on eclipselink 2.5" {
         runEclipseTask(script("[2.5,2.6)")) {
           it.output should contain("org.eclipse.persistence/org.eclipse.persistence.jpa/2.5.")
         }

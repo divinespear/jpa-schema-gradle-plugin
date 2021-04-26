@@ -101,25 +101,9 @@ open class JpaSchemaGenerationTask : DefaultTask() {
       error("packageToScan is required on non-xml mode.")
     }
 
-    fun buildPersistenceUnitInfo(classLoader: ClassLoader): PersistenceUnitInfo {
-      val managerClass =
-        classLoader.loadClass("org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager")
-      return managerClass.getDeclaredConstructor().newInstance().apply {
-        managerClass.getDeclaredMethod("setPersistenceXmlLocations", Array<String>::class.java)
-          .invoke(this, emptyArray<String>())
-        managerClass.getDeclaredMethod("setDefaultPersistenceUnitName", String::class.java)
-          .invoke(this, target.persistenceUnitName!!)
-        managerClass.getDeclaredMethod("setPackagesToScan", Array<String>::class.java)
-          .invoke(this, target.packageToScan.toTypedArray())
-        managerClass.getDeclaredMethod("afterPropertiesSet").invoke(this)
-      }.let {
-        managerClass.getDeclaredMethod("obtainDefaultPersistenceUnitInfo").invoke(it) as PersistenceUnitInfo
-      }
-    }
-
     val classLoader = Thread.currentThread().contextClassLoader
 
-    val persistenceUnitInfo = buildPersistenceUnitInfo(classLoader)
+    val persistenceUnitInfo = target.buildPersistenceUnitInfo(classLoader)
 
     @Suppress("UNCHECKED_CAST")
     val providerClass = classLoader.loadClass(providerClassName) as Class<PersistenceProvider>
