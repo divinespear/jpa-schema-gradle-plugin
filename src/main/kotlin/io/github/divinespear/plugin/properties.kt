@@ -19,6 +19,11 @@
 package io.github.divinespear.plugin
 
 import java.io.File
+import java.net.URL
+import java.util.*
+import javax.persistence.spi.PersistenceUnitInfo
+import javax.persistence.spi.PersistenceUnitTransactionType
+import javax.sql.DataSource
 
 open class JpaSchemaGenerationProperties(
   val name: String?,
@@ -73,4 +78,65 @@ open class JpaSchemaGenerationProperties(
   internal fun provider() = vendor?.let { PERSISTENCE_PROVIDER_MAP[it.toLowerCase()] } ?: vendor
   internal fun isDatabaseTarget() = !JAVAX_SCHEMA_GENERATION_NONE_ACTION.equals(databaseAction, true)
   internal fun isScriptTarget() = !JAVAX_SCHEMA_GENERATION_NONE_ACTION.equals(scriptAction, true)
+
+  fun buildPersistenceUnitInfo(classLoader: ClassLoader): PersistenceUnitInfo =
+    createPersistenceUnitInfo(classLoader).let {
+      return if (this.provider() === PERSISTENCE_PROVIDER_MAP["eclipselink"]) {
+        createEclipselinkPersistenceUnitInfo(classLoader, it)
+      } else {
+        it
+      }
+    }
+
+  private fun createPersistenceUnitInfo(classLoader: ClassLoader): PersistenceUnitInfo {
+    val p = this
+    val managerClass =
+      classLoader.loadClass("org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager")
+    return managerClass.getDeclaredConstructor().newInstance().apply {
+      managerClass.getDeclaredMethod("setPersistenceXmlLocations", Array<String>::class.java)
+        .invoke(this, emptyArray<String>())
+      managerClass.getDeclaredMethod("setDefaultPersistenceUnitName", String::class.java)
+        .invoke(this, p.persistenceUnitName!!)
+      managerClass.getDeclaredMethod("setPackagesToScan", Array<String>::class.java)
+        .invoke(this, p.packageToScan.toTypedArray())
+      managerClass.getDeclaredMethod("afterPropertiesSet").invoke(this)
+    }.let {
+      managerClass.getDeclaredMethod("obtainDefaultPersistenceUnitInfo").invoke(it) as PersistenceUnitInfo
+    }
+  }
+
+  private fun createEclipselinkPersistenceUnitInfo(
+    classLoader: ClassLoader,
+    origin: PersistenceUnitInfo
+  ): PersistenceUnitInfo {
+    val puiClass = classLoader.loadClass("org.eclipse.persistence.internal.jpa.deployment.SEPersistenceUnitInfo")
+    return puiClass.getDeclaredConstructor().newInstance().apply {
+      puiClass.getMethod("setPersistenceUnitName", String::class.java)
+        .invoke(this, origin.persistenceUnitName)
+      puiClass.getMethod("setTransactionType", PersistenceUnitTransactionType::class.java)
+        .invoke(this, origin.transactionType)
+      puiClass.getMethod("setJtaDataSource", DataSource::class.java)
+        .invoke(this, origin.jtaDataSource)
+      puiClass.getMethod("setNonJtaDataSource", DataSource::class.java)
+        .invoke(this, origin.nonJtaDataSource)
+      puiClass.getMethod("setMappingFileNames", java.util.List::class.java)
+        .invoke(this, origin.mappingFileNames)
+      puiClass.getMethod("setJarFileUrls", java.util.List::class.java)
+        .invoke(this, origin.jarFileUrls)
+      puiClass.getMethod("setPersistenceUnitRootUrl", URL::class.java)
+        .invoke(this, origin.persistenceUnitRootUrl)
+      puiClass.getMethod("setManagedClassNames", java.util.List::class.java)
+        .invoke(this, origin.managedClassNames)
+      puiClass.getMethod("setExcludeUnlistedClasses", Boolean::class.javaPrimitiveType)
+        .invoke(this, origin.excludeUnlistedClasses())
+      puiClass.getMethod("setProperties", Properties::class.java)
+        .invoke(this, origin.properties)
+      puiClass.getMethod("setSharedCacheMode", String::class.java)
+        .invoke(this, origin.sharedCacheMode.toString())
+      puiClass.getMethod("setValidationMode", String::class.java)
+        .invoke(this, origin.validationMode.toString())
+      puiClass.getMethod("setClassLoader", ClassLoader::class.java)
+        .invoke(this, origin.classLoader)
+    } as PersistenceUnitInfo
+  }
 }
