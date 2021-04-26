@@ -64,5 +64,35 @@ ${"\t"}PRIMARY KEY (VERSION,REFERENCE_ID)
         actual shouldBe expected
       }
     }
+
+    "create index" should {
+      "format well" {
+        val source = "CREATE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED ON USER_ACCOUNT (ENABLED,DELETED);"
+        val expected = """CREATE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED
+${"\t"}ON USER_ACCOUNT (ENABLED,DELETED);""".trimIndent()
+
+        val actual = formatLine(source, LINE_SEPARATOR)
+        actual shouldBe expected
+      }
+      "format well with options" {
+        val source = "CREATE UNIQUE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED ON USER_ACCOUNT (ENABLED,DELETED);"
+        val expected = """CREATE UNIQUE INDEX INDEX_USER_ACCOUNT_ENABLED_DELETED
+${"\t"}ON USER_ACCOUNT (ENABLED,DELETED);""".trimIndent()
+
+        val actual = formatLine(source, LINE_SEPARATOR)
+        actual shouldBe expected
+      }
+    }
+
+    "issue #9" should {
+      "be fixed illegal syntax" {
+        val source = "CREATE INDEX INDEX_SYSTEM_CURRENCY_RATE_VERSION DESC ON SYSTEM_CURRENCY_RATE (VERSION DESC);"
+        val expected = """CREATE INDEX INDEX_SYSTEM_CURRENCY_RATE_VERSION
+${"\t"}ON SYSTEM_CURRENCY_RATE (VERSION DESC);""".trimIndent()
+
+        val actual = formatLine(source, LINE_SEPARATOR)
+        actual shouldBe expected
+      }
+    }
   }
 }
