@@ -36,6 +36,7 @@ val functionalTest: SourceSet by sourceSets.creating {
 }
 
 dependencies {
+  implementation("com.github.vertical-blank:sql-formatter:2.0.0")
   // jaxb (removed from java 9+)
   api("javax.xml.bind:jaxb-api:2.3.0")
   // jpa

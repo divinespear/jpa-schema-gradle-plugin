@@ -40,13 +40,13 @@ class FormatFileTest : WordSpec() {
     }
 
     "eclipselink result file" should {
-      "be formatted".config(enabled = false) {
+      "be formatted" {
         val source = resourcePath("/eclipselink-normal-result.txt")
         val expected = resourcePath("/eclipselink-format-result.txt")
         val actualPath = actual.toPath()
 
         Files.copy(source, actualPath, StandardCopyOption.REPLACE_EXISTING)
-        formatFile(actualPath, true, FormatTest.LINE_SEPARATOR)
+        formatFile(actualPath, true, LINE_SEPARATOR)
 
         val diff = DiffUtils.diff(Files.readAllLines(expected), Files.readAllLines(actualPath))
         diff.deltas should beEmpty()
@@ -54,13 +54,13 @@ class FormatFileTest : WordSpec() {
     }
 
     "hibernate result file" should {
-      "be formatted".config(enabled = false) {
+      "be formatted" {
         val source = resourcePath("/hibernate-normal-result.txt")
         val expected = resourcePath("/hibernate-format-result.txt")
         val actualPath = actual.toPath()
 
         Files.copy(source, actualPath, StandardCopyOption.REPLACE_EXISTING)
-        formatFile(actualPath, true, FormatTest.LINE_SEPARATOR)
+        formatFile(actualPath, true, LINE_SEPARATOR)
 
         val diff = DiffUtils.diff(Files.readAllLines(expected), Files.readAllLines(actualPath))
         diff.deltas should beEmpty()
