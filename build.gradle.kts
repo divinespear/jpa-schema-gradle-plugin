@@ -43,6 +43,7 @@ dependencies {
   "functionalTestApi"("org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final")
   // test
   testImplementation(gradleTestKit())
+  testImplementation("io.github.java-diff-utils:java-diff-utils:4.5")
   listOf(
     "io.kotest:kotest-assertions-core-jvm",
     "io.kotest:kotest-framework-engine-jvm",
@@ -73,7 +74,7 @@ tasks.register<Test>("functionalTest") {
 
 tasks.withType<Test> {
   useJUnitPlatform()
-  jvmArgs = listOf("-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m")
+  jvmArgs = listOf("-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m", "-Dkotest.assertions.multi-line-diff-size=0")
 }
 
 tasks.test {
