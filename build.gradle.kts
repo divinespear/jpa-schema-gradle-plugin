@@ -34,6 +34,8 @@ val functionalTest: SourceSet by sourceSets.creating {
   runtimeClasspath += output + compileClasspath
 }
 
+val jacocoRuntime: Configuration by configurations.creating
+
 dependencies {
   implementation("com.github.vertical-blank:sql-formatter:2.0.0")
   // jaxb (removed from java 9+)
@@ -53,6 +55,8 @@ dependencies {
   "functionalTestRuntimeOnly"(fileTree("dir" to "lib", "include" to listOf("*.jar")))
   // lombok
   "functionalTestCompileOnly"("org.projectlombok:lombok:1.18.12")
+  // jacoco
+  "jacocoRuntime"("org.jacoco:org.jacoco.agent:${jacoco.toolVersion}:runtime")
 }
 
 java {
