@@ -44,9 +44,7 @@ dependencies {
   // test
   testImplementation(gradleTestKit())
   testImplementation("io.github.java-diff-utils:java-diff-utils:4.5")
-  testImplementation("io.kotest:kotest-runner-junit5:4.1.3") {
-    exclude(group = "org.jetbrains.kotlin")
-  }
+  testImplementation("io.kotest:kotest-runner-junit5:4.2.6")
   // functional test
   "functionalTestImplementation"(gradleTestKit())
   "functionalTestImplementation"("org.hamcrest:hamcrest-all:1.3")
