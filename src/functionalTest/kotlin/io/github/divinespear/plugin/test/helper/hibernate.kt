@@ -19,7 +19,6 @@
 package io.github.divinespear.plugin.test.helper
 
 import io.github.divinespear.plugin.test.FunctionalSpec
-import io.kotest.matchers.and
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain

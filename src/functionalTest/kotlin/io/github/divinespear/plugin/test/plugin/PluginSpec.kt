@@ -24,9 +24,9 @@ import io.github.divinespear.plugin.JpaSchemaGenerationTask
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.instanceOf
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.instanceOf
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get

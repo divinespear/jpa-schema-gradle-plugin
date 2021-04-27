@@ -21,10 +21,7 @@ package io.github.divinespear.plugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaLibraryPlugin
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.*
 
 class JpaSchemaGenerationPlugin : Plugin<Project> {
 
@@ -39,7 +36,7 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.run {
-      plugins.apply(JavaLibraryPlugin::class.java)
+      plugins.apply(JavaLibraryPlugin::class)
 
       configurations {
         register(CONFIGURATION_NAME)
@@ -53,7 +50,7 @@ class JpaSchemaGenerationPlugin : Plugin<Project> {
 
       extensions.create<JpaSchemaGenerationExtension>(EXTENSION_NAME).apply {
         defaultOutputDirectory = project.buildDir.resolve("generated-schema")
-        targets = project.container(JpaSchemaGenerationProperties::class.java)
+        targets = project.container(JpaSchemaGenerationProperties::class)
       }
 
       tasks {

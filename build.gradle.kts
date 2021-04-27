@@ -22,7 +22,6 @@ plugins {
   `kotlin-dsl`
   `maven-publish`
   id("com.gradle.plugin-publish") version ("0.12.0")
-  id("io.kotest") version ("0.2.6")
   jacoco
 }
 
@@ -45,12 +44,8 @@ dependencies {
   // test
   testImplementation(gradleTestKit())
   testImplementation("io.github.java-diff-utils:java-diff-utils:4.5")
-  listOf(
-    "io.kotest:kotest-assertions-core-jvm",
-    "io.kotest:kotest-framework-engine-jvm",
-    "io.kotest:kotest-runner-junit5"
-  ).forEach {
-    testImplementation("${it}:4.2.6")
+  testImplementation("io.kotest:kotest-runner-junit5:4.1.3") {
+    exclude(group = "org.jetbrains.kotlin")
   }
   // functional test
   "functionalTestImplementation"(gradleTestKit())
@@ -60,6 +55,11 @@ dependencies {
   "functionalTestRuntimeOnly"(fileTree("dir" to "lib", "include" to listOf("*.jar")))
   // lombok
   "functionalTestCompileOnly"("org.projectlombok:lombok:1.18.12")
+}
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
