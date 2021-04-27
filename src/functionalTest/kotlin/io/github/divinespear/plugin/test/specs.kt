@@ -46,14 +46,17 @@ abstract class FunctionalSpec(private val suffix: String = "gradle") : WordSpec(
       // create temporary project root and gradle files
       testProjectDir = createTempDir("test-", "", File("build", "tmp"))
       testkitDir = createTempDir("testkit-", "", testProjectDir)
-      propertiesFile = testProjectDir.resolve("gradle.properties").apply {
-        writeText("")
-      }
       settingsFile = testProjectDir.resolve("settings.${suffix}").apply {
         writeText("rootProject.name = \"${testProjectDir.name}\"\n")
       }
       buildFile = testProjectDir.resolve("build.${suffix}").apply {
         writeText("// Running test for ${testProjectDir.name}\n\n")
+      }
+      propertiesFile = testProjectDir.resolve("gradle.properties").apply {
+        // issue #52: apply jacoco
+        val testkitProps = this@FunctionalSpec.javaClass.classLoader.getResource("testkit-gradle.properties")
+        writeText(testkitProps!!.readText())
+        appendText("\n")
       }
 
       // copy example entities for test
