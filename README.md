@@ -20,16 +20,16 @@ Sometimes (*most times* exactly :scream:) JPA will generate weird scripts, so yo
 
 See Releases for more information...
 
-### 6.x (in progress...)
+### 0.4.x
 
 Counterpart for Gradle 6.x
 
 * Required JDK 8 or above.
 * Required Gradle 6.0 or above. (for support Java 13 or above)
 
-### 4.x
+### 0.3.x
 
-Counterpart Gradle 4.x, Re-versioning from 0.3.x
+Counterpart Gradle 4.10 to 5.x
 
 * Required JDK 8 or above.
 * Required Gradle 4.10 or above. (for support spring-boot plugin version 2.0+)
@@ -43,7 +43,7 @@ see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divine
 
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.6'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.4.0'
 }
 
 generateSchema {
@@ -148,7 +148,7 @@ generateSchema {
     // load java.time converter from spring-data-jpa
     'org.springframework.data.jpa.convert.threeten',
     'your.package.to.scan',
-    // more
+    // more...
   ]
 }
 ```
@@ -173,7 +173,7 @@ generateSchema {
     // load java.time converter from spring-data-jpa
     "org.springframework.data.jpa.convert.threeten",
     "your.package.to.scan",
-    // more
+    // more...
   )
 }
 ```
@@ -183,7 +183,6 @@ generateSchema {
 
 ### EclipseLink
 
- * EclipseLink 2.5 on Java 9 without `persistence.xml` will not work.
  * EclipseLink 2.6 on Java 12 or higher will not work. embedded ASM library cannot read class files.
  * EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
 
@@ -194,13 +193,13 @@ generateSchema {
   * 4.x: `hibernate.ejb.naming_strategy`
   * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
 
-* For select dialect, do one of
+* For select dialect without `persistence.xml`, do one of
   * set `hibernate.dialect` on `properties`
   * set `databaseProductName`, `databaseMajorVersion`, and/or `databaseMinorVersion` for determine dialect.
 
 ### Hibernate with Spring ORM
 
- * `vendor` should be `hibernate+spring`. (without `persistence.xml`)
+ * `vendor` should be `hibernate+spring`, others are same as hibernate without `persistence.xml`
  * use `io.spring.dependency-management` for version management.
    * You can change hibernate version with `hibernate.version` property.
 
