@@ -20,13 +20,12 @@
 plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
-  `maven-publish`
-  id("com.gradle.plugin-publish") version ("0.12.0")
+  id("com.gradle.plugin-publish") version ("0.14.0")
   jacoco
 }
 
 group = "io.github.divinespear"
-version = "0.4.1-SNAPSHOT"
+version = "0.4.0"
 
 repositories {
   jcenter()
