@@ -10,7 +10,7 @@ on:
     branches: [ master, "6.x" ]
 
 jobs:
-  prepare:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,11 +20,6 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-  build:
-    needs:
-      - prepare
-    runs-on: ubuntu-latest
-    steps:
       - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
