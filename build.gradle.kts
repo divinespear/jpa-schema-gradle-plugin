@@ -34,6 +34,8 @@ val functionalTest: SourceSet by sourceSets.creating {
   runtimeClasspath += output + compileClasspath
 }
 
+val jacocoRuntime: Configuration by configurations.creating
+
 dependencies {
   implementation("com.github.vertical-blank:sql-formatter:2.0.0")
   // jaxb (removed from java 9+)
@@ -47,12 +49,14 @@ dependencies {
   testImplementation("io.kotest:kotest-runner-junit5:4.2.6")
   // functional test
   "functionalTestImplementation"(gradleTestKit())
-  "functionalTestImplementation"("org.hamcrest:hamcrest-all:1.3")
+  "functionalTestImplementation"(files("$buildDir/testkit"))
   // extra dependencies for test
   "functionalTestRuntimeOnly"("com.h2database:h2:1.4.200")
   "functionalTestRuntimeOnly"(fileTree("dir" to "lib", "include" to listOf("*.jar")))
   // lombok
   "functionalTestCompileOnly"("org.projectlombok:lombok:1.18.12")
+  // jacoco
+  "jacocoRuntime"("org.jacoco:org.jacoco.agent:${jacoco.toolVersion}:runtime")
 }
 
 java {
@@ -66,9 +70,48 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
   }
 }
 
-tasks.register<Test>("functionalTest") {
+val createTestkitFilesTask = tasks.create("createTestkitFiles") {
+  val outputDir = file("$buildDir/testkit")
+
+  inputs.files(jacocoRuntime)
+  outputs.dir(outputDir)
+
+  doLast {
+    outputDir.mkdirs()
+    val jacocoPath = jacocoRuntime.asPath.replace("\\", "/")
+    outputDir.resolve("testkit-gradle.properties")
+      .writeText("org.gradle.jvmargs=-javaagent:${jacocoPath}=destfile=$buildDir/jacoco/functionalTest.exec,append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")
+  }
+}
+
+val functionalTestTask = tasks.register<Test>("functionalTest") {
   testClassesDirs = functionalTest.output.classesDirs
   classpath = functionalTest.runtimeClasspath
+}
+
+val jacocoFunctionalTestReportTask = tasks.register<JacocoReport>("jacocoFunctionalTestReport") {
+  sourceSets(sourceSets.main.get())
+  executionData(functionalTestTask.get())
+  reports {
+    html.isEnabled = true
+    xml.isEnabled = true
+    all {
+      destination = if (outputType === Report.OutputType.DIRECTORY) {
+        file("${jacoco.reportsDir}/${functionalTestTask.name}/${this.name}")
+      } else {
+        file("${jacoco.reportsDir}/${functionalTestTask.name}/${this@register.name}.${this.name}")
+      }
+    }
+  }
+}
+
+functionalTestTask {
+  dependsOn(createTestkitFilesTask)
+  finalizedBy(jacocoFunctionalTestReportTask)
+}
+
+jacocoFunctionalTestReportTask {
+  dependsOn(functionalTestTask)
 }
 
 tasks.withType<Test> {
@@ -77,17 +120,18 @@ tasks.withType<Test> {
 }
 
 tasks.test {
-  dependsOn(tasks["functionalTest"])
+  dependsOn(functionalTestTask)
   finalizedBy(tasks.jacocoTestReport)
+
   testLogging.showStandardStreams = true
 }
 
 tasks.jacocoTestReport {
-  dependsOn(tasks.test, tasks["functionalTest"])
+  dependsOn(tasks.test)
+
   reports {
     html.isEnabled = true
     xml.isEnabled = true
-    csv.isEnabled = false
   }
 }
 

@@ -23,7 +23,6 @@ import io.kotest.core.test.TestType
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import org.gradle.testkit.runner.TaskOutcome
-import java.io.File
 
 class Issue34GroovySpec : GroovyFunctionalSpec() {
 

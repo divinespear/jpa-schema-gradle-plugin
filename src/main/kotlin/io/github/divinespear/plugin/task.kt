@@ -32,7 +32,6 @@ import java.sql.Driver
 import java.sql.DriverManager
 import javax.persistence.Persistence
 import javax.persistence.spi.PersistenceProvider
-import javax.persistence.spi.PersistenceUnitInfo
 
 open class JpaSchemaGenerationTask : DefaultTask() {
 
@@ -63,31 +62,31 @@ open class JpaSchemaGenerationTask : DefaultTask() {
       }
     }
     // classloader
-    val taskClassLoader = project.classLoader(javaClass.classLoader, target.scanTestClasses == true)
-    // register jdbc driver if not registered
-    val driverClassName = target.jdbcDriver ?: ""
-    if (driverClassName.isNotEmpty() && DriverManager.getDrivers().toList()
-        .none { it.javaClass.name == driverClassName }
-    ) {
-      val driver = taskClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance() as Driver
-      DriverManager.registerDriver(driver)
-    }
-    // generate
-    val thread = Thread.currentThread()
-    val originalClassLoader = thread.contextClassLoader
-    try {
-      thread.contextClassLoader = taskClassLoader
-      val provider = target.provider()
-      if (provider == null) {
-        // with xml
-        doGenerate(target)
-      } else {
-        // without xml
-        doGenerate(provider, target)
+    project.classLoader(javaClass.classLoader, target.scanTestClasses == true).use { taskClassLoader ->
+      // register jdbc driver if not registered
+      val driverClassName = target.jdbcDriver ?: ""
+      if (driverClassName.isNotEmpty() && DriverManager.getDrivers().toList()
+          .none { it.javaClass.name == driverClassName }
+      ) {
+        val driver = taskClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance() as Driver
+        DriverManager.registerDriver(driver)
       }
-    } finally {
-      thread.contextClassLoader = originalClassLoader
-      taskClassLoader.close()
+      // generate
+      val thread = Thread.currentThread()
+      val originalClassLoader = thread.contextClassLoader
+      try {
+        thread.contextClassLoader = taskClassLoader
+        val provider = target.provider()
+        if (provider == null) {
+          // with xml
+          doGenerate(target)
+        } else {
+          // without xml
+          doGenerate(provider, target)
+        }
+      } finally {
+        thread.contextClassLoader = originalClassLoader
+      }
     }
     // post-process
     postProcess(target)
@@ -117,17 +116,10 @@ open class JpaSchemaGenerationTask : DefaultTask() {
 }
 
 private fun Project.mergeOutputClasspath(scanTestClasses: Boolean = false): File {
-  fun recursiveDelete(file: File) {
-    file.listFiles()?.forEach {
-      recursiveDelete(it)
-    }
-    file.delete()
-  }
-
   val target = buildDir.resolve("classes-merged")
   val sources = mutableSetOf<File>()
   // delete target directory if exists
-  recursiveDelete(target)
+  target.deleteRecursively()
   // create directory list
   (properties["sourceSets"] as SourceSetContainer).forEach {
     if (!it.name.contains("test", ignoreCase = true) || scanTestClasses) {

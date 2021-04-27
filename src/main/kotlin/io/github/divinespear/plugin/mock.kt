@@ -4,9 +4,11 @@ import java.sql.*
 import java.util.*
 import java.util.concurrent.Executor
 
-class ConnectionMock(val productName: String,
-                     val majorVersion: Int?,
-                     val minorVersion: Int?) : Connection {
+class ConnectionMock(
+  val productName: String,
+  val majorVersion: Int?,
+  val minorVersion: Int?
+) : Connection {
 
   override fun getMetaData(): DatabaseMetaData = DatabaseMetaDataMock(this)
   override fun getAutoCommit(): Boolean = true
@@ -20,7 +22,12 @@ class ConnectionMock(val productName: String,
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun prepareStatement(sql: String?, resultSetType: Int, resultSetConcurrency: Int, resultSetHoldability: Int): PreparedStatement {
+  override fun prepareStatement(
+    sql: String?,
+    resultSetType: Int,
+    resultSetConcurrency: Int,
+    resultSetHoldability: Int
+  ): PreparedStatement {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -76,7 +83,12 @@ class ConnectionMock(val productName: String,
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun prepareCall(sql: String?, resultSetType: Int, resultSetConcurrency: Int, resultSetHoldability: Int): CallableStatement {
+  override fun prepareCall(
+    sql: String?,
+    resultSetType: Int,
+    resultSetConcurrency: Int,
+    resultSetHoldability: Int
+  ): CallableStatement {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -250,7 +262,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getAttributes(catalog: String?, schemaPattern: String?, typeNamePattern: String?, attributeNamePattern: String?): ResultSet {
+  override fun getAttributes(
+    catalog: String?,
+    schemaPattern: String?,
+    typeNamePattern: String?,
+    attributeNamePattern: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -362,7 +379,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getTables(catalog: String?, schemaPattern: String?, tableNamePattern: String?, types: Array<out String>?): ResultSet {
+  override fun getTables(
+    catalog: String?,
+    schemaPattern: String?,
+    tableNamePattern: String?,
+    types: Array<out String>?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -410,7 +432,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getFunctionColumns(catalog: String?, schemaPattern: String?, functionNamePattern: String?, columnNamePattern: String?): ResultSet {
+  override fun getFunctionColumns(
+    catalog: String?,
+    schemaPattern: String?,
+    functionNamePattern: String?,
+    columnNamePattern: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -506,7 +533,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getProcedureColumns(catalog: String?, schemaPattern: String?, procedureNamePattern: String?, columnNamePattern: String?): ResultSet {
+  override fun getProcedureColumns(
+    catalog: String?,
+    schemaPattern: String?,
+    procedureNamePattern: String?,
+    columnNamePattern: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -594,11 +626,23 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getColumns(catalog: String?, schemaPattern: String?, tableNamePattern: String?, columnNamePattern: String?): ResultSet {
+  override fun getColumns(
+    catalog: String?,
+    schemaPattern: String?,
+    tableNamePattern: String?,
+    columnNamePattern: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getCrossReference(parentCatalog: String?, parentSchema: String?, parentTable: String?, foreignCatalog: String?, foreignSchema: String?, foreignTable: String?): ResultSet {
+  override fun getCrossReference(
+    parentCatalog: String?,
+    parentSchema: String?,
+    parentTable: String?,
+    foreignCatalog: String?,
+    foreignSchema: String?,
+    foreignTable: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -626,7 +670,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getUDTs(catalog: String?, schemaPattern: String?, typeNamePattern: String?, types: IntArray?): ResultSet {
+  override fun getUDTs(
+    catalog: String?,
+    schemaPattern: String?,
+    typeNamePattern: String?,
+    types: IntArray?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -678,7 +727,13 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getBestRowIdentifier(catalog: String?, schema: String?, table: String?, scope: Int, nullable: Boolean): ResultSet {
+  override fun getBestRowIdentifier(
+    catalog: String?,
+    schema: String?,
+    table: String?,
+    scope: Int,
+    nullable: Boolean
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -706,7 +761,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getPseudoColumns(catalog: String?, schemaPattern: String?, tableNamePattern: String?, columnNamePattern: String?): ResultSet {
+  override fun getPseudoColumns(
+    catalog: String?,
+    schemaPattern: String?,
+    tableNamePattern: String?,
+    columnNamePattern: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -734,7 +794,12 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getColumnPrivileges(catalog: String?, schema: String?, table: String?, columnNamePattern: String?): ResultSet {
+  override fun getColumnPrivileges(
+    catalog: String?,
+    schema: String?,
+    table: String?,
+    columnNamePattern: String?
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -758,7 +823,13 @@ class DatabaseMetaDataMock(private val connection: ConnectionMock) : DatabaseMet
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun getIndexInfo(catalog: String?, schema: String?, table: String?, unique: Boolean, approximate: Boolean): ResultSet {
+  override fun getIndexInfo(
+    catalog: String?,
+    schema: String?,
+    table: String?,
+    unique: Boolean,
+    approximate: Boolean
+  ): ResultSet {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
