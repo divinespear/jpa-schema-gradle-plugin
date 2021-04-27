@@ -32,7 +32,6 @@ import java.sql.Driver
 import java.sql.DriverManager
 import javax.persistence.Persistence
 import javax.persistence.spi.PersistenceProvider
-import javax.persistence.spi.PersistenceUnitInfo
 
 open class JpaSchemaGenerationTask : DefaultTask() {
 

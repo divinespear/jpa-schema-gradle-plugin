@@ -8,9 +8,9 @@ package io.github.divinespear.model;
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -20,19 +20,11 @@ package io.github.divinespear.model;
  */
 
 import java.util.Date;
-
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 /**
  * Test JPA model
- * 
+ *
  * @author divinespear
  */
 @Entity
@@ -40,31 +32,31 @@ import javax.persistence.TemporalType;
 @Table(name = "KEY_VALUE_STORE")
 public class KeyValueStore {
 
-    @Id
-    @Column(name = "STORED_KEY", length = 128)
-    private String key;
+  @Id
+  @Column(name = "STORED_KEY", length = 128)
+  private String key;
 
-    @Column(name = "STORED_VALUE", length = 32768)
-    private String value;
+  @Column(name = "STORED_VALUE", length = 32768)
+  private String value;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_AT")
-    private Date createdAt;
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "CREATED_AT")
+  private Date createdAt;
 
-    public String getKey() {
-        return key;
-    }
+  public String getKey() {
+    return key;
+  }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  public String getValue() {
+    return value;
+  }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+  public void setValue(String value) {
+    this.value = value;
+  }
 
 }

@@ -73,14 +73,12 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
 val createTestkitFilesTask = tasks.create("createTestkitFiles") {
   val outputDir = file("$buildDir/testkit")
 
-  inputs.files(sourceSets.main.get().runtimeClasspath)
   inputs.files(jacocoRuntime)
   outputs.dir(outputDir)
 
   doLast {
     outputDir.mkdirs()
     val jacocoPath = jacocoRuntime.asPath.replace("\\", "/")
-    outputDir.resolve("testkit-classpath.txt").writeText(sourceSets.main.get().runtimeClasspath.joinToString("\n"))
     outputDir.resolve("testkit-gradle.properties")
       .writeText("org.gradle.jvmargs=-javaagent:${jacocoPath}=destfile=$buildDir/jacoco/functionalTest.exec,append=true,inclnolocationclasses=false,dumponexit=true,output=file,jmx=false")
   }
