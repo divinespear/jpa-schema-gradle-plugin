@@ -3,6 +3,7 @@ package io.github.divinespear.plugin
 import com.github.difflib.DiffUtils
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.spec.tempfile
+import io.kotest.matchers.and
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.paths.aFile

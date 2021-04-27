@@ -21,6 +21,7 @@ package io.github.divinespear.plugin.test
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestStatus
 import io.kotest.core.test.TestType
+import io.kotest.matchers.and
 import io.kotest.matchers.paths.aFile
 import io.kotest.matchers.paths.beReadable
 import io.kotest.matchers.paths.exist

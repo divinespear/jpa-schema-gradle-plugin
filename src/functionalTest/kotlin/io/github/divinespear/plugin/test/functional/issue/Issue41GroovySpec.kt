@@ -19,6 +19,7 @@
 package io.github.divinespear.plugin.test.functional.issue
 
 import io.github.divinespear.plugin.test.GroovyFunctionalSpec
+import io.kotest.matchers.and
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe

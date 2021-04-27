@@ -19,6 +19,7 @@
 package io.github.divinespear.plugin.test.plugin
 
 import io.github.divinespear.plugin.test.KotlinFunctionalSpec
+import io.kotest.matchers.and
 import io.kotest.matchers.should
 import io.kotest.matchers.string.contain
 
