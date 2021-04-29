@@ -2,8 +2,11 @@ title: jpa-schema-gradle-plugin
 description: Gradle plugin for generate database schema or DDL scripts from JPA entities
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-slate
+theme: jekyll-theme-minima
 
 gems:
   - jekyll-mentions
-  - jekyll-code-tabs
+plugins:
+  - jekyll-tabs
+  - jekyll-remote-theme
+
