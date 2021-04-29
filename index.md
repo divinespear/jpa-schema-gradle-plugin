@@ -1,49 +1,50 @@
 jpa-schema-gradle-plugin
 ========================
 
-**Version 0.3.5.1**
-[![Build Status](https://secure.travis-ci.org/divinespear/jpa-schema-gradle-plugin.png)](https://travis-ci.org/divinespear/jpa-schema-gradle-plugin)
+[![Workflow Status](https://github.com/divinespear/jpa-schema-gradle-plugin/actions/workflows/master-build.yml/badge.svg)](https://github.com/divinespear/jpa-schema-gradle-plugin/actions/workflows/master-build.yml)
+[![Version](https://img.shields.io/maven-metadata/v?label=Gradle%20Plugin&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Fgradle%2Fplugin%2Fio%2Fgithub%2Fdivinespear%2Fjpa-schema-gradle-plugin%2Fmaven-metadata.xml)](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin?ref=badge_shield)
 
 Gradle plugin for generate schema or DDL scripts from JPA entities using [JPA 2.1](http://jcp.org/en/jsr/detail?id=338) schema generator.
 for Maven, see [Maven Plugin](https://github.com/divinespear/jpa-schema-maven-plugin).
 
-Currently support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference Implementation) and [Hibernate](http://hibernate.org).
+Currently, support [EclipseLink](http://www.eclipse.org/eclipselink) (Reference Implementation) and [Hibernate](http://hibernate.org).
 
 ## Before Announce...
 
 READ MY LIP; **JPA DDL GENERATOR IS NOT SILVER BULLET**
 
-Sometimes (*most times* exactly :P) JPA will generate weird scripts so you **SHOULD** modify them properly.
+Sometimes (*most times* exactly :scream:) JPA will generate weird scripts, so you **SHOULD** modify them properly.
 
-## Since Release 0.3.3
+## Version History
 
-* Java 9 support.
-* Required Gradle 4.2.1 or above. (for support Java 9)
+See Releases for more information...
 
-## Since Release 0.3
+### 0.4.x
 
-* Required Gradle 4.0 or above.
+Counterpart for Gradle 6.x
+
 * Required JDK 8 or above.
-* No more `output.resourcesDir = output.classesDir` needed.
-* No more `buildscript` dependencies needed.
-* Dropped support DataNucleus, it was my mistake.
+* Required Gradle 6.0 or above. (for support Java 13 or above)
 
-### Reworking on 0.3
+### 0.3.x
 
-* Minimized spring dependency, only include `spring-orm`, `spring-context`, `spring-aspects` and its dependencies. (based on spring 5.0)
-* Direct including any JPA implementation is removed, remains [JUST API](http://doki-doki-literature-club.wikia.com/wiki/Monika).
-* Will improve test with each major release version of each JPA providers.
-* Re-implemented with [Kotlin](https://kotlinlang.org), on my self-training.
+Counterpart Gradle 4.10 to 5.x
 
-If you have discussions, please make issue. discussions are always welcome.
+* Required JDK 8 or above.
+* Required Gradle 4.10 or above. (for support spring-boot plugin version 2.0+)
 
 ## How-to Use
 
 see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
 
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 plugins {
-  id 'io.github.divinespear.jpa-schema-generate' version '0.3.5.1'
+  id 'io.github.divinespear.jpa-schema-generate' version '0.4.0'
 }
 
 generateSchema {
@@ -59,6 +60,30 @@ generateSchema {
   }
 }
 ```
+</details>
+
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+plugins {
+  id("io.github.divinespear.jpa-schema-generate") version("0.4.0")
+}
+
+generateSchema {
+  // default options
+  // see SchemaGenerationConfig to all options
+  ...
+  // if you want multiple output
+  targets {
+    create("targetName") {
+      // same as default options
+      ...
+    }
+  }
+}
+```
+</details>
 
 To generate schema, run
 ```
@@ -69,63 +94,113 @@ or
 ./gradlew generateSchema
 ```
 
-see also test cases `Generate*Spec.groovy`, as examples.
+see also functional test cases as examples.
 
 ### without `persistence.xml`
 
-You **MUST** specify two options: `vendor` and `packageToScan`.
+You MUST specify two options: `vendor` and `packageToScan`.
+
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 generateSchema {
   vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'hibernate+spring'.
                        // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
-  packageToScan = [ 'your.package.to.scan', ... ]
-  ...
+  packageToScan = [ 'your.package.to.scan', /* more */ ]
+  // ...omitted...
 }
 ```
+</details>
+
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+generateSchema {
+  vendor = "hibernate" // 'eclipselink', 'hibernate', or 'hibernate+spring'.
+                       // you can use class name too. (like 'org.hibernate.jpa.HibernatePersistenceProvider')
+  packageToScan = setOf("your.package.to.scan", /* more */)
+  // ...omitted...
+}
+```
+</details>
 
 ## Plugin only dependencies
 
 Since 0.3.4, you can add dependencies for plugin with configuration `generateSchema`.
 
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 // no need to add 'generateSchema' into configurations block.
 
 dependencies {
-  ...
-  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  // ...omitted...
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   // only need to load java.time converter from spring-data-jpa on schema generation
-  generateSchema 'org:threeten:threetenbp:1.3.6'
+  generateSchema 'org.threeten:threetenbp:1.3.6'
 }
 
 generateSchema {
-  ...  
+  // ...omitted...
   packageToScan = [
     // load java.time converter from spring-data-jpa
     'org.springframework.data.jpa.convert.threeten',
     'your.package.to.scan',
-    ...
+    // more...
   ]
-  ...
 }
 ```
+</details>
 
-## Provider specific
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+// no need to add 'generateSchema' into configurations block.
+
+dependencies {
+  // ...omitted...
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  // only need to load java.time converter from spring-data-jpa on schema generation
+  generateSchema("org.threeten:threetenbp:1.3.6")
+}
+
+generateSchema {
+  // ...omitted...
+  packageToScan = setOf(
+    // load java.time converter from spring-data-jpa
+    "org.springframework.data.jpa.convert.threeten",
+    "your.package.to.scan",
+    // more...
+  )
+}
+```
+</details>
+
+## Provider-specific issues
 
 ### EclipseLink
 
- * EclipseLink 2.5 on Java 9 without `persistence.xml` **will not work**. 
+ * EclipseLink 2.6 on Java 12 or higher will not work. embedded ASM library cannot read class files.
  * EclipseLink's `Oracle{8,9,10,11}Platform` uses some type classes from Oracle's JDBC driver. you should have it in your dependency.
 
 ### Hibernate
 
- * After 5.2, just use `hibernate-core` instead `hibernate-entitymanager`, it is [merged](https://github.com/hibernate/hibernate-orm/wiki/Migration-Guide---5.2).
- * Naming strategy property is
-   * 4.x: `hibernate.ejb.naming_strategy`
-   * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
+* After 5.2, just use `hibernate-core` instead `hibernate-entitymanager`, it is [merged](https://github.com/hibernate/hibernate-orm/wiki/Migration-Guide---5.2).
+* Naming strategy property is
+  * 4.x: `hibernate.ejb.naming_strategy`
+  * 5.x: `hibernate.physical_naming_strategy` / `hibernate.implicit_naming_strategy`
+
+* For select dialect without `persistence.xml`, do one of
+  * set `hibernate.dialect` on `properties`
+  * set `databaseProductName`, `databaseMajorVersion`, and/or `databaseMinorVersion` for determine dialect.
 
 ### Hibernate with Spring ORM
 
- * `vendor` should be `hibernate+spring`. (without `persistence.xml`)
+ * `vendor` should be `hibernate+spring`, others are same as hibernate without `persistence.xml`
  * use `io.spring.dependency-management` for version management.
    * You can change hibernate version with `hibernate.version` property.
 
@@ -138,7 +213,7 @@ Here is full list of parameters of `generateSchema`.
 | `skip` | `boolean` | skip schema generation<p>default value is `false`.</p> |
 | `format` | `boolean` | generate as formatted<p>default value is `false`.</p> |
 | `scanTestClasses` | `boolean`| scan test classes<p>default value is `false`.</p> |
-| `persistenceXml` | `string` | location of `persistence.xml` file<p>Note: **Hibernate DOES NOT SUPPORT custom location.** (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
+| `persistenceXml` | `string` | location of `persistence.xml` file<p>Note: Hibernate DOES NOT SUPPORT custom location. (`SchemaExport` support it, but JPA 2.1 schema generator does NOT.)</p><p>default value is `META-INF/persistence.xml`.</p> |
 | `persistenceUnitName` | `string` | unit name of `persistence.xml`<p>default value is `default`.</p> |
 | `databaseAction` | `string` | schema generation action for database<p>support value is one of <ul><li>`none`</li><li>`create`</li><li>`drop`</li><li>`drop-and-create`</li><li>`create-or-extend-tables` (only for EclipseLink with database target)</li></ul></p><p>default value is `none`.</p> |
 | `scriptAction` | `string` | schema generation action for script<p>support value is one of <ul><li>`none`</li><li>`create`</li><li>`drop`</li><li>`drop-and-create`</li></ul></p><p>default value is `none`.</p> |
@@ -149,46 +224,65 @@ Here is full list of parameters of `generateSchema`.
 | `createSourceFile` | `string` | create source file path.<p>REQUIRED for `createSourceMode` is one of `script`, `metadata-then-script`, or`script-then-metadata`.</p> |
 | `dropSourceMode` | `string` | specifies whether the dropping of database artifacts is to occur on the basis of the object/relational mappingmetadata, DDL script, or a combination of the two.<p>support value is one of <ul><li>`metadata`</li><li>`script`</li><li>`metadata-then-script`</li><li>`script-then-metadata`</li></ul></p><p>default value is `metadata`.</p> |
 | `dropSourceFile` | `file` | drop source file path.<p>REQUIRED for `dropSourceMode` is one of `script`, `metadata-then-script`, or`script-then-metadata`.</p> |
-| `jdbcDriver` | `string` | jdbc driver class name<p>default is declared class name in persistence xml.</p><p>and Remember, ~~[No Russian](http://callofduty.wikia.com/wiki/No_Russian)~~ you MUST configure jdbc driver to dependencies.</p> |
+| `jdbcDriver` | `string` | jdbc driver class name<p>default is declared class name in persistence xml.</p><p>and Remember, ~~[No Russian](http://callofduty.wikia.com/wiki/No_Russian)~~ you MUST add jdbc driver to dependencies.</p> |
 | `jdbcUrl` | `string` | jdbc connection url<p>default is declared connection url in persistence xml.</p> |
 | `jdbcUser` | `string` | jdbc connection username<p>default is declared username in persistence xml.</p> |
 | `jdbcPassword` | `string` | jdbc connection password<p>default is declared password in persistence xml.</p><p>If your account has no password (especially local file-base, like Apache Derby, H2, etc...), it can be omitted.</p> |
-| `databaseProductName` | `string` | database product name for emulate database connection. this should useful for script-only action.<ul><li>specified if scripts are to be generated by the persistence provider and a connection to the target databaseis not supplied.</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseProductName()`</li></ul> |
+| `databaseProductName` | `string` | database product name for emulate database connection. this should useful for script-only action.<ul><li>specified if scripts are to be generated by the persistence provider and a connection to the target database is not supplied.</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseProductName()`</li></ul> |
 | `databaseMajorVersion` | `int` | database major version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMajorVersion()`</li></ul> |
 | `databaseMinorVersion` | `int` | database minor version for emulate database connection. this should useful for script-only action.<ul><li>specified if sufficient database version information is not included from `DatabaseMetaData#getDatabaseProductName()`</li><li>The value of this property should be the value returned for the target database by `DatabaseMetaData#getDatabaseMinorVersion()`</li></ul> |
 | `lineSeparator` | `string` | line separator for generated schema file.<p>support value is one of <code>CRLF</code> (windows default), <code>LF</code> (*nix, max osx), and <code>CR</code> (classic mac), in case-insensitive.</p><p>default value is system property <code>line.separator</code>. if JVM cannot detect <code>line.separator</code>, then use <code>LF</code> by <a href="http://git-scm.com/book/en/Customizing-Git-Git-Configuration">git <code>core.autocrlf</code> handling</a>.</p> |
 | `properties` | `java.util.Map` | JPA vendor specific properties. |
-| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implemention.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`hibernate+spring` (or `org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
-| `packageToScan` | `java.util.List` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
+| `vendor` | `string` | JPA vendor name or class name of vendor's `PersistenceProvider` implementation.<p>vendor name is one of <ul><li>`eclipselink`(or `org.eclipse.persistence.jpa.PersistenceProvider`)</li><li>`hibernate` (or `org.hibernate.jpa.HibernatePersistenceProvider`)</li><li>`hibernate+spring` (or `org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider`)</li></ul></p><p>**REQUIRED for project without `persistence.xml`**</p> |
+| `packageToScan` | `java.util.Set` | list of package name for scan entity classes<p>**REQUIRED for project without `persistence.xml`**</p> |
 
-### How-to config `properties`
+### How-to config library specific `properties`
 
-It's just groovy map, so you can config like this:
+It's just map, so you can config like this
+
+<details class="tab">
+  <summary>Groovy</summary>
+
 ```groovy
 generateSchema {
-  ...
   // global properties
   properties = [
-    'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
-    ...
+      'hibernate.dialect': 'org.hibernate.dialect.MySQL5InnoDBDialect',
+      // more...
   ]
   // you can set target-specific too.
-  ...
 }
 ```
+</details>
+
+<details class="tab">
+  <summary>Kotlin</summary>
+
+```kotlin
+generateSchema {
+  // global properties
+  properties = mapOf(
+    "hibernate.dialect" to "org.hibernate.dialect.MySQL5InnoDBDialect",
+    // more...
+  )
+  // you can set target-specific too.
+}
+```
+</details>
 
 ## Database Product Names
 
 It's about `databaseProductName` property. If not listed below, will work as basic standard SQL.
 
 ### for EclipseLink
+
 `databaseMajorVersion` and `databaseMinorVersion` is not required.
 
 * `Oracle12` = Oracle 12c
 * `Oracle11` = Oracle 11g
-* `Oracle10`: Oracle 10g
-* `Oracle9`: Oracle 9i
-* `Oracle`: Oracle with default compatibility
+* `Oracle10` = Oracle 10g
+* `Oracle9` = Oracle 9i
+* `Oracle` = Oracle with default compatibility
 * `Microsoft SQL Server`
 * `DB2`
 * `MySQL`
@@ -205,65 +299,15 @@ It's about `databaseProductName` property. If not listed below, will work as bas
 * `HSQL Database Engine`
 
 ### for Hibernate
-Some products uses different dialect by `databaseMajorVersion` and/or `databaseMinorVersion`. (striked dialects are not resolved by default.)
 
-You can override using `hibernate.dialect` property.
+* [All dialect list of 5.4.12](https://github.com/hibernate/hibernate-orm/tree/5.4.12/hibernate-core/src/main/java/org/hibernate/dialect)
+* [Preregistered dialects of 5.4.12](https://github.com/hibernate/hibernate-orm/blob/5.4.12/hibernate-core/src/test/java/org/hibernate/dialect/resolver/DialectFactoryTest.java#L107)
 
-* `CUBRID`
-    * `org.hibernate.dialect.CUBRIDDialect` = all version
-* `HSQL Database Engine`
-    * `org.hibernate.dialect.HSQLDialect` = all version
-* `H2`
-    * `org.hibernate.dialect.H2Dialect` = all version
-* `MySQL`
-    * `org.hibernate.dialect.MySQL5Dialect` = 5.x
-    * `org.hibernate.dialect.MySQLDialect` = 4.x or below
-    * ~~`org.hibernate.dialect.MySQLMyISAMDialect`~~
-    * ~~`org.hibernate.dialect.MySQLInnoDBDialect`~~
-    * ~~`org.hibernate.dialect.MySQL5InnoDBDialect`~~
-    * ~~`org.hibernate.dialect.MySQL57InnoDBDialect`~~
-* `PostgreSQL`
-    * `org.hibernate.dialect.PostgreSQL94Dialect` = 9.4 or above
-    * `org.hibernate.dialect.PostgreSQL92Dialect` = 9.2 or above
-    * `org.hibernate.dialect.PostgreSQL9Dialect` = 9.x
-    * `org.hibernate.dialect.PostgreSQL82Dialect` = 8.2 or above
-    * `org.hibernate.dialect.PostgreSQL81Dialect` = 8.1 or below
-* `Apache Derby`
-    * `org.hibernate.dialect.DerbyTenSevenDialect` = 10.7 or above
-    * `org.hibernate.dialect.DerbyTenSixDialect` = 10.6
-    * `org.hibernate.dialect.DerbyTenFiveDialect` = 10.5
-    * `org.hibernate.dialect.DerbyDialect` = 10.4 or below
-* `ingres`
-    * `org.hibernate.dialect.Ingres10Dialect` = 10.x
-    * `org.hibernate.dialect.Ingres9Dialect` = 9.2 or above
-    * `org.hibernate.dialect.IngresDialect` = 9.1 or below
-* `Microsoft SQL Server`
-    * `org.hibernate.dialect.SQLServer2012Dialect` = 11.x
-    * `org.hibernate.dialect.SQLServer2008Dialect` = 10.x
-    * `org.hibernate.dialect.SQLServer2005Dialect` = 9.x
-    * `org.hibernate.dialect.SQLServerDialect` = 8.x or below
-* `Sybase SQL Server`
-    * `org.hibernate.dialect.SybaseASE15Dialect` = all version
-    * ~~`org.hibernate.dialect.SybaseASE17Dialect`~~
-* `Adaptive Server Enterprise` = Sybase
-* `Adaptive Server Anywhere`
-    * `org.hibernate.dialect.SybaseAnywhereDialect` = all version
-* `Informix Dynamic Server`
-    * `org.hibernate.dialect.InformixDialect` = all version
-* `DB2 UDB for AS/390`
-    * ~~`org.hibernate.dialect.DB2390Dialect`~~
-* `DB2 UDB for AS/400`
-    * `org.hibernate.dialect.DB2400Dialect` = all version
-*  start with `DB2/`
-    * `org.hibernate.dialect.DB2Dialect` = all version
-* `Oracle`
-    * `org.hibernate.dialect.Oracle12cDialect` = 12.x
-    * `org.hibernate.dialect.Oracle10gDialect` = 11.x, 10.x
-    * `org.hibernate.dialect.Oracle9iDialect` = 9.x
-    * `org.hibernate.dialect.Oracle8iDialect` = 8.x or below
-* `Firebird`
-    * `org.hibernate.dialect.FirebirdDialect` = all version
+For other versions, select tag to your version.
 
 ## License
 
-Source Copyright © 2013-2018 Sin Young "Divinespear" Kang (divinespear at gmail dot com). Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses).
+Source Copyright © 2013-2021 Sinyoung "Divinespear" Kang (divinespear at gmail dot com). Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses).
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdivinespear%2Fjpa-schema-gradle-plugin?ref=badge_large)
