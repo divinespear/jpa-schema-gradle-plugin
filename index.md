@@ -60,6 +60,7 @@ generateSchema {
   }
 }
 ```
+
 </details>
 
 <details class="tab">
@@ -83,6 +84,7 @@ generateSchema {
   }
 }
 ```
+
 </details>
 
 To generate schema, run
@@ -111,6 +113,7 @@ generateSchema {
   // ...omitted...
 }
 ```
+
 </details>
 
 <details class="tab">
@@ -124,6 +127,7 @@ generateSchema {
   // ...omitted...
 }
 ```
+
 </details>
 
 ## Plugin only dependencies
@@ -153,6 +157,7 @@ generateSchema {
   ]
 }
 ```
+
 </details>
 
 <details class="tab">
@@ -178,6 +183,7 @@ generateSchema {
   )
 }
 ```
+
 </details>
 
 ## Provider-specific issues
@@ -253,6 +259,7 @@ generateSchema {
   // you can set target-specific too.
 }
 ```
+
 </details>
 
 <details class="tab">
@@ -268,6 +275,7 @@ generateSchema {
   // you can set target-specific too.
 }
 ```
+
 </details>
 
 ## Database Product Names
