@@ -39,9 +39,6 @@ Counterpart Gradle 4.10 to 5.x
 
 see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
 
-<details class="tab">
-  <summary>Groovy</summary>
-
 ```groovy
 plugins {
   id 'io.github.divinespear.jpa-schema-generate' version '0.4.0'
@@ -60,11 +57,6 @@ generateSchema {
   }
 }
 ```
-
-</details>
-
-<details class="tab">
-  <summary>Kotlin</summary>
 
 ```kotlin
 plugins {
@@ -85,8 +77,6 @@ generateSchema {
 }
 ```
 
-</details>
-
 To generate schema, run
 ```
 gradle generateSchema
@@ -102,9 +92,6 @@ see also functional test cases as examples.
 
 You MUST specify two options: `vendor` and `packageToScan`.
 
-<details class="tab">
-  <summary>Groovy</summary>
-
 ```groovy
 generateSchema {
   vendor = 'hibernate' // 'eclipselink', 'hibernate', or 'hibernate+spring'.
@@ -113,11 +100,6 @@ generateSchema {
   // ...omitted...
 }
 ```
-
-</details>
-
-<details class="tab">
-  <summary>Kotlin</summary>
 
 ```kotlin
 generateSchema {
@@ -128,14 +110,9 @@ generateSchema {
 }
 ```
 
-</details>
-
 ## Plugin only dependencies
 
 Since 0.3.4, you can add dependencies for plugin with configuration `generateSchema`.
-
-<details class="tab">
-  <summary>Groovy</summary>
 
 ```groovy
 // no need to add 'generateSchema' into configurations block.
@@ -158,11 +135,6 @@ generateSchema {
 }
 ```
 
-</details>
-
-<details class="tab">
-  <summary>Kotlin</summary>
-
 ```kotlin
 // no need to add 'generateSchema' into configurations block.
 
@@ -183,8 +155,6 @@ generateSchema {
   )
 }
 ```
-
-</details>
 
 ## Provider-specific issues
 
@@ -246,9 +216,6 @@ Here is full list of parameters of `generateSchema`.
 
 It's just map, so you can config like this
 
-<details class="tab">
-  <summary>Groovy</summary>
-
 ```groovy
 generateSchema {
   // global properties
@@ -260,11 +227,6 @@ generateSchema {
 }
 ```
 
-</details>
-
-<details class="tab">
-  <summary>Kotlin</summary>
-
 ```kotlin
 generateSchema {
   // global properties
@@ -275,8 +237,6 @@ generateSchema {
   // you can set target-specific too.
 }
 ```
-
-</details>
 
 ## Database Product Names
 
