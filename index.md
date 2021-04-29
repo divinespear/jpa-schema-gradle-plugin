@@ -39,6 +39,9 @@ Counterpart Gradle 4.10 to 5.x
 
 see [Gradle Plugins Registry](https://plugins.gradle.org/plugin/io.github.divinespear.jpa-schema-generate).
 
+{% codetabs %}
+
+{% codetab Groovy %}
 ```groovy
 plugins {
   id 'io.github.divinespear.jpa-schema-generate' version '0.4.0'
@@ -57,7 +60,9 @@ generateSchema {
   }
 }
 ```
+{% endcodetab %}
 
+{% codetab Kotlin %}
 ```kotlin
 plugins {
   id("io.github.divinespear.jpa-schema-generate") version("0.4.0")
@@ -76,6 +81,9 @@ generateSchema {
   }
 }
 ```
+{% endcodetab %}
+
+{% endcodetabs %}
 
 To generate schema, run
 ```
